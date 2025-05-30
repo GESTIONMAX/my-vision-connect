@@ -128,59 +128,64 @@ const Products = () => {
         </div>
       </section>
 
-      {/* Contenu principal */}
+      {/* Contenu principal avec sidebar */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Filtres */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="mb-8"
-        >
-          <ProductFilters
-            filters={filters}
-            onFilterChange={handleFilterChange}
-            onClearFilters={handleClearFilters}
-            resultCount={filteredAndSortedProducts.length}
-          />
-        </motion.div>
+        <div className="flex gap-8">
+          {/* Sidebar des filtres */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="hidden lg:block flex-shrink-0"
+          >
+            <ProductFilters
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              onClearFilters={handleClearFilters}
+              resultCount={filteredAndSortedProducts.length}
+            />
+          </motion.div>
 
-        {/* Grille de produits avec images d'ambiance */}
-        {filteredAndSortedProducts.length > 0 ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 auto-rows-max"
-          >
-            {createGridWithAmbientImages()}
-          </motion.div>
-        ) : (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="text-center py-16"
-          >
-            <div className="max-w-md mx-auto">
-              <div className="w-24 h-24 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-gray-400 text-2xl">🔍</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                Aucun produit trouvé
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Essayez de modifier vos filtres pour voir plus de résultats
-              </p>
-              <button
-                onClick={handleClearFilters}
-                className="text-blue-600 dark:text-blue-400 hover:underline"
+          {/* Contenu principal */}
+          <div className="flex-1">
+            {/* Grille de produits avec images d'ambiance */}
+            {filteredAndSortedProducts.length > 0 ? (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-max"
               >
-                Effacer tous les filtres
-              </button>
-            </div>
-          </motion.div>
-        )}
+                {createGridWithAmbientImages()}
+              </motion.div>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="text-center py-16"
+              >
+                <div className="max-w-md mx-auto">
+                  <div className="w-24 h-24 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <span className="text-gray-400 text-2xl">🔍</span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                    Aucun produit trouvé
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400 mb-6">
+                    Essayez de modifier vos filtres pour voir plus de résultats
+                  </p>
+                  <button
+                    onClick={handleClearFilters}
+                    className="text-blue-600 dark:text-blue-400 hover:underline"
+                  >
+                    Effacer tous les filtres
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

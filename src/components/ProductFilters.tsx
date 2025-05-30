@@ -1,8 +1,7 @@
-
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { X, Filter } from 'lucide-react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { sortOptions } from '@/data/products';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface ProductFiltersProps {
   filters: {
@@ -17,217 +16,183 @@ interface ProductFiltersProps {
   resultCount: number;
 }
 
-const categoryTabs = [
-  { value: 'all', label: 'ALL' },
-  { value: 'popular', label: 'BEST SELLERS' },
-  { value: 'sport', label: 'SPORT' },
-  { value: 'lifestyle', label: 'LIFESTYLE' },
-  { value: 'pro', label: 'PRISMATIC™' },
-  { value: 'premium', label: 'CHAMELO BUNDLES' }
-];
-
 export const ProductFilters = ({ 
   filters, 
   onFilterChange, 
   onClearFilters, 
   resultCount 
 }: ProductFiltersProps) => {
-  const hasActiveFilters = Object.values(filters).some(value => value !== 'all' && value !== 'popularity');
+  const [selectedFilters, setSelectedFilters] = useState<{[key: string]: string[]}>({
+    sort: [],
+    collection: [],
+    frameColor: [],
+    lensColor: [],
+    tech: [],
+    faceSize: []
+  });
 
-  const handleCategoryClick = (category: string) => {
-    // Map les valeurs d'affichage aux vraies catégories de produits
-    let actualCategory = category;
-    switch (category) {
-      case 'popular':
-        actualCategory = 'all';
-        onFilterChange('sort', 'popularity');
-        break;
-      case 'lifestyle':
-        actualCategory = 'classic';
-        break;
-      case 'premium':
-        actualCategory = 'pro';
-        break;
-      default:
-        actualCategory = category;
-    }
-    onFilterChange('category', actualCategory);
+  const handleCheckboxChange = (section: string, value: string, checked: boolean) => {
+    setSelectedFilters(prev => {
+      const newFilters = { ...prev };
+      if (checked) {
+        newFilters[section] = [...(newFilters[section] || []), value];
+      } else {
+        newFilters[section] = (newFilters[section] || []).filter(item => item !== value);
+      }
+      return newFilters;
+    });
   };
 
-  const getActiveCategory = () => {
-    if (filters.sort === 'popularity' && filters.category === 'all') return 'popular';
-    if (filters.category === 'classic') return 'lifestyle';
-    if (filters.category === 'pro') return 'premium';
-    return filters.category;
+  const clearAllFilters = () => {
+    setSelectedFilters({
+      sort: [],
+      collection: [],
+      frameColor: [],
+      lensColor: [],
+      tech: [],
+      faceSize: []
+    });
+    onClearFilters();
+  };
+
+  const filterSections = [
+    {
+      title: "SORT BY",
+      key: "sort",
+      options: [
+        { value: "best-selling", label: "Best selling" },
+        { value: "price-low-high", label: "Price, low to high" },
+        { value: "price-high-low", label: "Price, high to low" }
+      ]
+    },
+    {
+      title: "COLLECTION",
+      key: "collection",
+      options: [
+        { value: "lifestyle", label: "Lifestyle", count: 16 },
+        { value: "prismatic", label: "Prismatic", count: 8 },
+        { value: "sport", label: "Sport", count: 36 }
+      ]
+    },
+    {
+      title: "FRAME COLOR",
+      key: "frameColor",
+      options: [
+        { value: "black", label: "Black", count: 42 },
+        { value: "black-gold", label: "Black/Gold", count: 2 },
+        { value: "clear", label: "Clear", count: 5 },
+        { value: "white", label: "White", count: 11 }
+      ]
+    },
+    {
+      title: "LENS COLOR",
+      key: "lensColor",
+      options: [
+        { value: "blue", label: "Blue", count: 6 },
+        { value: "calm", label: "Calm", count: 7 },
+        { value: "fire", label: "Fire", count: 26 },
+        { value: "purple", label: "Purple", count: 5 },
+        { value: "smoke", label: "Smoke", count: 13 }
+      ]
+    },
+    {
+      title: "TECH",
+      key: "tech",
+      options: [
+        { value: "built-in-audio", label: "Built-in audio", count: 22 },
+        { value: "adjustable-tint", label: "Adjustable tint", count: 52 },
+        { value: "color-changing-lenses", label: "Color-changing lenses", count: 5 }
+      ]
+    },
+    {
+      title: "FACE SIZE",
+      key: "faceSize",
+      options: [
+        { value: "average", label: "Average", count: 23 },
+        { value: "medium-wide", label: "Medium-Wide", count: 10 },
+        { value: "narrow", label: "Narrow", count: 2 },
+        { value: "wide", label: "Wide", count: 22 }
+      ]
+    }
+  ];
+
+  const getTotalSelectedFilters = () => {
+    return Object.values(selectedFilters).reduce((total, filters) => total + filters.length, 0);
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
-      {/* Header avec compteur de résultats */}
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 w-full max-w-sm">
+      {/* Header */}
       <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Filter className="h-5 w-5 text-blue-600" />
+            <Filter className="h-5 w-5 text-gray-600 dark:text-gray-400" />
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Catalogue
+              Filters ({getTotalSelectedFilters()})
             </h3>
           </div>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600 dark:text-gray-400">
-              <span className="font-medium text-blue-600 dark:text-blue-400">{resultCount}</span> produit{resultCount > 1 ? 's' : ''}
-            </span>
-            {hasActiveFilters && (
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={onClearFilters}
-                className="flex items-center gap-2 text-xs"
-              >
-                <X className="h-3 w-3" />
-                Réinitialiser
-              </Button>
-            )}
-          </div>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={clearAllFilters}
+            className="p-2"
+          >
+            <X className="h-4 w-4" />
+          </Button>
         </div>
       </div>
 
-      {/* Onglets de catégories */}
-      <div className="p-6">
-        <div className="flex flex-wrap gap-1 mb-6">
-          {categoryTabs.map((tab) => {
-            const isActive = getActiveCategory() === tab.value;
-            const isLastItem = tab.value === 'premium';
-            
-            return (
-              <Button
-                key={tab.value}
-                variant={isActive ? "default" : "outline"}
-                size="sm"
-                onClick={() => handleCategoryClick(tab.value)}
-                className={`
-                  px-4 py-2 text-sm font-medium tracking-wide
-                  ${isActive 
-                    ? (isLastItem 
-                      ? 'bg-black hover:bg-gray-800 text-white border-black' 
-                      : 'bg-blue-600 hover:bg-blue-700 text-white border-blue-600'
-                    )
-                    : 'bg-white hover:bg-gray-50 text-gray-700 border-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-300 dark:border-gray-600'
-                  }
-                  ${isLastItem ? 'ml-2' : ''}
-                `}
-              >
-                {tab.label}
-              </Button>
-            );
-          })}
-        </div>
-
-        {/* Filtres secondaires en ligne */}
-        <div className="flex flex-wrap items-center gap-4">
-          {/* Tri */}
-          <div className="flex items-center gap-2">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Trier par:
-            </label>
-            <Select value={filters.sort} onValueChange={(value) => onFilterChange('sort', value)}>
-              <SelectTrigger className="w-40">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {sortOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Genre */}
-          <div className="flex items-center gap-2">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Genre:
-            </label>
-            <Select value={filters.genre} onValueChange={(value) => onFilterChange('genre', value)}>
-              <SelectTrigger className="w-32">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Tous</SelectItem>
-                <SelectItem value="mixte">Mixte</SelectItem>
-                <SelectItem value="homme">Homme</SelectItem>
-                <SelectItem value="femme">Femme</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Usage */}
-          <div className="flex items-center gap-2">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Usage:
-            </label>
-            <Select value={filters.usage} onValueChange={(value) => onFilterChange('usage', value)}>
-              <SelectTrigger className="w-32">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Tous</SelectItem>
-                <SelectItem value="quotidien">Quotidien</SelectItem>
-                <SelectItem value="sport">Sport</SelectItem>
-                <SelectItem value="conduite">Conduite</SelectItem>
-                <SelectItem value="travail">Travail</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        {/* Filtres actifs */}
-        {hasActiveFilters && (
-          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <div className="flex flex-wrap gap-2">
-              <span className="text-sm text-gray-600 dark:text-gray-400">Filtres actifs :</span>
-              {Object.entries(filters).map(([key, value]) => {
-                if (value === 'all' || (key === 'sort' && value === 'popularity')) return null;
-                
-                let label = '';
-                switch (key) {
-                  case 'category':
-                    const categoryTab = categoryTabs.find(tab => {
-                      if (value === 'classic') return tab.value === 'lifestyle';
-                      if (value === 'pro') return tab.value === 'premium';
-                      return tab.value === value;
-                    });
-                    label = categoryTab?.label || value;
-                    break;
-                  case 'genre':
-                    label = value === 'mixte' ? 'Mixte' : value === 'homme' ? 'Homme' : 'Femme';
-                    break;
-                  case 'usage':
-                    label = value.charAt(0).toUpperCase() + value.slice(1);
-                    break;
-                  case 'sort':
-                    label = sortOptions.find(s => s.value === value)?.label || value;
-                    break;
-                }
-                
-                return (
-                  <div
-                    key={key}
-                    className="flex items-center gap-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full text-xs"
+      {/* Filter Sections */}
+      <div className="px-6 py-4 max-h-[600px] overflow-y-auto">
+        {filterSections.map((section, index) => (
+          <div key={section.key} className={index > 0 ? "mt-8" : ""}>
+            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-4 tracking-wide">
+              {section.title}
+            </h4>
+            <div className="space-y-3">
+              {section.options.map((option) => (
+                <div key={option.value} className="flex items-center space-x-3">
+                  <Checkbox
+                    id={`${section.key}-${option.value}`}
+                    checked={selectedFilters[section.key]?.includes(option.value) || false}
+                    onCheckedChange={(checked) => 
+                      handleCheckboxChange(section.key, option.value, checked as boolean)
+                    }
+                    className="border-gray-300 dark:border-gray-600"
+                  />
+                  <label
+                    htmlFor={`${section.key}-${option.value}`}
+                    className="text-sm text-gray-700 dark:text-gray-300 cursor-pointer flex-1 flex items-center justify-between"
                   >
-                    <span>{label}</span>
-                    <button
-                      onClick={() => onFilterChange(key, key === 'sort' ? 'popularity' : 'all')}
-                      className="hover:bg-blue-200 dark:hover:bg-blue-800 rounded-full p-0.5"
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </div>
-                );
-              })}
+                    <span>{option.label}</span>
+                    {option.count && (
+                      <span className="text-gray-500 dark:text-gray-400">({option.count})</span>
+                    )}
+                  </label>
+                </div>
+              ))}
             </div>
           </div>
-        )}
+        ))}
+      </div>
+
+      {/* Footer */}
+      <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="space-y-3">
+          <Button 
+            className="w-full bg-gray-600 hover:bg-gray-700 text-white"
+            onClick={() => {/* Apply filters logic */}}
+          >
+            SELECT A FILTER
+          </Button>
+          <Button 
+            variant="ghost" 
+            className="w-full text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
+            onClick={clearAllFilters}
+          >
+            Clear all
+          </Button>
+        </div>
       </div>
     </div>
   );
