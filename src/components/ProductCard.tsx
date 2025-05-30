@@ -20,27 +20,27 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
       transition={{ delay: index * 0.1 }}
       className="group"
     >
-      <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 h-full">
-        <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700">
+      <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 h-full bg-white dark:bg-gray-800">
+        <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800">
           {/* Badges */}
           <div className="absolute top-3 left-3 z-10 flex flex-col gap-2">
             {product.isNew && (
-              <Badge className="bg-green-500 hover:bg-green-600 text-white">
+              <Badge className="bg-green-500 hover:bg-green-600 text-white text-xs">
                 Nouveau
               </Badge>
             )}
             {product.isPopular && (
-              <Badge className="bg-orange-500 hover:bg-orange-600 text-white">
+              <Badge className="bg-orange-500 hover:bg-orange-600 text-white text-xs">
                 Populaire
               </Badge>
             )}
             {product.originalPrice && (
-              <Badge variant="destructive">
+              <Badge variant="destructive" className="text-xs">
                 -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
               </Badge>
             )}
             {!product.inStock && (
-              <Badge variant="secondary">
+              <Badge variant="secondary" className="text-xs">
                 Rupture
               </Badge>
             )}
@@ -48,19 +48,32 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
 
           {/* Actions */}
           <div className="absolute top-3 right-3 z-10 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            <Button size="icon" variant="secondary" className="rounded-full">
+            <Button size="icon" variant="secondary" className="rounded-full h-8 w-8">
               <Eye className="h-4 w-4" />
             </Button>
-            <Button size="icon" variant="secondary" className="rounded-full" disabled={!product.inStock}>
+            <Button size="icon" variant="secondary" className="rounded-full h-8 w-8" disabled={!product.inStock}>
               <ShoppingCart className="h-4 w-4" />
             </Button>
           </div>
 
-          {/* Image */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-gray-500 dark:text-gray-400 text-lg font-medium">
-              {product.name}
-            </span>
+          {/* Image simulée de lunettes */}
+          <div className="absolute inset-0 flex items-center justify-center p-8">
+            <div className="relative w-full h-full flex items-center justify-center">
+              {/* Forme de lunettes stylisée */}
+              <div className="relative">
+                <div className="flex items-center justify-center gap-1">
+                  {/* Verre gauche */}
+                  <div className="w-16 h-12 rounded-full border-4 border-gray-800 dark:border-gray-200 bg-gradient-to-br from-blue-900/30 to-purple-900/30"></div>
+                  {/* Pont */}
+                  <div className="w-3 h-1 bg-gray-800 dark:bg-gray-200 rounded"></div>
+                  {/* Verre droit */}
+                  <div className="w-16 h-12 rounded-full border-4 border-gray-800 dark:border-gray-200 bg-gradient-to-br from-blue-900/30 to-purple-900/30"></div>
+                </div>
+                {/* Branches */}
+                <div className="absolute top-1/2 -left-4 w-6 h-1 bg-gray-800 dark:bg-gray-200 rounded transform -translate-y-1/2 rotate-12"></div>
+                <div className="absolute top-1/2 -right-4 w-6 h-1 bg-gray-800 dark:bg-gray-200 rounded transform -translate-y-1/2 -rotate-12"></div>
+              </div>
+            </div>
           </div>
         </div>
 
