@@ -399,6 +399,107 @@ export const products: Product[] = [
     reviewCount: 89,
     inStock: true,
     collection: 'lifestyle'
+  },
+  {
+    id: '16',
+    name: 'Chamelo Urban Black',
+    slug: 'chamelo-urban-black',
+    description: 'Style urbain discret et sobre. Verres noirs foncés pour un usage quotidien polyvalent en ville.',
+    price: 279,
+    category: 'lifestyle',
+    color: ['noir', 'noir mat'],
+    usage: 'quotidien',
+    genre: 'mixte',
+    images: ['/placeholder.svg', '/placeholder.svg', '/placeholder.svg'],
+    features: ['Teinte électronique', 'Protection UV400', 'Design urbain', 'Polyvalent'],
+    specifications: {
+      'Autonomie': '42 heures',
+      'Temps de charge': '2 heures',
+      'Protection UV': 'UV400',
+      'Poids': '32g',
+      'Matériau': 'Acétate urbain',
+      'Style': 'Urbain discret'
+    },
+    rating: 4.5,
+    reviewCount: 89,
+    inStock: true,
+    collection: 'lifestyle'
+  },
+  {
+    id: '17',
+    name: 'Chamelo Urban Gray',
+    slug: 'chamelo-urban-gray',
+    description: 'Élégance professionnelle avec verres gris et monture noire mate. Parfait pour le travail et les déplacements.',
+    price: 299,
+    category: 'lifestyle',
+    color: ['gris', 'noir mat'],
+    usage: 'travail',
+    genre: 'mixte',
+    images: ['/placeholder.svg', '/placeholder.svg', '/placeholder.svg'],
+    features: ['Verres gris', 'Style professionnel', 'Monture mate', 'Anti-reflets'],
+    specifications: {
+      'Autonomie': '45 heures',
+      'Temps de charge': '2 heures',
+      'Protection UV': 'UV400',
+      'Poids': '34g',
+      'Matériau': 'Acétate premium mat',
+      'Style': 'Professionnel élégant'
+    },
+    rating: 4.6,
+    reviewCount: 76,
+    inStock: true,
+    collection: 'lifestyle'
+  },
+  {
+    id: '18',
+    name: 'Chamelo Urban Silver',
+    slug: 'chamelo-urban-silver',
+    description: 'Design moderne et technologique avec verres miroir argentés. Innovation et style pour lumière modérée à forte.',
+    price: 329,
+    category: 'lifestyle',
+    color: ['argent', 'miroir argenté'],
+    usage: 'quotidien',
+    genre: 'mixte',
+    images: ['/placeholder.svg', '/placeholder.svg', '/placeholder.svg'],
+    features: ['Verres miroir', 'Monture métallique', 'Style tech', 'Anti-éblouissement'],
+    specifications: {
+      'Autonomie': '40 heures',
+      'Temps de charge': '1.5 heures',
+      'Protection UV': 'UV400',
+      'Poids': '36g',
+      'Matériau': 'Alliage métallique',
+      'Style': 'Moderne technologique'
+    },
+    isNew: true,
+    rating: 4.7,
+    reviewCount: 94,
+    inStock: true,
+    collection: 'lifestyle'
+  },
+  {
+    id: '19',
+    name: 'Chamelo Urban Blue',
+    slug: 'chamelo-urban-blue',
+    description: 'Original et tendance avec verres bleus foncés. Pour un lifestyle mode et urbain créatif.',
+    price: 309,
+    category: 'lifestyle',
+    color: ['bleu foncé', 'noir', 'bleu'],
+    usage: 'quotidien',
+    genre: 'mixte',
+    images: ['/placeholder.svg', '/placeholder.svg', '/placeholder.svg'],
+    features: ['Verres bleus', 'Style tendance', 'Design créatif', 'Mode urbaine'],
+    specifications: {
+      'Autonomie': '43 heures',
+      'Temps de charge': '2 heures',
+      'Protection UV': 'UV400',
+      'Poids': '33g',
+      'Matériau': 'Acétate coloré',
+      'Style': 'Urbain créatif'
+    },
+    rating: 4.4,
+    reviewCount: 67,
+    inStock: true,
+    collection: 'lifestyle'
   }
 ];
 
