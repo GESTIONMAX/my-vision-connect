@@ -1,4 +1,3 @@
-
 export interface Product {
   id: string;
   name: string;
@@ -6,7 +5,7 @@ export interface Product {
   description: string;
   price: number;
   originalPrice?: number;
-  category: 'classic' | 'sport' | 'pro' | 'femme' | 'homme';
+  category: 'classic' | 'sport' | 'pro' | 'femme' | 'homme' | 'lifestyle';
   color: string[];
   usage: 'quotidien' | 'sport' | 'conduite' | 'travail';
   genre: 'mixte' | 'homme' | 'femme';
@@ -18,6 +17,7 @@ export interface Product {
   rating: number;
   reviewCount: number;
   inStock: boolean;
+  collection?: 'lifestyle' | 'prismatic' | 'sport';
 }
 
 export const products: Product[] = [
@@ -44,7 +44,8 @@ export const products: Product[] = [
     isPopular: true,
     rating: 4.8,
     reviewCount: 142,
-    inStock: true
+    inStock: true,
+    collection: 'lifestyle'
   },
   {
     id: '2',
@@ -69,7 +70,8 @@ export const products: Product[] = [
     },
     rating: 4.9,
     reviewCount: 89,
-    inStock: true
+    inStock: true,
+    collection: 'sport'
   },
   {
     id: '3',
@@ -94,7 +96,8 @@ export const products: Product[] = [
     isNew: true,
     rating: 5.0,
     reviewCount: 203,
-    inStock: true
+    inStock: true,
+    collection: 'prismatic'
   },
   {
     id: '4',
@@ -118,7 +121,8 @@ export const products: Product[] = [
     },
     rating: 4.7,
     reviewCount: 156,
-    inStock: true
+    inStock: true,
+    collection: 'lifestyle'
   },
   {
     id: '5',
@@ -142,7 +146,8 @@ export const products: Product[] = [
     },
     rating: 4.6,
     reviewCount: 98,
-    inStock: true
+    inStock: true,
+    collection: 'lifestyle'
   },
   {
     id: '6',
@@ -166,7 +171,56 @@ export const products: Product[] = [
     },
     rating: 4.5,
     reviewCount: 67,
-    inStock: false
+    inStock: false,
+    collection: 'lifestyle'
+  },
+  {
+    id: '7',
+    name: 'NeoShades Urban',
+    slug: 'neoshades-urban',
+    description: 'Style urbain moderne pour la vie quotidienne. Design épuré et fonctionnalités essentielles.',
+    price: 259,
+    category: 'lifestyle',
+    color: ['noir', 'blanc', 'gris'],
+    usage: 'quotidien',
+    genre: 'mixte',
+    images: ['/placeholder.svg', '/placeholder.svg', '/placeholder.svg'],
+    features: ['Style urbain', 'Léger et confortable', 'Teinte automatique', 'Bluetooth'],
+    specifications: {
+      'Autonomie': '40 heures',
+      'Temps de charge': '1.5 heures',
+      'Poids': '30g',
+      'Matériau': 'Polycarbonate',
+      'Style': 'Urbain moderne'
+    },
+    rating: 4.4,
+    reviewCount: 85,
+    inStock: true,
+    collection: 'lifestyle'
+  },
+  {
+    id: '8',
+    name: 'NeoShades Casual',
+    slug: 'neoshades-casual',
+    description: 'Lunettes décontractées pour tous les jours. Confort optimal et style intemporel.',
+    price: 229,
+    category: 'lifestyle',
+    color: ['marron', 'vert olive', 'bleu marine'],
+    usage: 'quotidien',
+    genre: 'mixte',
+    images: ['/placeholder.svg', '/placeholder.svg', '/placeholder.svg'],
+    features: ['Confort optimal', 'Style décontracté', 'Protection UV', 'Design léger'],
+    specifications: {
+      'Autonomie': '35 heures',
+      'Temps de charge': '1.5 heures',
+      'Poids': '28g',
+      'Matériau': 'Acétate bio',
+      'Style': 'Casual chic'
+    },
+    rating: 4.3,
+    reviewCount: 92,
+    inStock: true,
+    collection: 'lifestyle'
   }
 ];
 
@@ -176,7 +230,8 @@ export const categories = [
   { value: 'sport', label: 'Sport' },
   { value: 'pro', label: 'Pro' },
   { value: 'femme', label: 'Femme' },
-  { value: 'homme', label: 'Homme' }
+  { value: 'homme', label: 'Homme' },
+  { value: 'lifestyle', label: 'Lifestyle' }
 ];
 
 export const colors = [

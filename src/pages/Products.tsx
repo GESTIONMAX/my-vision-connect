@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ProductCard } from '@/components/ProductCard';
@@ -11,7 +10,8 @@ const Products = () => {
     color: 'all',
     usage: 'all',
     genre: 'all',
-    sort: 'popularity'
+    sort: 'popularity',
+    collection: 'all'
   });
 
   const handleFilterChange = (key: string, value: string) => {
@@ -24,7 +24,8 @@ const Products = () => {
       color: 'all',
       usage: 'all',
       genre: 'all',
-      sort: 'popularity'
+      sort: 'popularity',
+      collection: 'all'
     });
   };
 
@@ -34,6 +35,7 @@ const Products = () => {
       if (filters.color !== 'all' && !product.color.includes(filters.color)) return false;
       if (filters.usage !== 'all' && product.usage !== filters.usage) return false;
       if (filters.genre !== 'all' && product.genre !== filters.genre) return false;
+      if (filters.collection !== 'all' && product.collection !== filters.collection) return false;
       return true;
     });
 
