@@ -10,6 +10,8 @@ import { Footer } from "@/components/Footer";
 import Index from "./pages/Index";
 import B2C from "./pages/B2C";
 import B2B from "./pages/B2B";
+import Products from "./pages/Products";
+import ProductDetail from "./pages/ProductDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +30,8 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/b2c" element={<B2C />} />
                 <Route path="/b2b" element={<B2B />} />
+                <Route path="/products" element={<Products />} />
+                <Route path="/products/:slug" element={<ProductDetail />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
