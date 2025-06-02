@@ -56,7 +56,12 @@ export const HeroSection = ({ isB2B = false }: HeroSectionProps) => {
           <motion.div variants={itemVariants} className="mb-4">
             <div className="relative mx-auto w-32 h-8">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-200/30 to-transparent"></div>
-              <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="40" height="8" viewBox="0 0 40 8" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M0 4c10 0 10-4 20-4s10 4 20 4" stroke="%23ddd6fe" stroke-width="0.5" fill="none"/%3E%3C/svg%3E')] opacity-60"></div>
+              <div 
+                className="absolute inset-0 opacity-60"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='8' viewBox='0 0 40 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 4c10 0 10-4 20-4s10 4 20 4' stroke='%23ddd6fe' stroke-width='0.5' fill='none'/%3E%3C/svg%3E")`
+                }}
+              ></div>
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full animate-pulse"></div>
             </div>
           </motion.div>
