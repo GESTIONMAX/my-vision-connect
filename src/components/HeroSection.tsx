@@ -1,6 +1,5 @@
-
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Zap, Eye, Smartphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface HeroSectionProps {
@@ -31,6 +30,18 @@ export const HeroSection = ({ isB2B = false }: HeroSectionProps) => {
     },
   };
 
+  const floatingIconVariants = {
+    hidden: { scale: 0, opacity: 0 },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        ease: 'easeOut',
+      },
+    },
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Background Pattern */}
@@ -43,6 +54,62 @@ export const HeroSection = ({ isB2B = false }: HeroSectionProps) => {
           animate="visible"
           className="text-center max-w-6xl mx-auto"
         >
+          {/* Icônes flottantes innovantes */}
+          <motion.div
+            variants={itemVariants}
+            className="flex justify-center items-center gap-8 mb-8"
+          >
+            <motion.div
+              variants={floatingIconVariants}
+              animate={{
+                y: [0, -10, 0],
+                rotate: [0, 5, 0],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg"
+            >
+              <Eye className="h-8 w-8 text-white" />
+            </motion.div>
+            
+            <motion.div
+              variants={floatingIconVariants}
+              animate={{
+                y: [0, -15, 0],
+                rotate: [0, -3, 0],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 0.5,
+              }}
+              className="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center shadow-xl"
+            >
+              <Zap className="h-10 w-10 text-white" />
+            </motion.div>
+            
+            <motion.div
+              variants={floatingIconVariants}
+              animate={{
+                y: [0, -8, 0],
+                rotate: [0, 8, 0],
+              }}
+              transition={{
+                duration: 3.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 1,
+              }}
+              className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-full flex items-center justify-center shadow-lg"
+            >
+              <Smartphone className="h-8 w-8 text-white" />
+            </motion.div>
+          </motion.div>
+
           <motion.div variants={itemVariants} className="mb-6">
             <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 border border-blue-200 dark:border-blue-800">
               {isB2B ? '🤝 Solutions Professionnelles' : '🚀 Innovation Technologique'}
