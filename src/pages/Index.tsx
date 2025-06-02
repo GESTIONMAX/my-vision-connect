@@ -1,51 +1,35 @@
 
 import { HeroSection } from '@/components/HeroSection';
 import { CollectionsSection } from '@/components/CollectionsSection';
-import { LifestyleSection } from '@/components/LifestyleSection';
-import { CreatorSection } from '@/components/CreatorSection';
-import { SocialProofSection } from '@/components/SocialProofSection';
+import { PopularProductsSection } from '@/components/PopularProductsSection';
 import { InnovationSection } from '@/components/InnovationSection';
-import { FeaturesSection } from '@/components/FeaturesSection';
-import { TestimonialsSection } from '@/components/TestimonialsSection';
-import { ProblemSolutionSection } from '@/components/ProblemSolutionSection';
-import { CTASection } from '@/components/CTASection';
-import { UserTypeSelector } from '@/components/UserTypeSelector';
+import { LifestyleSection } from '@/components/LifestyleSection';
+import { OpticiansSection } from '@/components/OpticiansSection';
+import { FAQSection } from '@/components/FAQSection';
 
 const Index = () => {
   return (
     <div className="min-h-screen">
-      {/* 1. Header + Hero avec accroche visuelle */}
+      {/* 1. Hero section avec image plein écran + bouton "Découvrir la collection" */}
       <HeroSection />
       
-      {/* 2. Collections - Shop by collection */}
+      {/* 2. Section 3 collections phares (affichage en 3 colonnes) */}
       <CollectionsSection />
       
-      {/* 3. Lifestyle - Looks en situation */}
-      <LifestyleSection />
+      {/* 3. Section produits populaires (3 à 6 best-sellers en grille) */}
+      <PopularProductsSection />
       
-      {/* 4. Créateur/Collaboration - Storytelling */}
-      <CreatorSection />
-      
-      {/* 5. Social proof - Partenaires */}
-      <SocialProofSection />
-      
-      {/* 6. Innovation produit - Techno détaillée */}
+      {/* 4. Bloc innovation (zoom sur technologie ou qualité des verres) */}
       <InnovationSection />
       
-      {/* 7. Fonctionnalités complémentaires */}
-      <FeaturesSection />
+      {/* 5. Bloc témoignages ou photos lifestyle (slider simple) */}
+      <LifestyleSection />
       
-      {/* 8. Témoignages clients */}
-      <TestimonialsSection />
+      {/* 6. Bloc opticiens : message d'appel + bouton "Prendre rendez-vous" */}
+      <OpticiansSection />
       
-      {/* 9. Solution aux problèmes */}
-      <ProblemSolutionSection />
-      
-      {/* 10. CTA final */}
-      <CTASection />
-      
-      {/* 11. Sélecteur de type d'utilisateur */}
-      <UserTypeSelector />
+      {/* 7. FAQ (accordéon) */}
+      <FAQSection />
     </div>
   );
 };
