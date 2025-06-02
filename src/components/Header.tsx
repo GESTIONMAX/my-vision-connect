@@ -20,8 +20,8 @@ export const Header = () => {
     { name: 'Accueil', href: '/' },
     { name: 'Produits', href: '/products' },
     { name: 'Technologie', href: '/technology' },
-    { name: 'Blog', href: '/blog' },
-    { name: 'Contact', href: '/contact' },
+    { name: 'FAQ', href: '/faq' },
+    { name: 'Carrières', href: '/careers' },
   ];
 
   return (
@@ -56,6 +56,17 @@ export const Header = () => {
 
           {/* Right Actions */}
           <div className="flex items-center space-x-4">
+            {/* User Type Switcher */}
+            <Button 
+              variant="outline" 
+              size="sm"
+              asChild
+            >
+              <Link to={isB2B ? '/b2c' : '/b2b'}>
+                {isB2B ? 'Je suis un particulier' : 'Je suis un professionnel'}
+              </Link>
+            </Button>
+            
             <Button variant="ghost" size="icon">
               <Globe className="h-5 w-5" />
             </Button>
@@ -100,6 +111,15 @@ export const Header = () => {
                   {item.name}
                 </Link>
               ))}
+              
+              {/* Mobile User Type Switcher */}
+              <Link
+                to={isB2B ? '/b2c' : '/b2b'}
+                className="mx-3 mt-4 px-3 py-2 border border-gray-300 rounded-md text-center text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-200"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {isB2B ? 'Je suis un particulier' : 'Je suis un professionnel'}
+              </Link>
             </nav>
           </motion.div>
         )}
