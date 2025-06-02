@@ -1,17 +1,13 @@
 
-import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Play, X } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 
 interface HeroSectionProps {
   isB2B?: boolean;
 }
 
 export const HeroSection = ({ isB2B = false }: HeroSectionProps) => {
-  const [isVideoOpen, setIsVideoOpen] = useState(false);
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -94,16 +90,27 @@ export const HeroSection = ({ isB2B = false }: HeroSectionProps) => {
               {isB2B ? 'Devenir Partenaire' : 'Découvrir la Collection'}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            
-            <Button
-              variant="outline"
-              size="lg"
-              className="px-8 py-4 text-lg font-semibold rounded-full border-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200"
-              onClick={() => setIsVideoOpen(true)}
-            >
-              <Play className="mr-2 h-5 w-5" />
-              {isB2B ? 'Voir la Démo Pro' : 'Voir en Action'}
-            </Button>
+          </motion.div>
+
+          {/* Vidéo intégrée */}
+          <motion.div
+            variants={itemVariants}
+            className="mb-12"
+          >
+            <div className="max-w-4xl mx-auto">
+              <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl bg-black/10 backdrop-blur-sm border border-gray-200 dark:border-gray-700">
+                <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                  <iframe
+                    className="absolute top-0 left-0 w-full h-full"
+                    src="https://www.youtube.com/embed/nb1_yCncBzg?si=nb1_yCncBzg&start=18"
+                    title="EUROGLOBAL - Démonstration"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+            </div>
           </motion.div>
 
           <motion.div
@@ -144,29 +151,6 @@ export const HeroSection = ({ isB2B = false }: HeroSectionProps) => {
           </motion.div>
         </motion.div>
       </div>
-
-      {/* Modal vidéo */}
-      <Dialog open={isVideoOpen} onOpenChange={setIsVideoOpen}>
-        <DialogContent className="max-w-4xl w-full p-0 bg-black border-0">
-          <DialogTitle className="sr-only">Vidéo de démonstration</DialogTitle>
-          <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-            <iframe
-              className="absolute top-0 left-0 w-full h-full"
-              src="https://www.youtube.com/embed/nb1_yCncBzg?si=nb1_yCncBzg&autoplay=1&start=18"
-              title="EUROGLOBAL - Démonstration"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            />
-          </div>
-          <button
-            onClick={() => setIsVideoOpen(false)}
-            className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-10"
-          >
-            <X className="h-6 w-6" />
-          </button>
-        </DialogContent>
-      </Dialog>
 
       {/* Floating Elements */}
       <motion.div
