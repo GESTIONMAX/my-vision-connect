@@ -1,3 +1,4 @@
+
 export interface Product {
   id: string;
   name: string;
@@ -23,8 +24,8 @@ export interface Product {
 export const products: Product[] = [
   {
     id: '1',
-    name: 'NeoShades Classic',
-    slug: 'neoshades-classic',
+    name: 'Chamelo Classic',
+    slug: 'chamelo-classic',
     description: 'Lunettes connectées à teinte électronique pour un usage quotidien. Design intemporel et technologie avancée.',
     price: 299,
     category: 'classic',
@@ -49,8 +50,8 @@ export const products: Product[] = [
   },
   {
     id: '2',
-    name: 'NeoShades Sport',
-    slug: 'neoshades-sport',
+    name: 'Chamelo Sport',
+    slug: 'chamelo-sport',
     description: 'Lunettes connectées robustes pour les activités sportives. Résistantes aux chocs et à l\'eau.',
     price: 399,
     originalPrice: 449,
@@ -75,8 +76,8 @@ export const products: Product[] = [
   },
   {
     id: '3',
-    name: 'NeoShades Pro',
-    slug: 'neoshades-pro',
+    name: 'Chamelo Pro',
+    slug: 'chamelo-pro',
     description: 'Le summum de la technologie. IA intégrée, GPS et appels mains libres pour les professionnels.',
     price: 599,
     category: 'pro',
@@ -101,8 +102,8 @@ export const products: Product[] = [
   },
   {
     id: '4',
-    name: 'NeoShades Femme Élégance',
-    slug: 'neoshades-femme-elegance',
+    name: 'Chamelo Femme Élégance',
+    slug: 'chamelo-femme-elegance',
     description: 'Design féminin raffiné avec teinte électronique adaptative. Parfait pour toutes les occasions.',
     price: 349,
     category: 'femme',
@@ -126,8 +127,8 @@ export const products: Product[] = [
   },
   {
     id: '5',
-    name: 'NeoShades Homme Executive',
-    slug: 'neoshades-homme-executive',
+    name: 'Chamelo Homme Executive',
+    slug: 'chamelo-homme-executive',
     description: 'Style masculin sophistiqué pour les dirigeants. Technologie discrète et performance optimale.',
     price: 449,
     category: 'homme',
@@ -151,8 +152,8 @@ export const products: Product[] = [
   },
   {
     id: '6',
-    name: 'NeoShades Drive',
-    slug: 'neoshades-drive',
+    name: 'Chamelo Drive',
+    slug: 'chamelo-drive',
     description: 'Spécialement conçues pour la conduite. Adaptation automatique aux conditions de luminosité.',
     price: 379,
     category: 'classic',
@@ -176,8 +177,8 @@ export const products: Product[] = [
   },
   {
     id: '7',
-    name: 'NeoShades Urban',
-    slug: 'neoshades-urban',
+    name: 'Chamelo Urban',
+    slug: 'chamelo-urban',
     description: 'Style urbain moderne pour la vie quotidienne. Design épuré et fonctionnalités essentielles.',
     price: 259,
     category: 'lifestyle',
@@ -200,8 +201,8 @@ export const products: Product[] = [
   },
   {
     id: '8',
-    name: 'NeoShades Casual',
-    slug: 'neoshades-casual',
+    name: 'Chamelo Casual',
+    slug: 'chamelo-casual',
     description: 'Lunettes décontractées pour tous les jours. Confort optimal et style intemporel.',
     price: 229,
     category: 'lifestyle',
@@ -224,8 +225,8 @@ export const products: Product[] = [
   },
   {
     id: '9',
-    name: 'NeoShades Retro',
-    slug: 'neoshades-retro',
+    name: 'Chamelo Retro',
+    slug: 'chamelo-retro',
     description: 'Style rétro vintage avec technologie moderne. Parfait pour un look authentique et branché.',
     price: 289,
     category: 'lifestyle',
@@ -249,8 +250,8 @@ export const products: Product[] = [
   },
   {
     id: '10',
-    name: 'NeoShades Minimalist',
-    slug: 'neoshades-minimalist',
+    name: 'Chamelo Minimalist',
+    slug: 'chamelo-minimalist',
     description: 'Design épuré et minimaliste pour les amateurs de simplicité. Élégance discrète garantie.',
     price: 249,
     category: 'lifestyle',
@@ -274,8 +275,8 @@ export const products: Product[] = [
   },
   {
     id: '11',
-    name: 'NeoShades Creative',
-    slug: 'neoshades-creative',
+    name: 'Chamelo Creative',
+    slug: 'chamelo-creative',
     description: 'Lunettes pour les créatifs et artistes. Fonctionnalités spéciales pour la création de contenu.',
     price: 329,
     category: 'lifestyle',
@@ -300,8 +301,8 @@ export const products: Product[] = [
   },
   {
     id: '12',
-    name: 'NeoShades Eco',
-    slug: 'neoshades-eco',
+    name: 'Chamelo Eco',
+    slug: 'chamelo-eco',
     description: 'Lunettes écologiques fabriquées à partir de matériaux recyclés. Pour un mode de vie responsable.',
     price: 199,
     category: 'lifestyle',
@@ -325,8 +326,8 @@ export const products: Product[] = [
   },
   {
     id: '13',
-    name: 'NeoShades Travel',
-    slug: 'neoshades-travel',
+    name: 'Chamelo Travel',
+    slug: 'chamelo-travel',
     description: 'Compagnon idéal pour les voyageurs. GPS, traduction et guide touristique intégrés.',
     price: 369,
     category: 'lifestyle',
@@ -350,8 +351,8 @@ export const products: Product[] = [
   },
   {
     id: '14',
-    name: 'NeoShades Student',
-    slug: 'neoshades-student',
+    name: 'Chamelo Student',
+    slug: 'chamelo-student',
     description: 'Spécialement conçues pour les étudiants. Prix abordable et fonctionnalités d\'apprentissage.',
     price: 179,
     originalPrice: 219,
@@ -377,8 +378,8 @@ export const products: Product[] = [
   },
   {
     id: '15',
-    name: 'NeoShades Night',
-    slug: 'neoshades-night',
+    name: 'Chamelo Night',
+    slug: 'chamelo-night',
     description: 'Parfaites pour la vie nocturne. Éclairage LED discret et mode soirée intégré.',
     price: 319,
     category: 'lifestyle',

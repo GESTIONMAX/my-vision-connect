@@ -51,7 +51,7 @@ const B2C = () => {
               Révolutionnez votre <span className="text-yellow-300">vision</span>
             </h1>
             <p className="text-xl md:text-2xl text-purple-100 mb-8">
-              Les lunettes connectées NeoShades s'adaptent instantanément à votre environnement lumineux pour un confort visuel inégalé.
+              Les lunettes connectées Chamelo s'adaptent instantanément à votre environnement lumineux pour un confort visuel inégalé.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-white text-purple-600 hover:bg-gray-100">
@@ -79,7 +79,7 @@ const B2C = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl font-bold mb-4">
-              Pourquoi choisir NeoShades ?
+              Pourquoi choisir Chamelo ?
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
               Une technologie révolutionnaire qui transforme votre expérience visuelle au quotidien.
@@ -162,7 +162,7 @@ const B2C = () => {
               Prêt à révolutionner votre vision ?
             </h2>
             <p className="text-xl text-blue-100 mb-8">
-              Rejoignez les milliers d'utilisateurs qui ont déjà adopté la technologie NeoShades.
+              Rejoignez les milliers d'utilisateurs qui ont déjà adopté la technologie Chamelo.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100">

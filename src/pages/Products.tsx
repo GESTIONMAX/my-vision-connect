@@ -121,7 +121,7 @@ const Products = () => {
             className="text-center"
           >
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Catalogue NeoShades
+              Catalogue Chamelo
             </h1>
             <p className="text-xl text-blue-100 max-w-3xl mx-auto">
               Découvrez notre collection complète de lunettes connectées à teinte électronique

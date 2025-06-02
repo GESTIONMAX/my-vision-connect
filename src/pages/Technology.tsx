@@ -85,25 +85,25 @@ const Technology = () => {
       feature: "Temps de réaction",
       standard: "Non applicable",
       photochromique: "30 sec - 5 min",
-      neoshades: "< 0.1 sec"
+      chamelo: "< 0.1 sec"
     },
     {
       feature: "Contrôle manuel",
       standard: "Non",
       photochromique: "Non",
-      neoshades: "Oui"
+      chamelo: "Oui"
     },
     {
       feature: "Niveaux de teinte",
       standard: "1 fixe",
       photochromique: "Variable auto",
-      neoshades: "3 niveaux réglables"
+      chamelo: "3 niveaux réglables"
     },
     {
       feature: "Fonctionnement intérieur",
       standard: "Limité",
       photochromique: "Non",
-      neoshades: "Parfait"
+      chamelo: "Parfait"
     }
   ];
 
@@ -136,12 +136,12 @@ const Technology = () => {
         </div>
       </section>
 
-      {/* Innovation NeoShades */}
+      {/* Innovation Chamelo */}
       <section className="py-20 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Technologie NeoShades
+              Technologie Chamelo
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
               Des verres à cristaux liquides révolutionnaires qui redéfinissent l'expérience optique
@@ -227,7 +227,7 @@ const Technology = () => {
               Comparaison Technologies
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-300">
-              NeoShades vs technologies traditionnelles
+              Chamelo vs technologies traditionnelles
             </p>
           </motion.div>
 
@@ -240,7 +240,7 @@ const Technology = () => {
                       <th className="px-6 py-4 text-left font-semibold">Caractéristique</th>
                       <th className="px-6 py-4 text-center font-semibold">Lunettes Standard</th>
                       <th className="px-6 py-4 text-center font-semibold">Photochromiques</th>
-                      <th className="px-6 py-4 text-center font-semibold text-blue-600">NeoShades</th>
+                      <th className="px-6 py-4 text-center font-semibold text-blue-600">Chamelo</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -252,7 +252,7 @@ const Technology = () => {
                         <td className="px-6 py-4 text-center">
                           <div className="flex items-center justify-center gap-2">
                             <CheckCircle className="h-4 w-4 text-green-600" />
-                            <span className="font-semibold text-blue-600">{row.neoshades}</span>
+                            <span className="font-semibold text-blue-600">{row.chamelo}</span>
                           </div>
                         </td>
                       </tr>
@@ -429,7 +429,7 @@ const Technology = () => {
             {...fadeInUp}
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              NeoShades : Design, Technologie et Liberté
+              Chamelo : Design, Technologie et Liberté
             </h2>
             <p className="text-xl mb-8 opacity-90 leading-relaxed">
               Une innovation pensée pour les humains et la lumière. 
