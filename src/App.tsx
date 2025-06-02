@@ -10,6 +10,9 @@ import { Footer } from "@/components/Footer";
 import Index from "./pages/Index";
 import B2C from "./pages/B2C";
 import B2B from "./pages/B2B";
+import B2BCatalog from "./pages/B2BCatalog";
+import B2BPartnership from "./pages/B2BPartnership";
+import B2BSupport from "./pages/B2BSupport";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
 import Technology from "./pages/Technology";
@@ -32,6 +35,9 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/b2c" element={<B2C />} />
                 <Route path="/b2b" element={<B2B />} />
+                <Route path="/b2b/catalog" element={<B2BCatalog />} />
+                <Route path="/b2b/partnership" element={<B2BPartnership />} />
+                <Route path="/b2b/support" element={<B2BSupport />} />
                 <Route path="/products" element={<Products />} />
                 <Route path="/products/:slug" element={<ProductDetail />} />
                 <Route path="/technology" element={<Technology />} />
