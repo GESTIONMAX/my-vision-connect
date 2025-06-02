@@ -1,4 +1,3 @@
-
 import { motion } from 'framer-motion';
 import { 
   Accordion,
@@ -312,7 +311,6 @@ const FAQ = () => {
                           <AccordionContent className="text-gray-600 dark:text-gray-300">
                             {faq.answer}
                           </AccordionContent>
-                        </AccordionContent>
                         </AccordionItem>
                       ))}
                     </Accordion>
