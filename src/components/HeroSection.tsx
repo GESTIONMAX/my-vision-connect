@@ -117,7 +117,7 @@ export const HeroSection = ({ isB2B = false }: HeroSectionProps) => {
           </motion.div>
 
           {/* Slider d'images */}
-          <HeroCarousel />
+          <HeroCarousel isB2B={isB2B} />
 
           {/* Vidéo intégrée */}
           <HeroVideo />

@@ -8,7 +8,11 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-export const HeroCarousel = () => {
+interface HeroCarouselProps {
+  isB2B?: boolean;
+}
+
+export const HeroCarousel = ({ isB2B = false }: HeroCarouselProps) => {
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
     visible: {
@@ -21,7 +25,26 @@ export const HeroCarousel = () => {
     },
   };
 
-  const sliderImages = [
+  const b2bImages = [
+    {
+      src: "/lovable-uploads/b711eaf0-a0ba-49c2-8022-38d498c882d5.png",
+      alt: "Lunettes intelligentes sport - technologie avancée",
+    },
+    {
+      src: "/lovable-uploads/f6429810-9066-4e7e-a6c3-bddacc2dd7db.png",
+      alt: "Lunettes connectées urbaines - design moderne",
+    },
+    {
+      src: "/lovable-uploads/2ec5555e-8f2b-468a-992b-865f2f39f822.png",
+      alt: "Lunettes sport haute performance",
+    },
+    {
+      src: "/lovable-uploads/0a8f5b45-7c63-46fc-b2b4-80ae263fd173.png",
+      alt: "Lunettes sport lifestyle - basketball",
+    },
+  ];
+
+  const b2cImages = [
     {
       src: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&h=600&fit=crop",
       alt: "Innovation technologique",
@@ -43,6 +66,8 @@ export const HeroCarousel = () => {
       alt: "Technologie futuriste",
     },
   ];
+
+  const sliderImages = isB2B ? b2bImages : b2cImages;
 
   return (
     <motion.div
