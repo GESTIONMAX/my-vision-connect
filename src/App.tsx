@@ -13,6 +13,7 @@ import B2B from "./pages/B2B";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
 import Technology from "./pages/Technology";
+import FAQ from "./pages/FAQ";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
                 <Route path="/products" element={<Products />} />
                 <Route path="/products/:slug" element={<ProductDetail />} />
                 <Route path="/technology" element={<Technology />} />
+                <Route path="/faq" element={<FAQ />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
