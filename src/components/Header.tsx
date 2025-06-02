@@ -1,10 +1,10 @@
-
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Menu, X, ShoppingBag, User, Globe } from 'lucide-react';
+import { Menu, X, ShoppingBag, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from './ThemeToggle';
+import { LanguageSelector } from './LanguageSelector';
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -67,9 +67,7 @@ export const Header = () => {
               </Link>
             </Button>
             
-            <Button variant="ghost" size="icon">
-              <Globe className="h-5 w-5" />
-            </Button>
+            <LanguageSelector />
             <ThemeToggle />
             {!isB2B && (
               <Button variant="ghost" size="icon">
