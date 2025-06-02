@@ -36,7 +36,7 @@ export const PartnerSection = () => {
               Vous êtes opticien ou magasin de sport ?
             </h2>
             <p className="text-2xl text-blue-200 mb-8">
-              Devenez partenaire Chamelo partenaire d'EUROGLOBAL TRADING DISTRIBUTION en tant que distributeur européen pour la marque Cham
+              Devenez partenaire d'EUROGLOBAL TRADING DISTRIBUTION distributeur européen pour la marque Chamelo
             </p>
             <p className="text-xl text-blue-100 max-w-3xl mx-auto">
               Rejoignez notre réseau de partenaires et proposez à vos clients 
