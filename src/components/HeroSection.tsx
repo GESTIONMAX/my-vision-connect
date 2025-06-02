@@ -1,13 +1,12 @@
+
 import { motion } from 'framer-motion';
-import { ArrowRight, Zap, Eye, Smartphone } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+import { FloatingIcons } from '@/components/hero/FloatingIcons';
+import { HeroStats } from '@/components/hero/HeroStats';
+import { HeroCarousel } from '@/components/hero/HeroCarousel';
+import { HeroVideo } from '@/components/hero/HeroVideo';
+import { FloatingElements } from '@/components/hero/FloatingElements';
 
 interface HeroSectionProps {
   isB2B?: boolean;
@@ -37,41 +36,6 @@ export const HeroSection = ({ isB2B = false }: HeroSectionProps) => {
     },
   };
 
-  const floatingIconVariants = {
-    hidden: { scale: 0, opacity: 0 },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        ease: 'easeOut',
-      },
-    },
-  };
-
-  const sliderImages = [
-    {
-      src: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&h=600&fit=crop",
-      alt: "Innovation technologique",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=600&fit=crop",
-      alt: "Technologie avancée",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?w=800&h=600&fit=crop",
-      alt: "Innovation",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1485833077593-4278bba3f11f?w=800&h=600&fit=crop",
-      alt: "Vision moderne",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1487887235947-a955ef187fcc?w=800&h=600&fit=crop",
-      alt: "Technologie futuriste",
-    },
-  ];
-
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Background Pattern */}
@@ -85,59 +49,8 @@ export const HeroSection = ({ isB2B = false }: HeroSectionProps) => {
           className="text-center max-w-6xl mx-auto"
         >
           {/* Icônes flottantes innovantes */}
-          <motion.div
-            variants={itemVariants}
-            className="flex justify-center items-center gap-8 mb-8"
-          >
-            <motion.div
-              variants={floatingIconVariants}
-              animate={{
-                y: [0, -10, 0],
-                rotate: [0, 5, 0],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg"
-            >
-              <Eye className="h-8 w-8 text-white" />
-            </motion.div>
-            
-            <motion.div
-              variants={floatingIconVariants}
-              animate={{
-                y: [0, -15, 0],
-                rotate: [0, -3, 0],
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 0.5,
-              }}
-              className="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center shadow-xl"
-            >
-              <Zap className="h-10 w-10 text-white" />
-            </motion.div>
-            
-            <motion.div
-              variants={floatingIconVariants}
-              animate={{
-                y: [0, -8, 0],
-                rotate: [0, 8, 0],
-              }}
-              transition={{
-                duration: 3.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 1,
-              }}
-              className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-full flex items-center justify-center shadow-lg"
-            >
-              <Smartphone className="h-8 w-8 text-white" />
-            </motion.div>
+          <motion.div variants={itemVariants}>
+            <FloatingIcons />
           </motion.div>
 
           <motion.div variants={itemVariants} className="mb-6">
@@ -190,123 +103,18 @@ export const HeroSection = ({ isB2B = false }: HeroSectionProps) => {
           </motion.div>
 
           {/* Slider d'images */}
-          <motion.div
-            variants={itemVariants}
-            className="mb-8"
-          >
-            <Carousel
-              opts={{
-                align: "start",
-                loop: true,
-              }}
-              className="w-full max-w-4xl mx-auto"
-            >
-              <CarouselContent>
-                {sliderImages.map((image, index) => (
-                  <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-                    <div className="p-2">
-                      <div className="relative overflow-hidden rounded-xl group">
-                        <img
-                          src={image.src}
-                          alt={image.alt}
-                          className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      </div>
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="hidden md:flex" />
-              <CarouselNext className="hidden md:flex" />
-            </Carousel>
-          </motion.div>
+          <HeroCarousel />
 
           {/* Vidéo intégrée */}
-          <motion.div
-            variants={itemVariants}
-            className="mb-12"
-          >
-            <div className="max-w-4xl mx-auto">
-              <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl bg-black/10 backdrop-blur-sm border border-gray-200 dark:border-gray-700">
-                <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-                  <iframe
-                    className="absolute top-0 left-0 w-full h-full"
-                    src="https://www.youtube.com/embed/nb1_yCncBzg?si=nb1_yCncBzg&start=18"
-                    title="EUROGLOBAL - Démonstration"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                  />
-                </div>
-              </div>
-            </div>
-          </motion.div>
+          <HeroVideo />
 
-          <motion.div
-            variants={itemVariants}
-            className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center"
-          >
-            {isB2B ? (
-              <>
-                <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
-                  <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">500+</div>
-                  <div className="text-gray-600 dark:text-gray-300">Opticiens Partenaires</div>
-                </div>
-                <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
-                  <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">30%</div>
-                  <div className="text-gray-600 dark:text-gray-300">Marge Moyenne</div>
-                </div>
-                <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
-                  <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">24/7</div>
-                  <div className="text-gray-600 dark:text-gray-300">Support Technique</div>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
-                  <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">0.3s</div>
-                  <div className="text-gray-600 dark:text-gray-300">Adaptation Instantanée</div>
-                </div>
-                <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
-                  <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">48h</div>
-                  <div className="text-gray-600 dark:text-gray-300">Autonomie Batterie</div>
-                </div>
-                <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
-                  <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">100%</div>
-                  <div className="text-gray-600 dark:text-gray-300">Protection UV</div>
-                </div>
-              </>
-            )}
-          </motion.div>
+          {/* Statistics */}
+          <HeroStats isB2B={isB2B} />
         </motion.div>
       </div>
 
       {/* Floating Elements */}
-      <motion.div
-        animate={{
-          y: [0, -20, 0],
-          rotate: [0, 5, 0],
-        }}
-        transition={{
-          duration: 6,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="absolute top-20 right-10 w-16 h-16 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full opacity-20 blur-xl"
-      />
-      <motion.div
-        animate={{
-          y: [0, 30, 0],
-          rotate: [0, -5, 0],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="absolute bottom-20 left-10 w-24 h-24 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full opacity-20 blur-xl"
-      />
+      <FloatingElements />
     </section>
   );
 };
