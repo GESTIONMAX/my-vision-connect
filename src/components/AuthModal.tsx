@@ -81,6 +81,7 @@ export function AuthModal({ children }: AuthModalProps) {
     setLoading(true);
     setError('');
 
+    // ✅ Appel corrigé avec un objet
     const { error } = await signUp({
       email: signUpForm.email,
       password: signUpForm.password,
