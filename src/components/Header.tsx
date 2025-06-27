@@ -1,16 +1,20 @@
+
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Menu, X, ShoppingBag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { ThemeToggle } from './ThemeToggle';
 import { LanguageSelector } from './LanguageSelector';
 import { UserMenu } from './UserMenu';
+import { useCart } from '@/hooks/useCart';
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const isB2B = location.pathname.startsWith('/b2b');
+  const { itemCount } = useCart();
 
   const navigation = isB2B ? [
     { name: 'Accueil Pro', href: '/b2b' },
@@ -71,8 +75,17 @@ export const Header = () => {
             <LanguageSelector />
             <ThemeToggle />
             {!isB2B && (
-              <Button variant="ghost" size="icon">
-                <ShoppingBag className="h-5 w-5" />
+              <Button variant="ghost" size="icon" className="relative" asChild>
+                <Link to="/account/cart">
+                  <ShoppingBag className="h-5 w-5" />
+                  {itemCount > 0 && (
+                    <Badge 
+                      className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-blue-600 hover:bg-blue-600"
+                    >
+                      {itemCount > 9 ? '9+' : itemCount}
+                    </Badge>
+                  )}
+                </Link>
               </Button>
             )}
             <UserMenu />
@@ -108,6 +121,18 @@ export const Header = () => {
                   {item.name}
                 </Link>
               ))}
+              
+              {/* Mobile Cart Link */}
+              {!isB2B && (
+                <Link
+                  to="/account/cart"
+                  className="mx-3 mt-4 px-3 py-2 border border-gray-300 rounded-md text-center text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-200 flex items-center justify-center gap-2"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <ShoppingBag className="h-4 w-4" />
+                  Mon panier {itemCount > 0 && `(${itemCount})`}
+                </Link>
+              )}
               
               {/* Mobile User Type Switcher */}
               <Link
