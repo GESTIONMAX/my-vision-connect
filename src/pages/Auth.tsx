@@ -10,7 +10,8 @@ const Auth = () => {
 
   useEffect(() => {
     if (!loading && user) {
-      navigate('/', { replace: true });
+      // Redirection vers la page de bienvenue pour les utilisateurs connectés
+      navigate('/welcome', { replace: true });
     }
   }, [user, loading, navigate]);
 

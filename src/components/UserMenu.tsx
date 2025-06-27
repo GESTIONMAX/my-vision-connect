@@ -68,19 +68,25 @@ export const UserMenu = () => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         
-        <DropdownMenuItem>
-          <User className="mr-2 h-4 w-4" />
-          <span>Profil</span>
+        <DropdownMenuItem asChild>
+          <Link to="/account/profile">
+            <User className="mr-2 h-4 w-4" />
+            <span>Profil</span>
+          </Link>
         </DropdownMenuItem>
         
-        <DropdownMenuItem>
-          <Settings className="mr-2 h-4 w-4" />
-          <span>Paramètres</span>
+        <DropdownMenuItem asChild>
+          <Link to="/account/settings">
+            <Settings className="mr-2 h-4 w-4" />
+            <span>Paramètres</span>
+          </Link>
         </DropdownMenuItem>
         
-        <DropdownMenuItem>
-          <ShoppingBag className="mr-2 h-4 w-4" />
-          <span>Mes commandes</span>
+        <DropdownMenuItem asChild>
+          <Link to="/account/orders">
+            <ShoppingBag className="mr-2 h-4 w-4" />
+            <span>Mes commandes</span>
+          </Link>
         </DropdownMenuItem>
 
         {(profile?.user_type === 'business' || profile?.user_type === 'admin') && (
