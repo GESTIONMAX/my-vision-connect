@@ -39,7 +39,7 @@ const Products = () => {
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = products.filter((product) => {
       if (filters.category !== 'all' && product.category !== filters.category) return false;
-      if (filters.color !== 'all' && !product.color.includes(filters.color)) return false;
+      if (filters.color !== 'all' && !product.color?.includes(filters.color)) return false;
       if (filters.usage !== 'all' && product.usage !== filters.usage) return false;
       if (filters.genre !== 'all' && product.genre !== filters.genre) return false;
       if (filters.collection !== 'all' && product.collection !== filters.collection) return false;

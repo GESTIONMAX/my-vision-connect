@@ -1,7 +1,11 @@
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { X, Filter } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useProducts } from '@/hooks/useProducts';
+import { useCollections } from '@/hooks/useCollections';
+import { useFilterOptions } from '@/hooks/useFilterOptions';
 
 interface ProductFiltersProps {
   filters: {
@@ -10,6 +14,7 @@ interface ProductFiltersProps {
     usage: string;
     genre: string;
     sort: string;
+    collection: string;
   };
   onFilterChange: (key: string, value: string) => void;
   onClearFilters: () => void;
@@ -22,13 +27,17 @@ export const ProductFilters = ({
   onClearFilters, 
   resultCount 
 }: ProductFiltersProps) => {
+  const { data: products = [] } = useProducts();
+  const { data: collections = [] } = useCollections();
+  const { data: filterOptions = [] } = useFilterOptions();
+
   const [selectedFilters, setSelectedFilters] = useState<{[key: string]: string[]}>({
     sort: [],
     collection: [],
-    frameColor: [],
-    lensColor: [],
-    tech: [],
-    faceSize: []
+    category: [],
+    color: [],
+    usage: [],
+    genre: []
   });
 
   const handleCheckboxChange = (section: string, value: string, checked: boolean) => {
@@ -36,8 +45,12 @@ export const ProductFilters = ({
       const newFilters = { ...prev };
       if (checked) {
         newFilters[section] = [...(newFilters[section] || []), value];
+        onFilterChange(section, value);
       } else {
         newFilters[section] = (newFilters[section] || []).filter(item => item !== value);
+        if (newFilters[section].length === 0) {
+          onFilterChange(section, 'all');
+        }
       }
       return newFilters;
     });
@@ -47,72 +60,109 @@ export const ProductFilters = ({
     setSelectedFilters({
       sort: [],
       collection: [],
-      frameColor: [],
-      lensColor: [],
-      tech: [],
-      faceSize: []
+      category: [],
+      color: [],
+      usage: [],
+      genre: []
     });
     onClearFilters();
   };
 
+  // Generate dynamic filter options based on actual product data
+  const getUniqueCategories = () => {
+    const categories = products.map(p => p.category).filter(Boolean);
+    const uniqueCategories = [...new Set(categories)];
+    return uniqueCategories.map(cat => ({
+      value: cat,
+      label: cat === 'classic' ? 'Classic' : 
+             cat === 'sport' ? 'Sport' : 
+             cat === 'pro' ? 'Pro' : 
+             cat === 'femme' ? 'Femme' : 
+             cat === 'homme' ? 'Homme' : 
+             cat === 'lifestyle' ? 'Lifestyle' : cat,
+      count: products.filter(p => p.category === cat).length
+    }));
+  };
+
+  const getUniqueColors = () => {
+    const allColors = products.flatMap(p => p.color || []);
+    const uniqueColors = [...new Set(allColors)];
+    return uniqueColors.map(color => ({
+      value: color,
+      label: color.charAt(0).toUpperCase() + color.slice(1),
+      count: products.filter(p => p.color?.includes(color)).length
+    }));
+  };
+
+  const getUniqueUsages = () => {
+    const usages = products.map(p => p.usage).filter(Boolean);
+    const uniqueUsages = [...new Set(usages)];
+    return uniqueUsages.map(usage => ({
+      value: usage,
+      label: usage === 'quotidien' ? 'Quotidien' : 
+             usage === 'sport' ? 'Sport' : 
+             usage === 'conduite' ? 'Conduite' : 
+             usage === 'travail' ? 'Travail' : usage,
+      count: products.filter(p => p.usage === usage).length
+    }));
+  };
+
+  const getUniqueGenres = () => {
+    const genres = products.map(p => p.genre).filter(Boolean);
+    const uniqueGenres = [...new Set(genres)];
+    return uniqueGenres.map(genre => ({
+      value: genre,
+      label: genre === 'mixte' ? 'Mixte' : 
+             genre === 'homme' ? 'Homme' : 
+             genre === 'femme' ? 'Femme' : genre,
+      count: products.filter(p => p.genre === genre).length
+    }));
+  };
+
+  const getCollectionOptions = () => {
+    return collections.map(collection => ({
+      value: collection.slug,
+      label: collection.name,
+      count: products.filter(p => p.collection === collection.slug).length
+    }));
+  };
+
   const filterSections = [
     {
-      title: "SORT BY",
+      title: "TRI",
       key: "sort",
       options: [
-        { value: "best-selling", label: "Best selling" },
-        { value: "price-low-high", label: "Price, low to high" },
-        { value: "price-high-low", label: "Price, high to low" }
+        { value: "popularity", label: "Plus populaires" },
+        { value: "price-asc", label: "Prix croissant" },
+        { value: "price-desc", label: "Prix décroissant" },
+        { value: "newest", label: "Nouveautés" },
+        { value: "rating", label: "Mieux notés" }
       ]
     },
     {
       title: "COLLECTION",
       key: "collection",
-      options: [
-        { value: "lifestyle", label: "Lifestyle", count: 16 },
-        { value: "prismatic", label: "Prismatic", count: 8 },
-        { value: "sport", label: "Sport", count: 36 }
-      ]
+      options: getCollectionOptions()
     },
     {
-      title: "FRAME COLOR",
-      key: "frameColor",
-      options: [
-        { value: "black", label: "Black", count: 42 },
-        { value: "black-gold", label: "Black/Gold", count: 2 },
-        { value: "clear", label: "Clear", count: 5 },
-        { value: "white", label: "White", count: 11 }
-      ]
+      title: "CATÉGORIE",
+      key: "category",
+      options: getUniqueCategories()
     },
     {
-      title: "LENS COLOR",
-      key: "lensColor",
-      options: [
-        { value: "blue", label: "Blue", count: 6 },
-        { value: "calm", label: "Calm", count: 7 },
-        { value: "fire", label: "Fire", count: 26 },
-        { value: "purple", label: "Purple", count: 5 },
-        { value: "smoke", label: "Smoke", count: 13 }
-      ]
+      title: "COULEUR",
+      key: "color",
+      options: getUniqueColors()
     },
     {
-      title: "TECH",
-      key: "tech",
-      options: [
-        { value: "built-in-audio", label: "Built-in audio", count: 22 },
-        { value: "adjustable-tint", label: "Adjustable tint", count: 52 },
-        { value: "color-changing-lenses", label: "Color-changing lenses", count: 5 }
-      ]
+      title: "USAGE",
+      key: "usage",
+      options: getUniqueUsages()
     },
     {
-      title: "FACE SIZE",
-      key: "faceSize",
-      options: [
-        { value: "average", label: "Average", count: 23 },
-        { value: "medium-wide", label: "Medium-Wide", count: 10 },
-        { value: "narrow", label: "Narrow", count: 2 },
-        { value: "wide", label: "Wide", count: 22 }
-      ]
+      title: "GENRE",
+      key: "genre",
+      options: getUniqueGenres()
     }
   ];
 
@@ -128,7 +178,7 @@ export const ProductFilters = ({
           <div className="flex items-center gap-3">
             <Filter className="h-5 w-5 text-gray-600 dark:text-gray-400" />
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Filters ({getTotalSelectedFilters()})
+              Filtres ({getTotalSelectedFilters()})
             </h3>
           </div>
           <Button 
@@ -140,6 +190,9 @@ export const ProductFilters = ({
             <X className="h-4 w-4" />
           </Button>
         </div>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          {resultCount} produit{resultCount > 1 ? 's' : ''} trouvé{resultCount > 1 ? 's' : ''}
+        </p>
       </div>
 
       {/* Filter Sections */}
@@ -165,7 +218,7 @@ export const ProductFilters = ({
                     className="text-sm text-gray-700 dark:text-gray-300 cursor-pointer flex-1 flex items-center justify-between"
                   >
                     <span>{option.label}</span>
-                    {option.count && (
+                    {option.count !== undefined && (
                       <span className="text-gray-500 dark:text-gray-400">({option.count})</span>
                     )}
                   </label>
@@ -180,17 +233,17 @@ export const ProductFilters = ({
       <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
         <div className="space-y-3">
           <Button 
-            className="w-full bg-gray-600 hover:bg-gray-700 text-white"
-            onClick={() => {/* Apply filters logic */}}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+            onClick={() => {/* Apply filters logic is handled by individual checkboxes */}}
           >
-            SELECT A FILTER
+            APPLIQUER LES FILTRES
           </Button>
           <Button 
             variant="ghost" 
             className="w-full text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
             onClick={clearAllFilters}
           >
-            Clear all
+            Effacer tout
           </Button>
         </div>
       </div>
