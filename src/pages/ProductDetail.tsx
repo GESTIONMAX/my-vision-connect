@@ -6,17 +6,24 @@ import { Star, ShoppingCart, Heart, Share2, ArrowLeft, Check } from 'lucide-reac
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { products } from '@/data/products';
+import { useProduct } from '@/hooks/useProducts';
 import { Link } from 'react-router-dom';
 
 const ProductDetail = () => {
   const { slug } = useParams();
+  const { data: product, isLoading, error } = useProduct(slug || '');
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedColor, setSelectedColor] = useState('');
 
-  const product = products.find(p => p.slug === slug);
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
-  if (!product) {
+  if (error || !product) {
     return <Navigate to="/products" replace />;
   }
 
@@ -41,13 +48,13 @@ const ProductDetail = () => {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid lg:grid-cols-2 gap-12">
-          {/* Galerie d'images */}
+          {/* Image gallery */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             className="space-y-4"
           >
-            {/* Image principale */}
+            {/* Main image */}
             <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 rounded-2xl overflow-hidden">
               <div className="w-full h-full flex items-center justify-center">
                 <span className="text-gray-500 dark:text-gray-400 text-2xl font-medium">
@@ -56,7 +63,7 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            {/* Miniatures */}
+            {/* Thumbnails */}
             <div className="grid grid-cols-3 gap-4">
               {product.images.map((_, index) => (
                 <button
@@ -78,7 +85,7 @@ const ProductDetail = () => {
             </div>
           </motion.div>
 
-          {/* Informations produit */}
+          {/* Product information */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -103,7 +110,7 @@ const ProductDetail = () => {
               )}
             </div>
 
-            {/* Titre et rating */}
+            {/* Title and rating */}
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
                 {product.name}
@@ -127,7 +134,7 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            {/* Prix */}
+            {/* Price */}
             <div className="flex items-center gap-4">
               <span className="text-4xl font-bold text-blue-600 dark:text-blue-400">
                 {product.price}€
@@ -149,7 +156,7 @@ const ProductDetail = () => {
               {product.description}
             </p>
 
-            {/* Sélection couleur */}
+            {/* Color selection */}
             <div>
               <h3 className="font-semibold mb-3">Couleur</h3>
               <div className="flex flex-wrap gap-2">
@@ -202,7 +209,7 @@ const ProductDetail = () => {
           </motion.div>
         </div>
 
-        {/* Spécifications techniques */}
+        {/* Technical specifications */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

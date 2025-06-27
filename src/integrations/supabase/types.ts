@@ -9,6 +9,159 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      collections: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          name: string
+          slug: string
+          sort_order: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          name: string
+          slug: string
+          sort_order?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          name?: string
+          slug?: string
+          sort_order?: number | null
+        }
+        Relationships: []
+      }
+      filter_options: {
+        Row: {
+          created_at: string | null
+          filter_type: string
+          hex_color: string | null
+          id: string
+          name: string
+          sort_order: number | null
+          value: string
+        }
+        Insert: {
+          created_at?: string | null
+          filter_type: string
+          hex_color?: string | null
+          id?: string
+          name: string
+          sort_order?: number | null
+          value: string
+        }
+        Update: {
+          created_at?: string | null
+          filter_type?: string
+          hex_color?: string | null
+          id?: string
+          name?: string
+          sort_order?: number | null
+          value?: string
+        }
+        Relationships: []
+      }
+      product_collections: {
+        Row: {
+          collection_id: string
+          product_id: string
+        }
+        Insert: {
+          collection_id: string
+          product_id: string
+        }
+        Update: {
+          collection_id?: string
+          product_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_collections_collection_id_fkey"
+            columns: ["collection_id"]
+            isOneToOne: false
+            referencedRelation: "collections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_collections_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_filters: {
+        Row: {
+          filter_option_id: string
+          product_id: string
+        }
+        Insert: {
+          filter_option_id: string
+          product_id: string
+        }
+        Update: {
+          filter_option_id?: string
+          product_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_filters_filter_option_id_fkey"
+            columns: ["filter_option_id"]
+            isOneToOne: false
+            referencedRelation: "filter_options"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_filters_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_tags: {
+        Row: {
+          product_id: string
+          tag_id: string
+        }
+        Insert: {
+          product_id: string
+          tag_id: string
+        }
+        Update: {
+          product_id?: string
+          tag_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_tags_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_tags_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           category: string | null
@@ -22,13 +175,17 @@ export type Database = {
           images: string[] | null
           in_stock: boolean | null
           is_bundle: boolean | null
+          is_featured: boolean | null
           is_new: boolean | null
           is_popular: boolean | null
           name: string
           original_price: number | null
           price: number
+          review_count: number | null
           slug: string
           specifications: Json | null
+          stock_quantity: number | null
+          updated_at: string | null
           usage: string | null
         }
         Insert: {
@@ -43,13 +200,17 @@ export type Database = {
           images?: string[] | null
           in_stock?: boolean | null
           is_bundle?: boolean | null
+          is_featured?: boolean | null
           is_new?: boolean | null
           is_popular?: boolean | null
           name: string
           original_price?: number | null
           price: number
+          review_count?: number | null
           slug: string
           specifications?: Json | null
+          stock_quantity?: number | null
+          updated_at?: string | null
           usage?: string | null
         }
         Update: {
@@ -64,14 +225,45 @@ export type Database = {
           images?: string[] | null
           in_stock?: boolean | null
           is_bundle?: boolean | null
+          is_featured?: boolean | null
           is_new?: boolean | null
           is_popular?: boolean | null
           name?: string
           original_price?: number | null
           price?: number
+          review_count?: number | null
           slug?: string
           specifications?: Json | null
+          stock_quantity?: number | null
+          updated_at?: string | null
           usage?: string | null
+        }
+        Relationships: []
+      }
+      tags: {
+        Row: {
+          category: string
+          color: string | null
+          created_at: string | null
+          icon: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          category: string
+          color?: string | null
+          created_at?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          category?: string
+          color?: string | null
+          created_at?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
         }
         Relationships: []
       }

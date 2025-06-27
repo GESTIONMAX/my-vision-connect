@@ -1,10 +1,17 @@
+
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ProductCard } from '@/components/ProductCard';
 import { ProductFilters } from '@/components/ProductFilters';
-import { products, Product } from '@/data/products';
+import { useProducts } from '@/hooks/useProducts';
+import { useCollections } from '@/hooks/useCollections';
+import { useFilterOptions } from '@/hooks/useFilterOptions';
 
 const Products = () => {
+  const { data: products = [], isLoading: productsLoading } = useProducts();
+  const { data: collections = [] } = useCollections();
+  const { data: filterOptions = [] } = useFilterOptions();
+
   const [filters, setFilters] = useState({
     category: 'all',
     color: 'all',
@@ -39,7 +46,7 @@ const Products = () => {
       return true;
     });
 
-    // Tri
+    // Sort products
     switch (filters.sort) {
       case 'price-asc':
         filtered.sort((a, b) => a.price - b.price);
@@ -60,15 +67,25 @@ const Products = () => {
     }
 
     return filtered;
-  }, [filters]);
+  }, [products, filters]);
 
-  // Créer une grille avec des images d'ambiance intégrées
+  // Create a grid with ambient images integrated
   const createGridWithAmbientImages = () => {
+    if (productsLoading) {
+      return Array.from({ length: 8 }).map((_, i) => (
+        <div key={i} className="animate-pulse">
+          <div className="bg-gray-200 dark:bg-gray-700 rounded-xl aspect-[4/3] mb-4"></div>
+          <div className="bg-gray-200 dark:bg-gray-700 rounded h-4 mb-2"></div>
+          <div className="bg-gray-200 dark:bg-gray-700 rounded h-4 w-3/4"></div>
+        </div>
+      ));
+    }
+
     const items = [];
     let productIndex = 0;
 
     for (let i = 0; i < Math.ceil(filteredAndSortedProducts.length * 1.4); i++) {
-      // Ajouter une image d'ambiance tous les 6-8 produits
+      // Add ambient image every 6-8 products
       if (i > 0 && i % 7 === 0 && productIndex < filteredAndSortedProducts.length - 2) {
         items.push(
           <motion.div
@@ -82,7 +99,7 @@ const Products = () => {
               <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
                 <div className="text-center text-white p-6">
                   <h3 className="text-2xl font-bold mb-2">
-                    {i % 14 === 0 ? "Style & Performance" : "Innovation NeoShades"}
+                    {i % 14 === 0 ? "Style & Performance" : "Innovation Chamelo"}
                   </h3>
                   <p className="text-blue-100">
                     {i % 14 === 0 
@@ -130,10 +147,10 @@ const Products = () => {
         </div>
       </section>
 
-      {/* Contenu principal avec sidebar */}
+      {/* Main content with sidebar */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex gap-8">
-          {/* Sidebar des filtres */}
+          {/* Filters sidebar */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -148,10 +165,10 @@ const Products = () => {
             />
           </motion.div>
 
-          {/* Contenu principal */}
+          {/* Main content */}
           <div className="flex-1">
-            {/* Grille de produits avec images d'ambiance */}
-            {filteredAndSortedProducts.length > 0 ? (
+            {/* Products grid with ambient images */}
+            {filteredAndSortedProducts.length > 0 || productsLoading ? (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
