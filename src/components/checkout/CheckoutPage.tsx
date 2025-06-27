@@ -1,6 +1,8 @@
+
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useCart } from '@/hooks/useCart';
+import { useNavigate } from 'react-router-dom';
 import { CartSummary } from '@/components/cart/CartSummary';
 import { CartItems } from '@/components/cart/CartItems';
 import { CheckoutSteps } from './CheckoutSteps';
@@ -12,10 +14,12 @@ export type CheckoutStep = 'cart' | 'payment' | 'account' | 'confirmation';
 
 export const CheckoutPage = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const { 
     items, 
     updateQuantity, 
     removeItem,
+    clearCart,
     subtotal, 
     discountAmount, 
     businessDiscount, 
@@ -34,6 +38,18 @@ export const CheckoutPage = () => {
       setCurrentStep('confirmation');
     }
   }, [user, currentStep]);
+
+  // Redirection automatique après confirmation
+  useEffect(() => {
+    if (currentStep === 'confirmation') {
+      const timer = setTimeout(() => {
+        clearCart(); // Vider le panier
+        navigate('/'); // Rediriger vers l'accueil
+      }, 5000); // Redirection après 5 secondes
+
+      return () => clearTimeout(timer);
+    }
+  }, [currentStep, navigate, clearCart]);
 
   if (itemCount === 0) {
     return <EmptyCart />;
@@ -60,6 +76,11 @@ export const CheckoutPage = () => {
   const handleAccountCreated = () => {
     console.log('Compte créé/connexion réussie, redirection vers confirmation');
     setCurrentStep('confirmation');
+  };
+
+  const handleBackToHome = () => {
+    clearCart();
+    navigate('/');
   };
 
   return (
@@ -103,15 +124,35 @@ export const CheckoutPage = () => {
           )}
 
           {currentStep === 'confirmation' && (
-            <div className="space-y-4">
+            <div className="space-y-6">
               <h2 className="text-2xl font-bold">Confirmation</h2>
-              <div className="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg">
-                <p className="text-green-800 dark:text-green-200">
+              <div className="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg space-y-4">
+                <div className="flex items-center space-x-2">
+                  <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <p className="text-green-800 dark:text-green-200 font-semibold">
+                    {isBusinessUser 
+                      ? 'Votre demande de devis a été transmise !' 
+                      : 'Votre commande a été confirmée !'}
+                  </p>
+                </div>
+                <p className="text-green-700 dark:text-green-300">
                   {isBusinessUser 
-                    ? 'Votre demande de devis a été transmise. Un commercial vous contactera sous 24h.'
-                    : 'Votre commande a été confirmée. Vous recevrez un email de confirmation.'
-                  }
+                    ? 'Un commercial vous contactera sous 24h pour finaliser votre devis.'
+                    : 'Vous recevrez un email de confirmation dans quelques minutes.'}
                 </p>
+                <p className="text-sm text-green-600 dark:text-green-400">
+                  Redirection automatique vers l'accueil dans 5 secondes...
+                </p>
+                <button
+                  onClick={handleBackToHome}
+                  className="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors"
+                >
+                  Retourner à l'accueil
+                </button>
               </div>
             </div>
           )}
