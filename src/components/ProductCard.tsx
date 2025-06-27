@@ -6,6 +6,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Product } from '@/hooks/useProducts';
+import { useCart } from '@/hooks/useCart';
+import { useToast } from '@/hooks/use-toast';
 
 interface ProductCardProps {
   product: Product;
@@ -13,6 +15,29 @@ interface ProductCardProps {
 }
 
 export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
+  const { addItem } = useCart();
+  const { toast } = useToast();
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    addItem({
+      id: product.slug,
+      name: product.name,
+      price: product.price,
+      quantity: 1,
+      reference: product.slug,
+      category: product.category || 'Lunettes',
+      originalPrice: product.originalPrice
+    });
+
+    toast({
+      title: "Produit ajouté",
+      description: `${product.name} a été ajouté à votre panier`,
+    });
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -51,7 +76,13 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
             <Button size="icon" variant="secondary" className="rounded-full h-8 w-8">
               <Eye className="h-4 w-4" />
             </Button>
-            <Button size="icon" variant="secondary" className="rounded-full h-8 w-8" disabled={!product.inStock}>
+            <Button 
+              size="icon" 
+              variant="secondary" 
+              className="rounded-full h-8 w-8" 
+              disabled={!product.inStock}
+              onClick={handleAddToCart}
+            >
               <ShoppingCart className="h-4 w-4" />
             </Button>
           </div>
@@ -59,17 +90,12 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           {/* Image simulée de lunettes */}
           <div className="absolute inset-0 flex items-center justify-center p-8">
             <div className="relative w-full h-full flex items-center justify-center">
-              {/* Forme de lunettes stylisée */}
               <div className="relative">
                 <div className="flex items-center justify-center gap-1">
-                  {/* Verre gauche */}
                   <div className="w-16 h-12 rounded-full border-4 border-gray-800 dark:border-gray-200 bg-gradient-to-br from-blue-900/30 to-purple-900/30"></div>
-                  {/* Pont */}
                   <div className="w-3 h-1 bg-gray-800 dark:bg-gray-200 rounded"></div>
-                  {/* Verre droit */}
                   <div className="w-16 h-12 rounded-full border-4 border-gray-800 dark:border-gray-200 bg-gradient-to-br from-blue-900/30 to-purple-900/30"></div>
                 </div>
-                {/* Branches */}
                 <div className="absolute top-1/2 -left-4 w-6 h-1 bg-gray-800 dark:bg-gray-200 rounded transform -translate-y-1/2 rotate-12"></div>
                 <div className="absolute top-1/2 -right-4 w-6 h-1 bg-gray-800 dark:bg-gray-200 rounded transform -translate-y-1/2 -rotate-12"></div>
               </div>
@@ -106,7 +132,6 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
               )}
             </div>
 
-            {/* Rating */}
             <div className="flex items-center gap-2 mb-3">
               <div className="flex items-center">
                 {[...Array(5)].map((_, i) => (
@@ -144,6 +169,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
               variant={product.inStock ? "default" : "secondary"} 
               size="sm"
               disabled={!product.inStock}
+              onClick={handleAddToCart}
             >
               {product.inStock ? "Ajouter" : "Rupture"}
             </Button>
