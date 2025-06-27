@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useCart } from '@/hooks/useCart';
@@ -95,7 +94,7 @@ export const CheckoutPage = () => {
 
           {currentStep === 'account' && !user && (
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold">Créer votre compte</h2>
+              <h2 className="text-2xl font-bold">Connexion ou création de compte</h2>
               <AccountCreation
                 onAccountCreated={handleAccountCreated}
                 isBusinessUser={isBusinessUser}
@@ -136,7 +135,7 @@ export const CheckoutPage = () => {
                 className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white py-3 px-6 rounded-lg font-semibold transition-colors"
               >
                 {currentStep === 'cart' && 'Continuer vers le paiement'}
-                {currentStep === 'payment' && (user ? 'Finaliser la commande' : 'Créer mon compte')}
+                {currentStep === 'payment' && (user ? 'Finaliser la commande' : 'Se connecter ou créer un compte')}
                 {currentStep === 'account' && 'Finaliser la commande'}
               </button>
             )}
