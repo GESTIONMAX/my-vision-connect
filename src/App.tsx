@@ -28,6 +28,7 @@ import Technology from "./pages/Technology";
 import FAQ from "./pages/FAQ";
 import Careers from "./pages/Careers";
 import Auth from "./pages/Auth";
+import Welcome from "./pages/Welcome";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -56,6 +57,11 @@ const App = () => (
                   <Route path="/faq" element={<FAQ />} />
                   <Route path="/careers" element={<Careers />} />
                   <Route path="/auth" element={<Auth />} />
+                  <Route path="/welcome" element={
+                    <ProtectedRoute>
+                      <Welcome />
+                    </ProtectedRoute>
+                  } />
                   
                   {/* Account Routes - Protected */}
                   <Route path="/account" element={
