@@ -4,8 +4,58 @@ import { Headphones, FileText, Download, Phone, Mail, MessageCircle, Clock, User
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { useToast } from '@/hooks/use-toast';
 
 const B2BSupport = () => {
+  const { toast } = useToast();
+
+  const handleContactClick = (type: string, contact: string) => {
+    switch (type) {
+      case 'phone':
+        window.open(`tel:${contact.replace(/\s/g, '')}`);
+        break;
+      case 'email':
+        window.open(`mailto:${contact}`);
+        break;
+      case 'chat':
+        toast({
+          title: "Chat en cours d'ouverture",
+          description: "Un agent va vous contacter dans quelques instants.",
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleGuideDownload = (guideName: string) => {
+    toast({
+      title: "Téléchargement en cours",
+      description: `Le guide "${guideName}" va être téléchargé.`,
+    });
+    // Simulate download
+    setTimeout(() => {
+      toast({
+        title: "Téléchargement terminé",
+        description: `Le guide "${guideName}" a été téléchargé avec succès.`,
+      });
+    }, 2000);
+  };
+
+  const handleCTAClick = (action: string) => {
+    if (action === 'contact') {
+      toast({
+        title: "Contact de l'équipe pro",
+        description: "Vous allez être redirigé vers notre formulaire de contact.",
+      });
+    } else if (action === 'download') {
+      toast({
+        title: "Téléchargement des guides",
+        description: "Préparation du pack complet des guides...",
+      });
+    }
+  };
+
   const contactOptions = [
     {
       icon: Phone,
@@ -13,7 +63,8 @@ const B2BSupport = () => {
       description: 'Assistance pour installation et configuration',
       contact: '+33 1 23 45 67 89',
       hours: 'Lun-Ven 8h-18h',
-      color: 'from-blue-500 to-blue-600'
+      color: 'from-blue-500 to-blue-600',
+      type: 'phone'
     },
     {
       icon: Mail,
@@ -21,7 +72,8 @@ const B2BSupport = () => {
       description: 'Questions sur commandes et partenariat',
       contact: 'commercial@chamelo.fr',
       hours: 'Lun-Ven 9h-17h',
-      color: 'from-purple-500 to-purple-600'
+      color: 'from-purple-500 to-purple-600',
+      type: 'email'
     },
     {
       icon: MessageCircle,
@@ -29,7 +81,8 @@ const B2BSupport = () => {
       description: 'Réponse immédiate à vos questions',
       contact: 'Démarrer le chat',
       hours: 'Lun-Sam 8h-20h',
-      color: 'from-green-500 to-green-600'
+      color: 'from-green-500 to-green-600',
+      type: 'chat'
     }
   ];
 
@@ -162,7 +215,10 @@ const B2BSupport = () => {
                         {option.hours}
                       </div>
                     </div>
-                    <Button className={`w-full bg-gradient-to-r ${option.color} hover:shadow-lg`}>
+                    <Button 
+                      className={`w-full bg-gradient-to-r ${option.color} hover:shadow-lg`}
+                      onClick={() => handleContactClick(option.type, option.contact)}
+                    >
                       Contacter
                     </Button>
                   </CardContent>
@@ -260,7 +316,10 @@ const B2BSupport = () => {
                       <span>•</span>
                       <span>{guide.size}</span>
                     </div>
-                    <Button className="w-full group-hover:bg-blue-600 transition-colors">
+                    <Button 
+                      className="w-full group-hover:bg-blue-600 transition-colors"
+                      onClick={() => handleGuideDownload(guide.title)}
+                    >
                       <Download className="h-4 w-4 mr-2" />
                       Télécharger
                     </Button>
@@ -290,6 +349,7 @@ const B2BSupport = () => {
               <Button 
                 size="lg"
                 className="bg-white text-blue-900 hover:bg-blue-50 px-8 py-4 text-lg font-semibold"
+                onClick={() => handleCTAClick('contact')}
               >
                 <Headphones className="mr-2 h-5 w-5" />
                 Contacter l'équipe pro
@@ -298,6 +358,7 @@ const B2BSupport = () => {
                 size="lg"
                 variant="outline"
                 className="border-white text-white hover:bg-white hover:text-blue-900 px-8 py-4 text-lg font-semibold"
+                onClick={() => handleCTAClick('download')}
               >
                 <Download className="mr-2 h-5 w-5" />
                 Télécharger les guides
