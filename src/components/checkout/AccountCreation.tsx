@@ -20,7 +20,7 @@ export const AccountCreation = ({ onAccountCreated, isBusinessUser }: AccountCre
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [activeTab, setActiveTab] = useState('signup');
+  const [activeTab, setActiveTab] = useState('signin');
 
   // Formulaire de connexion
   const [signInData, setSignInData] = useState({
@@ -110,18 +110,25 @@ export const AccountCreation = ({ onAccountCreated, isBusinessUser }: AccountCre
   };
 
   return (
-    <Card>
+    <Card className="w-full">
       <CardHeader>
-        <CardTitle>Connexion ou création de compte</CardTitle>
+        <CardTitle className="text-center">Connexion ou création de compte</CardTitle>
       </CardHeader>
       <CardContent>
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="signin">Se connecter</TabsTrigger>
-            <TabsTrigger value="signup">Créer un compte</TabsTrigger>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsTrigger value="signin" className="text-sm">Se connecter</TabsTrigger>
+            <TabsTrigger value="signup" className="text-sm">Créer un compte</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="signin" className="space-y-4">
+          <TabsContent value="signin" className="space-y-4 mt-0">
+            <div className="text-center mb-4">
+              <h3 className="text-lg font-semibold">Connexion</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Connectez-vous à votre compte existant
+              </p>
+            </div>
+            
             <form onSubmit={handleSignIn} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="signin-email">Email</Label>
@@ -171,7 +178,14 @@ export const AccountCreation = ({ onAccountCreated, isBusinessUser }: AccountCre
             </form>
           </TabsContent>
 
-          <TabsContent value="signup" className="space-y-4">
+          <TabsContent value="signup" className="space-y-4 mt-0">
+            <div className="text-center mb-4">
+              <h3 className="text-lg font-semibold">Créer un compte</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Créez votre nouveau compte pour continuer
+              </p>
+            </div>
+
             <form onSubmit={handleSignUp} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
