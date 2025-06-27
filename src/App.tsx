@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -5,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { AuthProvider } from "@/hooks/useAuth";
+import { CartProvider } from "@/contexts/CartContext";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
@@ -37,55 +39,57 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider defaultTheme="system" storageKey="euroglobal-theme">
       <AuthProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <div className="min-h-screen flex flex-col">
-              <Header />
-              <main className="flex-1">
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/b2c" element={<B2C />} />
-                  <Route path="/b2b" element={<B2B />} />
-                  <Route path="/b2b/catalog" element={<B2BCatalog />} />
-                  <Route path="/b2b/partnership" element={<B2BPartnership />} />
-                  <Route path="/b2b/support" element={<B2BSupport />} />
-                  <Route path="/products" element={<Products />} />
-                  <Route path="/products/:slug" element={<ProductDetail />} />
-                  <Route path="/technology" element={<Technology />} />
-                  <Route path="/faq" element={<FAQ />} />
-                  <Route path="/careers" element={<Careers />} />
-                  <Route path="/auth" element={<Auth />} />
-                  <Route path="/checkout" element={<Checkout />} />
-                  <Route path="/welcome" element={
-                    <ProtectedRoute>
-                      <Welcome />
-                    </ProtectedRoute>
-                  } />
-                  
-                  {/* Account Routes - Protected */}
-                  <Route path="/account" element={
-                    <ProtectedRoute>
-                      <AccountLayout />
-                    </ProtectedRoute>
-                  }>
-                    <Route path="dashboard" element={<Dashboard />} />
-                    <Route path="profile" element={<Profile />} />
-                    <Route path="orders" element={<OrdersPage />} />
-                    <Route path="cart" element={<CartPage />} />
-                    <Route path="favorites" element={<FavoritesPage />} />
-                    <Route path="settings" element={<SettingsPage />} />
-                  </Route>
-                  
-                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </main>
-              <Footer />
-            </div>
-          </BrowserRouter>
-        </TooltipProvider>
+        <CartProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <div className="min-h-screen flex flex-col">
+                <Header />
+                <main className="flex-1">
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/b2c" element={<B2C />} />
+                    <Route path="/b2b" element={<B2B />} />
+                    <Route path="/b2b/catalog" element={<B2BCatalog />} />
+                    <Route path="/b2b/partnership" element={<B2BPartnership />} />
+                    <Route path="/b2b/support" element={<B2BSupport />} />
+                    <Route path="/products" element={<Products />} />
+                    <Route path="/products/:slug" element={<ProductDetail />} />
+                    <Route path="/technology" element={<Technology />} />
+                    <Route path="/faq" element={<FAQ />} />
+                    <Route path="/careers" element={<Careers />} />
+                    <Route path="/auth" element={<Auth />} />
+                    <Route path="/checkout" element={<Checkout />} />
+                    <Route path="/welcome" element={
+                      <ProtectedRoute>
+                        <Welcome />
+                      </ProtectedRoute>
+                    } />
+                    
+                    {/* Account Routes - Protected */}
+                    <Route path="/account" element={
+                      <ProtectedRoute>
+                        <AccountLayout />
+                      </ProtectedRoute>
+                    }>
+                      <Route path="dashboard" element={<Dashboard />} />
+                      <Route path="profile" element={<Profile />} />
+                      <Route path="orders" element={<OrdersPage />} />
+                      <Route path="cart" element={<CartPage />} />
+                      <Route path="favorites" element={<FavoritesPage />} />
+                      <Route path="settings" element={<SettingsPage />} />
+                    </Route>
+                    
+                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </main>
+                <Footer />
+              </div>
+            </BrowserRouter>
+          </TooltipProvider>
+        </CartProvider>
       </AuthProvider>
     </ThemeProvider>
   </QueryClientProvider>
