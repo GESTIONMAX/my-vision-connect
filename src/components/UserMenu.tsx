@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/useAuth';
+import { AuthModal } from './AuthModal';
 
 export const UserMenu = () => {
   const { user, profile, signOut } = useAuth();
@@ -26,9 +27,9 @@ export const UserMenu = () => {
 
   if (!user) {
     return (
-      <Button asChild variant="default">
-        <Link to="/auth">Connexion</Link>
-      </Button>
+      <AuthModal>
+        <Button variant="default">Connexion</Button>
+      </AuthModal>
     );
   }
 
@@ -57,6 +58,12 @@ export const UserMenu = () => {
             <p className="text-xs leading-none text-muted-foreground">
               {user.email}
             </p>
+            {profile?.user_type === 'business' && profile?.company_name && (
+              <p className="text-xs leading-none text-blue-600 flex items-center gap-1">
+                <Building className="h-3 w-3" />
+                {profile.company_name}
+              </p>
+            )}
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

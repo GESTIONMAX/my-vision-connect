@@ -59,7 +59,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return;
       }
 
-      setProfile(data);
+      if (data) {
+        // Ensure the data matches our Profile interface
+        const profileData: Profile = {
+          id: data.id,
+          email: data.email,
+          first_name: data.first_name,
+          last_name: data.last_name,
+          phone: data.phone,
+          avatar_url: data.avatar_url,
+          user_type: data.user_type as 'customer' | 'business' | 'admin' | 'partner',
+          company_name: data.company_name,
+          company_siret: data.company_siret,
+          company_sector: data.company_sector,
+          pricing_group: data.pricing_group,
+          created_at: data.created_at,
+          updated_at: data.updated_at,
+        };
+        setProfile(profileData);
+      }
     } catch (error) {
       console.error('Error fetching profile:', error);
     }
