@@ -1,5 +1,5 @@
-
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Dialog,
   DialogContent,
@@ -26,6 +26,7 @@ export function AuthModal({ children }: AuthModalProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const { signIn, signUp } = useAuth();
+  const navigate = useNavigate();
 
   const [signInForm, setSignInForm] = useState({
     email: '',
@@ -60,6 +61,7 @@ export function AuthModal({ children }: AuthModalProps) {
     } else {
       setOpen(false);
       setSignInForm({ email: '', password: '' });
+      navigate('/welcome');
     }
     
     setLoading(false);
@@ -81,7 +83,6 @@ export function AuthModal({ children }: AuthModalProps) {
     setLoading(true);
     setError('');
 
-    // ✅ Appel corrigé avec un objet
     const { error } = await signUp({
       email: signUpForm.email,
       password: signUpForm.password,
@@ -112,6 +113,7 @@ export function AuthModal({ children }: AuthModalProps) {
         companyName: '',
         companySector: '',
       });
+      navigate('/welcome');
     }
     
     setLoading(false);

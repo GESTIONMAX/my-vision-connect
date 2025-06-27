@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -132,12 +131,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         password,
       });
 
-      if (!error) {
-        setTimeout(() => {
-          window.location.href = '/';
-        }, 100);
-      }
-
+      // Suppression de la redirection automatique pour laisser le contrôle aux composants
       return { error };
     } catch (error) {
       return { error: error as AuthError };

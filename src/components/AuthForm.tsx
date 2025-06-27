@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -20,6 +21,7 @@ export const AuthForm = () => {
   const [success, setSuccess] = useState('');
 
   const { signIn, signUp } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,6 +38,9 @@ export const AuthForm = () => {
           } else {
             setError(error.message);
           }
+        } else {
+          // Redirection vers la page de bienvenue après connexion réussie
+          navigate('/welcome');
         }
       } else {
         const { error } = await signUp({
