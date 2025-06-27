@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useParams, Navigate, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -50,10 +49,15 @@ const ProductDetail = () => {
     toast({
       title: "Produit ajouté",
       description: `${product.name} a été ajouté à votre panier`,
-      action: {
-        altText: "Voir le panier",
-        onClick: () => navigate('/checkout')
-      }
+      action: (
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => navigate('/checkout')}
+        >
+          Voir le panier
+        </Button>
+      )
     });
   };
 

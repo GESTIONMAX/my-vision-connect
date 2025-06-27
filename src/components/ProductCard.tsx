@@ -35,10 +35,15 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
     toast({
       title: "Produit ajouté",
       description: `${product.name} a été ajouté à votre panier`,
-      action: {
-        altText: "Voir le panier",
-        onClick: () => navigate('/checkout')
-      }
+      action: (
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => navigate('/checkout')}
+        >
+          Voir le panier
+        </Button>
+      )
     });
   };
 
