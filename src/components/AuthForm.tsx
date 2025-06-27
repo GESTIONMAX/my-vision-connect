@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -39,7 +38,13 @@ export const AuthForm = () => {
           }
         }
       } else {
-        const { error } = await signUp(email, password, firstName, lastName);
+        const { error } = await signUp({
+          email,
+          password,
+          firstName,
+          lastName,
+          userType: 'customer'
+        });
         if (error) {
           if (error.message.includes('User already registered')) {
             setError('Un compte avec cet email existe déjà');
