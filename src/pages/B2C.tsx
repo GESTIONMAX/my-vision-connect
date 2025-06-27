@@ -1,3 +1,4 @@
+
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Check, Star, Shield, Zap, Smartphone, Users, Award } from 'lucide-react';
@@ -57,7 +58,7 @@ const B2C = () => {
               className="flex justify-center"
             >
               <img
-                src="/placeholder.svg" // Replace with your hero image
+                src="/placeholder.svg"
                 alt="Lunettes connectées"
                 className="max-w-md rounded-lg shadow-xl"
               />
@@ -136,7 +137,7 @@ const B2C = () => {
               Découvrez les modèles les plus appréciés par nos clients.
             </p>
           </motion.div>
-          <PopularProductsShowcase products={featuredProducts} />
+          <PopularProductsShowcase />
         </div>
       </section>
 
@@ -206,131 +207,3 @@ const FeatureCard = ({ title, description, icon: Icon }: FeatureCardProps) => (
 );
 
 export default B2C;
-
-export interface Product {
-  id: string;
-  name: string;
-  slug: string;
-  description: string;
-  price: number;
-  originalPrice?: number;
-  specifications: Record<string, string>;
-  isNew: boolean;
-  isPopular: boolean;
-  isFeatured: boolean;
-  inStock: boolean;
-  stockQuantity: number;
-  reviewCount: number;
-  images: string[];
-  features: string[];
-  collection: string;
-  category: 'classic' | 'sport' | 'pro' | 'femme' | 'homme' | 'lifestyle';
-  color: string[];
-  usage: 'quotidien' | 'sport' | 'conduite' | 'travail';
-  genre?: 'mixte' | 'homme' | 'femme';
-  rating: number;
-  reviewCount: number;
-  originalPrice?: number;
-  inStock: boolean;
-  isNew: boolean;
-  isPopular: boolean;
-  original_price?: number;
-  is_new: boolean;
-  is_popular: boolean;
-  is_featured: boolean;
-  in_stock: boolean;
-  stock_quantity: number;
-  review_count: number;
-}
-
-const featuredProducts = [
-  {
-    id: '1',
-    name: 'Chamelo Classic',
-    slug: 'chamelo-classic',
-    description: 'Lunettes connectées à teinte électronique pour un usage quotidien.',
-    price: 299,
-    originalPrice: 349,
-    category: 'classic' as const,
-    color: ['noir', 'marron', 'bleu'],
-    usage: 'quotidien' as const,
-    genre: 'mixte' as const,
-    images: ['/placeholder.svg'],
-    features: ['Teinte électronique', 'Autonomie 48h'],
-    specifications: {},
-    isNew: false,
-    isPopular: true,
-    isFeatured: true,
-    inStock: true,
-    stockQuantity: 10,
-    reviewCount: 142,
-    rating: 4.8,
-    collection: 'lifestyle',
-    original_price: 349,
-    is_new: false,
-    is_popular: true,
-    is_featured: true,
-    in_stock: true,
-    stock_quantity: 10,
-    review_count: 142
-  },
-  {
-    id: '2',
-    name: 'Chamelo Sport',
-    slug: 'chamelo-sport',
-    description: 'Lunettes connectées robustes pour les activités sportives.',
-    price: 399,
-    originalPrice: 449,
-    category: 'sport' as const,
-    color: ['noir', 'rouge', 'blanc'],
-    usage: 'sport' as const,
-    genre: 'mixte' as const,
-    images: ['/placeholder.svg'],
-    features: ['Résistant aux chocs', 'Étanche IP67'],
-    specifications: {},
-    isNew: false,
-    isPopular: true,
-    isFeatured: true,
-    inStock: true,
-    stockQuantity: 5,
-    reviewCount: 89,
-    rating: 4.9,
-    collection: 'sport',
-    original_price: 449,
-    is_new: false,
-    is_popular: true,
-    is_featured: true,
-    in_stock: true,
-    stock_quantity: 5,
-    review_count: 89
-  },
-  {
-    id: '3',
-    name: 'Chamelo Pro',
-    slug: 'chamelo-pro',
-    description: 'Le summum de la technologie avec IA intégrée.',
-    price: 599,
-    category: 'pro' as const,
-    color: ['noir', 'titane'],
-    usage: 'travail' as const,
-    genre: 'mixte' as const,
-    images: ['/placeholder.svg'],
-    features: ['IA intégrée', 'GPS navigation'],
-    specifications: {},
-    isNew: true,
-    isPopular: false,
-    isFeatured: true,
-    inStock: true,
-    stockQuantity: 3,
-    reviewCount: 203,
-    rating: 5.0,
-    collection: 'prismatic',
-    original_price: undefined,
-    is_new: true,
-    is_popular: false,
-    is_featured: true,
-    in_stock: true,
-    stock_quantity: 3,
-    review_count: 203
-  }
-];
