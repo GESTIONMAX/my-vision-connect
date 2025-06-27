@@ -81,12 +81,16 @@ export function AuthModal({ children }: AuthModalProps) {
     setLoading(true);
     setError('');
 
-    const { error } = await signUp(
-      signUpForm.email, 
-      signUpForm.password, 
-      signUpForm.firstName, 
-      signUpForm.lastName
-    );
+    const { error } = await signUp({
+      email: signUpForm.email,
+      password: signUpForm.password,
+      firstName: signUpForm.firstName,
+      lastName: signUpForm.lastName,
+      phone: signUpForm.phone,
+      userType: signUpForm.userType,
+      companyName: signUpForm.companyName,
+      companySector: signUpForm.companySector,
+    });
     
     if (error) {
       if (error.message.includes('User already registered')) {

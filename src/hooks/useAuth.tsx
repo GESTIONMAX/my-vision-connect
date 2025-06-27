@@ -1,6 +1,6 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { User, Session } from '@supabase/supabase-js';
+import { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 
 interface Profile {
@@ -24,8 +24,17 @@ interface AuthContextType {
   session: Session | null;
   profile: Profile | null;
   loading: boolean;
-  signUp: (email: string, password: string, firstName?: string, lastName?: string) => Promise<{ error: any }>;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>;
+  signUp: (userData: {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    phone?: string;
+    userType: 'customer' | 'business';
+    companyName?: string;
+    companySector?: string;
+  }) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<void>;
   updateProfile: (updates: Partial<Profile>) => Promise<{ error: any }>;
 }
@@ -60,7 +69,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
 
       if (data) {
-        // Ensure the data matches our Profile interface
         const profileData: Profile = {
           id: data.id,
           email: data.email,
@@ -84,14 +92,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          // Defer profile fetching to prevent deadlocks
           setTimeout(() => {
             fetchProfile(session.user.id);
           }, 0);
@@ -103,7 +109,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     );
 
-    // Check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
@@ -120,28 +125,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, firstName?: string, lastName?: string) => {
-    try {
-      const redirectUrl = `${window.location.origin}/`;
-      
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: redirectUrl,
-          data: {
-            first_name: firstName,
-            last_name: lastName,
-          }
-        }
-      });
-
-      return { error };
-    } catch (error) {
-      return { error };
-    }
-  };
-
   const signIn = async (email: string, password: string) => {
     try {
       const { error } = await supabase.auth.signInWithPassword({
@@ -150,7 +133,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       });
 
       if (!error) {
-        // Force page reload for clean state
         setTimeout(() => {
           window.location.href = '/';
         }, 100);
@@ -158,7 +140,43 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       return { error };
     } catch (error) {
+      return { error: error as AuthError };
+    }
+  };
+
+  const signUp = async (userData: {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    phone?: string;
+    userType: 'customer' | 'business';
+    companyName?: string;
+    companySector?: string;
+  }) => {
+    try {
+      const redirectUrl = `${window.location.origin}/`;
+      
+      const { data, error } = await supabase.auth.signUp({
+        email: userData.email,
+        password: userData.password,
+        options: {
+          emailRedirectTo: redirectUrl,
+          data: {
+            first_name: userData.firstName,
+            last_name: userData.lastName,
+            phone: userData.phone,
+            user_type: userData.userType,
+            company_name: userData.userType === 'business' ? userData.companyName : null,
+            company_sector: userData.userType === 'business' ? userData.companySector : null,
+            pricing_group: userData.userType === 'business' ? 'business' : 'standard'
+          }
+        }
+      });
+
       return { error };
+    } catch (error) {
+      return { error: error as AuthError };
     }
   };
 
@@ -200,8 +218,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     session,
     profile,
     loading,
-    signUp,
     signIn,
+    signUp,
     signOut,
     updateProfile,
   };
