@@ -76,7 +76,7 @@ export const Header = () => {
             <ThemeToggle />
             {!isB2B && (
               <Button variant="ghost" size="icon" className="relative" asChild>
-                <Link to="/account/cart">
+                <Link to="/checkout">
                   <ShoppingBag className="h-5 w-5" />
                   {itemCount > 0 && (
                     <Badge 
@@ -125,7 +125,7 @@ export const Header = () => {
               {/* Mobile Cart Link */}
               {!isB2B && (
                 <Link
-                  to="/account/cart"
+                  to="/checkout"
                   className="mx-3 mt-4 px-3 py-2 border border-gray-300 rounded-md text-center text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-200 flex items-center justify-center gap-2"
                   onClick={() => setIsMenuOpen(false)}
                 >
