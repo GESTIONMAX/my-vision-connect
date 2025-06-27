@@ -15,46 +15,55 @@ export interface CartItem {
 
 const CART_STORAGE_KEY = 'euroglobal-cart';
 
+// Variable globale pour éviter les réinitialisations multiples
+let isInitialized = false;
+let globalCartItems: CartItem[] = [];
+
 export const useCart = () => {
   const { profile } = useAuth();
   const [items, setItems] = useState<CartItem[]>([]);
 
-  // Charger le panier depuis localStorage au démarrage
+  // Initialiser le panier une seule fois
   useEffect(() => {
-    const savedCart = localStorage.getItem(CART_STORAGE_KEY);
-    if (savedCart) {
-      try {
-        const parsedCart = JSON.parse(savedCart);
-        setItems(Array.isArray(parsedCart) ? parsedCart : []);
-        console.log('Panier chargé depuis localStorage:', parsedCart);
-      } catch (error) {
-        console.error('Erreur lors du chargement du panier:', error);
-        setItems([]);
+    if (!isInitialized) {
+      const savedCart = localStorage.getItem(CART_STORAGE_KEY);
+      if (savedCart) {
+        try {
+          const parsedCart = JSON.parse(savedCart);
+          globalCartItems = Array.isArray(parsedCart) ? parsedCart : [];
+          console.log('Panier initialisé depuis localStorage:', globalCartItems);
+        } catch (error) {
+          console.error('Erreur lors du chargement du panier:', error);
+          globalCartItems = [];
+        }
       }
+      isInitialized = true;
     }
+    setItems([...globalCartItems]);
   }, []);
 
-  // Sauvegarder le panier dans localStorage à chaque modification
+  // Synchroniser avec le panier global quand les items changent
   useEffect(() => {
+    globalCartItems = [...items];
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
-    console.log('Panier sauvegardé dans localStorage:', items);
+    console.log('Panier synchronisé:', items.length, 'produits');
   }, [items]);
 
   const addItem = useCallback((item: CartItem) => {
-    console.log('Ajout d\'un produit au panier:', item);
-    setItems(prev => {
-      const existingItem = prev.find(i => i.id === item.id);
+    console.log('Ajout d\'un produit au panier:', item.name);
+    setItems(prevItems => {
+      const existingItem = prevItems.find(i => i.id === item.id);
       if (existingItem) {
-        const updated = prev.map(i => 
+        const updated = prevItems.map(i => 
           i.id === item.id 
             ? { ...i, quantity: i.quantity + item.quantity }
             : i
         );
-        console.log('Produit existant mis à jour, nouveau panier:', updated);
+        console.log('Produit existant mis à jour, total:', updated.length, 'produits');
         return updated;
       }
-      const updated = [...prev, item];
-      console.log('Nouveau produit ajouté, nouveau panier:', updated);
+      const updated = [...prevItems, item];
+      console.log('Nouveau produit ajouté, total:', updated.length, 'produits');
       return updated;
     });
   }, []);
@@ -78,6 +87,8 @@ export const useCart = () => {
   const clearCart = useCallback(() => {
     console.log('Vidage du panier');
     setItems([]);
+    globalCartItems = [];
+    localStorage.removeItem(CART_STORAGE_KEY);
   }, []);
 
   const subtotal = useMemo(() => {
@@ -98,7 +109,7 @@ export const useCart = () => {
   const total = subtotal - discountAmount;
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
-  console.log('État actuel du panier:', { items, itemCount, subtotal, total });
+  console.log('État du panier - Produits:', itemCount, 'Total:', total.toFixed(2) + '€');
 
   return {
     items,

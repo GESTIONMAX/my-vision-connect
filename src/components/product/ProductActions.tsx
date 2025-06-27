@@ -10,7 +10,11 @@ interface ProductActionsProps {
 
 export const ProductActions = ({ product, onAddToCart }: ProductActionsProps) => {
   const handleAddToCart = () => {
-    console.log('Bouton ajouter au panier cliqué pour:', product.name);
+    console.log('=== AJOUT AU PANIER ===');
+    console.log('Produit:', product.name);
+    console.log('ID:', product.slug);
+    console.log('Prix:', product.price);
+    console.log('=======================');
     onAddToCart();
   };
 
