@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -19,7 +20,6 @@ export const AccountCreation = ({ onAccountCreated, isBusinessUser }: AccountCre
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [activeTab, setActiveTab] = useState('signin');
 
   // Formulaire de connexion
   const [signInData, setSignInData] = useState({
@@ -118,7 +118,7 @@ export const AccountCreation = ({ onAccountCreated, isBusinessUser }: AccountCre
         <CardTitle className="text-center">Connexion ou création de compte</CardTitle>
       </CardHeader>
       <CardContent>
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <Tabs defaultValue="signin" className="w-full">
           <TabsList className="grid w-full grid-cols-2 mb-6">
             <TabsTrigger value="signin" className="text-sm">Se connecter</TabsTrigger>
             <TabsTrigger value="signup" className="text-sm">Créer un compte</TabsTrigger>
