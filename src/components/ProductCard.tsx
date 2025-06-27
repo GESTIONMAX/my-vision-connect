@@ -5,7 +5,7 @@ import { Star, ShoppingCart, Eye } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Product } from '@/data/products';
+import { Product } from '@/hooks/useProducts';
 
 interface ProductCardProps {
   product: Product;
@@ -94,12 +94,12 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
 
             {/* Features */}
             <div className="flex flex-wrap gap-1 mb-3">
-              {product.features.slice(0, 2).map((feature) => (
+              {product.features && product.features.slice(0, 2).map((feature) => (
                 <Badge key={feature} variant="outline" className="text-xs">
                   {feature}
                 </Badge>
               ))}
-              {product.features.length > 2 && (
+              {product.features && product.features.length > 2 && (
                 <Badge variant="outline" className="text-xs">
                   +{product.features.length - 2}
                 </Badge>
