@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -56,6 +55,8 @@ export const AccountCreation = ({ onAccountCreated, isBusinessUser }: AccountCre
           setError(error.message);
         }
       } else {
+        // Connexion réussie - redirection vers l'étape suivante
+        console.log('Connexion réussie, redirection...');
         onAccountCreated();
       }
     } catch (err) {
@@ -100,6 +101,8 @@ export const AccountCreation = ({ onAccountCreated, isBusinessUser }: AccountCre
           setError(error.message);
         }
       } else {
+        // Création de compte réussie - redirection vers l'étape suivante
+        console.log('Création de compte réussie, redirection...');
         onAccountCreated();
       }
     } catch (err) {

@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useCart } from '@/hooks/useCart';
 import { CartSummary } from '@/components/cart/CartSummary';
@@ -28,6 +28,14 @@ export const CheckoutPage = () => {
   const [currentStep, setCurrentStep] = useState<CheckoutStep>('cart');
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('');
 
+  // Redirection automatique si l'utilisateur se connecte pendant le processus
+  useEffect(() => {
+    if (user && currentStep === 'account') {
+      console.log('Utilisateur connecté détecté, redirection vers confirmation');
+      setCurrentStep('confirmation');
+    }
+  }, [user, currentStep]);
+
   if (itemCount === 0) {
     return <EmptyCart />;
   }
@@ -48,6 +56,11 @@ export const CheckoutPage = () => {
     } else if (currentStep === 'account') {
       setCurrentStep('payment');
     }
+  };
+
+  const handleAccountCreated = () => {
+    console.log('Compte créé/connexion réussie, redirection vers confirmation');
+    setCurrentStep('confirmation');
   };
 
   return (
@@ -84,7 +97,7 @@ export const CheckoutPage = () => {
             <div className="space-y-4">
               <h2 className="text-2xl font-bold">Créer votre compte</h2>
               <AccountCreation
-                onAccountCreated={() => setCurrentStep('confirmation')}
+                onAccountCreated={handleAccountCreated}
                 isBusinessUser={isBusinessUser}
               />
             </div>
