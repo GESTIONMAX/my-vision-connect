@@ -1,5 +1,5 @@
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 
 export interface CartItem {
@@ -13,9 +13,30 @@ export interface CartItem {
   originalPrice?: number;
 }
 
+const CART_STORAGE_KEY = 'euroglobal-cart';
+
 export const useCart = () => {
   const { profile } = useAuth();
   const [items, setItems] = useState<CartItem[]>([]);
+
+  // Charger le panier depuis localStorage au démarrage
+  useEffect(() => {
+    const savedCart = localStorage.getItem(CART_STORAGE_KEY);
+    if (savedCart) {
+      try {
+        const parsedCart = JSON.parse(savedCart);
+        setItems(Array.isArray(parsedCart) ? parsedCart : []);
+      } catch (error) {
+        console.error('Erreur lors du chargement du panier:', error);
+        setItems([]);
+      }
+    }
+  }, []);
+
+  // Sauvegarder le panier dans localStorage à chaque modification
+  useEffect(() => {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+  }, [items]);
 
   const addItem = useCallback((item: CartItem) => {
     setItems(prev => {
