@@ -1,6 +1,5 @@
-
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Star, ShoppingCart, Eye } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -17,6 +16,7 @@ interface ProductCardProps {
 export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
   const { addItem } = useCart();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -35,6 +35,10 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
     toast({
       title: "Produit ajouté",
       description: `${product.name} a été ajouté à votre panier`,
+      action: {
+        altText: "Voir le panier",
+        onClick: () => navigate('/checkout')
+      }
     });
   };
 

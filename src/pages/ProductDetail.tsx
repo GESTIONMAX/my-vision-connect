@@ -1,12 +1,14 @@
 
 import { useState } from 'react';
-import { useParams, Navigate } from 'react-router-dom';
+import { useParams, Navigate, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Star, ShoppingCart, Heart, Share2, ArrowLeft, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useProduct } from '@/hooks/useProducts';
+import { useCart } from '@/hooks/useCart';
+import { useToast } from '@/hooks/use-toast';
 import { Link } from 'react-router-dom';
 
 const ProductDetail = () => {
@@ -14,6 +16,9 @@ const ProductDetail = () => {
   const { data: product, isLoading, error } = useProduct(slug || '');
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedColor, setSelectedColor] = useState('');
+  const { addItem } = useCart();
+  const { toast } = useToast();
+  const navigate = useNavigate();
 
   if (isLoading) {
     return (
@@ -30,6 +35,27 @@ const ProductDetail = () => {
   if (!selectedColor && product.color.length > 0) {
     setSelectedColor(product.color[0]);
   }
+
+  const handleAddToCart = () => {
+    addItem({
+      id: product.slug,
+      name: product.name,
+      price: product.price,
+      quantity: 1,
+      reference: product.slug,
+      category: product.category || 'Lunettes',
+      originalPrice: product.originalPrice
+    });
+
+    toast({
+      title: "Produit ajouté",
+      description: `${product.name} a été ajouté à votre panier`,
+      action: {
+        altText: "Voir le panier",
+        onClick: () => navigate('/checkout')
+      }
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -54,7 +80,6 @@ const ProductDetail = () => {
             animate={{ opacity: 1, x: 0 }}
             className="space-y-4"
           >
-            {/* Main image */}
             <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 rounded-2xl overflow-hidden">
               <div className="w-full h-full flex items-center justify-center">
                 <span className="text-gray-500 dark:text-gray-400 text-2xl font-medium">
@@ -63,7 +88,6 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            {/* Thumbnails */}
             <div className="grid grid-cols-3 gap-4">
               {product.images.map((_, index) => (
                 <button
@@ -91,7 +115,6 @@ const ProductDetail = () => {
             animate={{ opacity: 1, x: 0 }}
             className="space-y-6"
           >
-            {/* Badges */}
             <div className="flex flex-wrap gap-2">
               {product.isNew && (
                 <Badge className="bg-green-500 hover:bg-green-600 text-white">
@@ -110,7 +133,6 @@ const ProductDetail = () => {
               )}
             </div>
 
-            {/* Title and rating */}
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
                 {product.name}
@@ -134,7 +156,6 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            {/* Price */}
             <div className="flex items-center gap-4">
               <span className="text-4xl font-bold text-blue-600 dark:text-blue-400">
                 {product.price}€
@@ -151,12 +172,10 @@ const ProductDetail = () => {
               )}
             </div>
 
-            {/* Description */}
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
               {product.description}
             </p>
 
-            {/* Color selection */}
             <div>
               <h3 className="font-semibold mb-3">Couleur</h3>
               <div className="flex flex-wrap gap-2">
@@ -176,7 +195,6 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            {/* Features */}
             <div>
               <h3 className="font-semibold mb-3">Caractéristiques principales</h3>
               <div className="grid grid-cols-2 gap-2">
@@ -189,12 +207,13 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            {/* Actions */}
+            {/* Actions - corrected routing */}
             <div className="flex gap-4">
               <Button 
                 size="lg" 
                 className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
                 disabled={!product.inStock}
+                onClick={handleAddToCart}
               >
                 <ShoppingCart className="h-5 w-5 mr-2" />
                 {product.inStock ? 'Ajouter au panier' : 'Rupture de stock'}

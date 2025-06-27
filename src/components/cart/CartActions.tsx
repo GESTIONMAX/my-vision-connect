@@ -1,6 +1,6 @@
-
 import { CreditCard, FileText, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 interface CartActionsProps {
   onClearCart: () => void;
@@ -15,6 +15,12 @@ export const CartActions = ({
   isBusinessUser, 
   itemCount 
 }: CartActionsProps) => {
+  const navigate = useNavigate();
+  
+  const handleCheckout = () => {
+    navigate('/checkout');
+  };
+
   return (
     <div className="space-y-4">
       {/* Bouton principal */}
@@ -25,7 +31,7 @@ export const CartActions = ({
             ? 'bg-blue-600 hover:bg-blue-700' 
             : 'bg-primary hover:bg-primary/90'
         }`}
-        onClick={onCheckout}
+        onClick={handleCheckout}
         disabled={itemCount === 0}
       >
         {isBusinessUser ? (
