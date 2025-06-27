@@ -9,13 +9,18 @@ interface ProductActionsProps {
 }
 
 export const ProductActions = ({ product, onAddToCart }: ProductActionsProps) => {
+  const handleAddToCart = () => {
+    console.log('Bouton ajouter au panier cliqué pour:', product.name);
+    onAddToCart();
+  };
+
   return (
     <div className="flex gap-4">
       <Button 
         size="lg" 
         className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
         disabled={!product.inStock}
-        onClick={onAddToCart}
+        onClick={handleAddToCart}
       >
         <ShoppingCart className="h-5 w-5 mr-2" />
         {product.inStock ? 'Ajouter au panier' : 'Rupture de stock'}

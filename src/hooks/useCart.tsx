@@ -26,6 +26,7 @@ export const useCart = () => {
       try {
         const parsedCart = JSON.parse(savedCart);
         setItems(Array.isArray(parsedCart) ? parsedCart : []);
+        console.log('Panier chargé depuis localStorage:', parsedCart);
       } catch (error) {
         console.error('Erreur lors du chargement du panier:', error);
         setItems([]);
@@ -36,23 +37,30 @@ export const useCart = () => {
   // Sauvegarder le panier dans localStorage à chaque modification
   useEffect(() => {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+    console.log('Panier sauvegardé dans localStorage:', items);
   }, [items]);
 
   const addItem = useCallback((item: CartItem) => {
+    console.log('Ajout d\'un produit au panier:', item);
     setItems(prev => {
       const existingItem = prev.find(i => i.id === item.id);
       if (existingItem) {
-        return prev.map(i => 
+        const updated = prev.map(i => 
           i.id === item.id 
             ? { ...i, quantity: i.quantity + item.quantity }
             : i
         );
+        console.log('Produit existant mis à jour, nouveau panier:', updated);
+        return updated;
       }
-      return [...prev, item];
+      const updated = [...prev, item];
+      console.log('Nouveau produit ajouté, nouveau panier:', updated);
+      return updated;
     });
   }, []);
 
   const updateQuantity = useCallback((id: string, quantity: number) => {
+    console.log('Mise à jour de la quantité:', { id, quantity });
     if (quantity <= 0) {
       setItems(prev => prev.filter(item => item.id !== id));
     } else {
@@ -63,10 +71,12 @@ export const useCart = () => {
   }, []);
 
   const removeItem = useCallback((id: string) => {
+    console.log('Suppression d\'un produit du panier:', id);
     setItems(prev => prev.filter(item => item.id !== id));
   }, []);
 
   const clearCart = useCallback(() => {
+    console.log('Vidage du panier');
     setItems([]);
   }, []);
 
@@ -87,6 +97,8 @@ export const useCart = () => {
   const discountAmount = subtotal * businessDiscount;
   const total = subtotal - discountAmount;
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+
+  console.log('État actuel du panier:', { items, itemCount, subtotal, total });
 
   return {
     items,
