@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,6 +8,14 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { AuthProvider } from "@/hooks/useAuth";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { AccountLayout } from "@/components/account/AccountLayout";
+import { Dashboard } from "@/components/account/Dashboard";
+import { Profile } from "@/components/account/Profile";
+import { OrdersPage } from "@/pages/account/OrdersPage";
+import { CartPage } from "@/pages/account/CartPage";
+import { FavoritesPage } from "@/pages/account/FavoritesPage";
+import { SettingsPage } from "@/pages/account/SettingsPage";
 import Index from "./pages/Index";
 import B2C from "./pages/B2C";
 import B2B from "./pages/B2B";
@@ -47,6 +56,21 @@ const App = () => (
                   <Route path="/faq" element={<FAQ />} />
                   <Route path="/careers" element={<Careers />} />
                   <Route path="/auth" element={<Auth />} />
+                  
+                  {/* Account Routes - Protected */}
+                  <Route path="/account" element={
+                    <ProtectedRoute>
+                      <AccountLayout />
+                    </ProtectedRoute>
+                  }>
+                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="profile" element={<Profile />} />
+                    <Route path="orders" element={<OrdersPage />} />
+                    <Route path="cart" element={<CartPage />} />
+                    <Route path="favorites" element={<FavoritesPage />} />
+                    <Route path="settings" element={<SettingsPage />} />
+                  </Route>
+                  
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
