@@ -62,16 +62,17 @@ export const ProductsGrid = ({
 
   // Filter products based on criteria
   const filteredProducts = products.filter(product => {
-    // Category filter
+    // Category filter (now includes collection filtering)
     if (selectedCategory !== 'all') {
       if (selectedCategory === 'best-sellers' && !product.isPopular) return false;
-      if (selectedCategory === 'sport' && product.category !== 'sport') return false;
-      if (selectedCategory === 'lifestyle' && product.category !== 'lifestyle') return false;
-      if (selectedCategory === 'prismatic' && product.collection !== 'prismatic') return false;
-      if (selectedCategory === 'bundles') return false; // Handle bundles separately
+      
+      // Check if selectedCategory matches a collection slug
+      if (selectedCategory !== 'best-sellers' && product.collection !== selectedCategory) {
+        return false;
+      }
     }
 
-    // Collection filter
+    // Collection filter from filters sidebar
     if (filters.collection !== 'all' && product.collection !== filters.collection) {
       return false;
     }

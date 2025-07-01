@@ -1,5 +1,6 @@
 
 import { Button } from '@/components/ui/button';
+import { useCollections } from '@/hooks/useCollections';
 
 interface CategoryTabsProps {
   selectedCategory: string;
@@ -7,18 +8,25 @@ interface CategoryTabsProps {
 }
 
 export const CategoryTabs = ({ selectedCategory, onCategoryChange }: CategoryTabsProps) => {
-  const categories = [
+  const { data: collections = [] } = useCollections();
+
+  const staticCategories = [
     { id: 'all', label: 'ALL' },
     { id: 'best-sellers', label: 'BEST SELLERS' },
-    { id: 'sport', label: 'SPORT' },
-    { id: 'lifestyle', label: 'LIFESTYLE' },
-    { id: 'prismatic', label: 'PRISMATIC™' },
-    { id: 'bundles', label: 'CHAMELO BUNDLES' },
+  ];
+
+  // Combine static categories with dynamic collections
+  const allCategories = [
+    ...staticCategories,
+    ...collections.map(collection => ({
+      id: collection.slug,
+      label: collection.name.toUpperCase()
+    }))
   ];
 
   return (
     <div className="flex flex-wrap gap-2 mb-8">
-      {categories.map((category) => (
+      {allCategories.map((category) => (
         <Button
           key={category.id}
           variant={selectedCategory === category.id ? "default" : "outline"}
