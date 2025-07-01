@@ -68,9 +68,11 @@ export const ProductsGrid = ({
       return false;
     }
 
-    // Brand filter
-    if (selectedBrands.length > 0 && !selectedBrands.includes(product.brand || '')) {
-      return false;
+    // Brand filter - since there's no brand property, we'll skip this filter for now
+    // The brands filter will be handled when we have proper brand data
+    if (selectedBrands.length > 0) {
+      // For now, we'll just pass through all products since brand filtering isn't available
+      // This can be implemented later when brand data is available
     }
 
     return true;
@@ -84,7 +86,8 @@ export const ProductsGrid = ({
       case 'price-high':
         return b.price - a.price;
       case 'newest':
-        return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
+        // Use created_at instead of createdAt
+        return new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime();
       default:
         return 0;
     }

@@ -29,6 +29,7 @@ export interface Product {
   inStock: boolean;
   isNew: boolean;
   isPopular: boolean;
+  created_at?: string;
 }
 
 export const useProducts = () => {
@@ -59,6 +60,8 @@ export const useProducts = () => {
         usage: (product.usage as Product['usage']) || 'quotidien',
         // Ensure genre matches the union type
         genre: (product.genre as Product['genre']) || 'mixte',
+        // Include created_at for sorting
+        created_at: product.created_at,
       }));
     },
   });
@@ -93,6 +96,8 @@ export const useProduct = (slug: string) => {
         usage: (data.usage as Product['usage']) || 'quotidien',
         // Ensure genre matches the union type
         genre: (data.genre as Product['genre']) || 'mixte',
+        // Include created_at for sorting
+        created_at: data.created_at,
       } as Product;
     },
   });
