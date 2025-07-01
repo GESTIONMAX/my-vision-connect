@@ -1,4 +1,3 @@
-
 import { motion } from 'framer-motion';
 import { ArrowRight, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -119,7 +118,7 @@ export const PopularProductsSection = () => {
                       )}
                     </div>
                     
-                    <Link to={`/products/${product.slug}`}>
+                    <Link to={`/shop/${product.slug}`}>
                       <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
                         Voir le produit
                         <ArrowRight className="ml-2 h-4 w-4" />
@@ -139,7 +138,7 @@ export const PopularProductsSection = () => {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="text-center"
         >
-          <Link to="/products">
+          <Link to="/shop">
             <Button
               variant="outline"
               size="lg"

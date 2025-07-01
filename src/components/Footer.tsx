@@ -1,4 +1,3 @@
-
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
@@ -6,9 +5,9 @@ import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from 'luc
 export const Footer = () => {
   const footerLinks = {
     Produits: [
-      { name: 'Lunettes Connectées', href: '/products/smart-glasses' },
-      { name: 'Teinte Électronique', href: '/products/electronic-tint' },
-      { name: 'Accessoires', href: '/products/accessories' },
+      { name: 'Lunettes Connectées', href: '/shop/smart-glasses' },
+      { name: 'Teinte Électronique', href: '/shop/electronic-tint' },
+      { name: 'Accessoires', href: '/shop/accessories' },
       { name: 'Garantie', href: '/warranty' },
     ],
     Professionnels: [

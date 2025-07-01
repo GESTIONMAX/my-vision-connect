@@ -23,7 +23,7 @@ export const Header = () => {
     { name: 'Support', href: '/b2b/support' },
   ] : [
     { name: 'Accueil', href: '/' },
-    { name: 'Produits', href: '/products' },
+    { name: 'Shop', href: '/shop' },
     { name: 'Technologie', href: '/technology' },
     { name: 'FAQ', href: '/faq' },
     { name: 'Carrières', href: '/careers' },

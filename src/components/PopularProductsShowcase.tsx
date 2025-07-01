@@ -1,4 +1,3 @@
-
 import { motion } from 'framer-motion';
 import { ArrowRight, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -119,7 +118,7 @@ export const PopularProductsShowcase = () => {
                       )}
                     </div>
                     
-                    <Link to={`/products/${product.slug}`}>
+                    <Link to={`/shop/${product.slug}`}>
                       <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
                         Voir
                         <ArrowRight className="ml-2 h-4 w-4" />
