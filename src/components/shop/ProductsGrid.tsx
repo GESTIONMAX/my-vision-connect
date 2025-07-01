@@ -8,6 +8,14 @@ interface ProductsGridProps {
   sortBy: string;
   priceRange: [number, number];
   selectedBrands: string[];
+  filters: {
+    category: string;
+    color: string;
+    usage: string;
+    genre: string;
+    sort: string;
+    collection: string;
+  };
 }
 
 export const ProductsGrid = ({
@@ -16,6 +24,7 @@ export const ProductsGrid = ({
   sortBy,
   priceRange,
   selectedBrands,
+  filters,
 }: ProductsGridProps) => {
   const { data: products, isLoading, error } = useProducts();
 
@@ -54,7 +63,36 @@ export const ProductsGrid = ({
   // Filter products based on criteria
   const filteredProducts = products.filter(product => {
     // Category filter
-    if (selectedCategory !== 'all' && product.category !== selectedCategory) {
+    if (selectedCategory !== 'all') {
+      if (selectedCategory === 'best-sellers' && !product.isPopular) return false;
+      if (selectedCategory === 'sport' && product.category !== 'sport') return false;
+      if (selectedCategory === 'lifestyle' && product.category !== 'lifestyle') return false;
+      if (selectedCategory === 'prismatic' && product.collection !== 'prismatic') return false;
+      if (selectedCategory === 'bundles') return false; // Handle bundles separately
+    }
+
+    // Collection filter
+    if (filters.collection !== 'all' && product.collection !== filters.collection) {
+      return false;
+    }
+
+    // Category filter from filters
+    if (filters.category !== 'all' && product.category !== filters.category) {
+      return false;
+    }
+
+    // Color filter
+    if (filters.color !== 'all' && !product.color?.includes(filters.color)) {
+      return false;
+    }
+
+    // Usage filter
+    if (filters.usage !== 'all' && product.usage !== filters.usage) {
+      return false;
+    }
+
+    // Genre filter
+    if (filters.genre !== 'all' && product.genre !== filters.genre) {
       return false;
     }
 
@@ -68,26 +106,24 @@ export const ProductsGrid = ({
       return false;
     }
 
-    // Brand filter - since there's no brand property, we'll skip this filter for now
-    // The brands filter will be handled when we have proper brand data
-    if (selectedBrands.length > 0) {
-      // For now, we'll just pass through all products since brand filtering isn't available
-      // This can be implemented later when brand data is available
-    }
-
     return true;
   });
 
   // Sort products
   const sortedProducts = [...filteredProducts].sort((a, b) => {
-    switch (sortBy) {
+    switch (filters.sort || sortBy) {
       case 'price-low':
+      case 'price-asc':
         return a.price - b.price;
       case 'price-high':
+      case 'price-desc':
         return b.price - a.price;
       case 'newest':
-        // Use created_at instead of createdAt
         return new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime();
+      case 'popularity':
+        return (b.isPopular ? 1 : 0) - (a.isPopular ? 1 : 0);
+      case 'rating':
+        return b.rating - a.rating;
       default:
         return 0;
     }
@@ -95,12 +131,6 @@ export const ProductsGrid = ({
 
   return (
     <div className="flex-1">
-      <div className="mb-6">
-        <p className="text-gray-600">
-          {sortedProducts.length} produit{sortedProducts.length > 1 ? 's' : ''} trouvé{sortedProducts.length > 1 ? 's' : ''}
-        </p>
-      </div>
-      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {sortedProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
