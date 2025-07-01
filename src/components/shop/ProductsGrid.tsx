@@ -28,10 +28,6 @@ export const ProductsGrid = ({
 }: ProductsGridProps) => {
   const { data: products, isLoading, error } = useProducts();
 
-  console.log('ProductsGrid - selectedCategory:', selectedCategory);
-  console.log('ProductsGrid - products received:', products?.length || 0);
-  console.log('ProductsGrid - first few products:', products?.slice(0, 3));
-
   if (isLoading) {
     return (
       <div className="flex-1">
@@ -49,7 +45,6 @@ export const ProductsGrid = ({
   }
 
   if (error) {
-    console.error('ProductsGrid - Error loading products:', error);
     return (
       <div className="flex-1 flex items-center justify-center">
         <p className="text-red-500">Erreur lors du chargement des produits</p>
@@ -58,7 +53,6 @@ export const ProductsGrid = ({
   }
 
   if (!products || products.length === 0) {
-    console.log('ProductsGrid - No products found in database');
     return (
       <div className="flex-1 flex items-center justify-center">
         <p className="text-gray-500">Aucun produit trouvé dans la base de données</p>
@@ -68,18 +62,14 @@ export const ProductsGrid = ({
 
   // Filter products based on criteria
   const filteredProducts = products.filter(product => {
-    console.log(`Filtering product: ${product.name}, collection: ${product.collection}, category: ${product.category}`);
-    
     // Category filter (now includes collection filtering)
     if (selectedCategory !== 'all') {
       if (selectedCategory === 'best-sellers' && !product.isPopular) {
-        console.log(`Product ${product.name} filtered out - not best seller`);
         return false;
       }
       
       // Check if selectedCategory matches a collection slug
       if (selectedCategory !== 'best-sellers' && product.collection !== selectedCategory) {
-        console.log(`Product ${product.name} filtered out - collection mismatch. Expected: ${selectedCategory}, Got: ${product.collection}`);
         return false;
       }
     }
@@ -119,12 +109,8 @@ export const ProductsGrid = ({
       return false;
     }
 
-    console.log(`Product ${product.name} passed all filters`);
     return true;
   });
-
-  console.log('ProductsGrid - Filtered products count:', filteredProducts.length);
-  console.log('ProductsGrid - Filtered products:', filteredProducts.map(p => ({ name: p.name, collection: p.collection })));
 
   // Sort products
   const sortedProducts = [...filteredProducts].sort((a, b) => {

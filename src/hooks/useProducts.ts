@@ -36,19 +36,14 @@ export const useProducts = () => {
   return useQuery({
     queryKey: ['products'],
     queryFn: async () => {
-      console.log('useProducts - Fetching products from database...');
       const { data, error } = await supabase
         .from('products')
         .select('*')
         .order('created_at', { ascending: false });
 
       if (error) {
-        console.error('useProducts - Error fetching products:', error);
         throw new Error(error.message);
       }
-
-      console.log('useProducts - Raw data from database:', data?.length || 0, 'products');
-      console.log('useProducts - Sample products:', data?.slice(0, 2));
 
       // Transform the data to match the expected format
       const transformedProducts = data.map((product: any): Product => ({
@@ -68,12 +63,6 @@ export const useProducts = () => {
         // Include created_at for sorting
         created_at: product.created_at,
       }));
-
-      console.log('useProducts - Transformed products:', transformedProducts.length);
-      console.log('useProducts - Products by collection:', transformedProducts.reduce((acc, p) => {
-        acc[p.collection || 'null'] = (acc[p.collection || 'null'] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>));
 
       return transformedProducts;
     },
