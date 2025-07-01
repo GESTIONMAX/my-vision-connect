@@ -1,9 +1,8 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { AuthProvider } from "@/hooks/useAuth";
 import { CartProvider } from "@/contexts/CartContext";
@@ -48,6 +47,7 @@ const App = () => (
                 <Header />
                 <main className="flex-1">
                   <Routes>
+                    <Route path="/" element={<Navigate to="/shop" replace />} />
                     <Route path="/b2c" element={<B2C />} />
                     <Route path="/b2b" element={<B2B />} />
                     <Route path="/b2b/catalog" element={<B2BCatalog />} />
