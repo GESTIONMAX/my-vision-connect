@@ -1,6 +1,7 @@
 
 import { useProducts } from '@/hooks/useProducts';
 import { ProductCard } from '@/components/ProductCard';
+import { SportSection } from './SportSection';
 
 interface ProductsGridProps {
   selectedCategory: string;
@@ -27,6 +28,11 @@ export const ProductsGrid = ({
   filters,
 }: ProductsGridProps) => {
   const { data: products, isLoading, error } = useProducts();
+
+  // Show specialized Sport section for sport category
+  if (selectedCategory === 'sport') {
+    return <SportSection />;
+  }
 
   if (isLoading) {
     return (

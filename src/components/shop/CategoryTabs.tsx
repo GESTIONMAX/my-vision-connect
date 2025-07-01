@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { useCollections } from '@/hooks/useCollections';
 
 interface CategoryTabsProps {
   selectedCategory: string;
@@ -8,18 +9,36 @@ interface CategoryTabsProps {
 }
 
 export const CategoryTabs = ({ selectedCategory, onCategoryChange }: CategoryTabsProps) => {
-  const categories = [
+  const { data: collections = [], isLoading } = useCollections();
+
+  const staticCategories = [
     { id: 'all', label: 'Tous les produits' },
     { id: 'best-sellers', label: 'Meilleures ventes' },
-    { id: 'lifestyle', label: 'Lifestyle' },
-    { id: 'sport', label: 'Sport' },
-    { id: 'prismatic', label: 'Prismatic' },
   ];
+
+  // Combine static categories with dynamic collections
+  const allCategories = [
+    ...staticCategories,
+    ...collections.map(collection => ({
+      id: collection.slug,
+      label: collection.name
+    }))
+  ];
+
+  if (isLoading) {
+    return (
+      <div className="border-b border-gray-200 dark:border-gray-700">
+        <nav className="-mb-px flex space-x-8 overflow-x-auto">
+          <div className="animate-pulse bg-gray-200 h-10 w-32 rounded"></div>
+        </nav>
+      </div>
+    );
+  }
 
   return (
     <div className="border-b border-gray-200 dark:border-gray-700">
       <nav className="-mb-px flex space-x-8 overflow-x-auto">
-        {categories.map((category) => (
+        {allCategories.map((category) => (
           <Button
             key={category.id}
             variant={selectedCategory === category.id ? "default" : "ghost"}
