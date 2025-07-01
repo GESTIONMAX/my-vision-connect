@@ -6,11 +6,11 @@ export interface Collection {
   id: string;
   name: string;
   slug: string;
-  description?: string;
-  image_url?: string;
+  description: string | null;
   is_active: boolean;
-  sort_order: number;
-  created_at: string;
+  sort_order: number | null;
+  image_url: string | null;
+  created_at: string | null;
 }
 
 export const useCollections = () => {
