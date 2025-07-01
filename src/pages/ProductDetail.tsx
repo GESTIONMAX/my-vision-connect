@@ -4,6 +4,7 @@ import { useParams, Navigate, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useProduct } from '@/hooks/useProducts';
+import { useProductVariants } from '@/hooks/useProductVariants';
 import { useCart } from '@/hooks/useCart';
 import { useToast } from '@/hooks/use-toast';
 import { Link } from 'react-router-dom';
@@ -11,10 +12,12 @@ import { ProductImageGallery } from '@/components/product/ProductImageGallery';
 import { ProductInfo } from '@/components/product/ProductInfo';
 import { ProductActions } from '@/components/product/ProductActions';
 import { ProductSpecifications } from '@/components/product/ProductSpecifications';
+import { ProductVariants } from '@/components/product/ProductVariants';
 
 const ProductDetail = () => {
   const { slug } = useParams();
   const { data: product, isLoading, error } = useProduct(slug || '');
+  const { data: variants = [] } = useProductVariants(slug || '');
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedColor, setSelectedColor] = useState('');
   const { addItem } = useCart();
@@ -63,6 +66,10 @@ const ProductDetail = () => {
     });
   };
 
+  const handleVariantSelect = (variant: any) => {
+    navigate(`/products/${variant.slug}`);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Navigation */}
@@ -95,6 +102,15 @@ const ProductDetail = () => {
               selectedColor={selectedColor}
               onColorChange={setSelectedColor}
             />
+
+            {/* Product Variants */}
+            {variants.length > 0 && (
+              <ProductVariants
+                currentProduct={product}
+                variants={variants}
+                onVariantSelect={handleVariantSelect}
+              />
+            )}
 
             {/* Actions */}
             <ProductActions
