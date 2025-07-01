@@ -1,3 +1,4 @@
+
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { Star, ShoppingCart, Eye } from 'lucide-react';
@@ -65,7 +66,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
             )}
             {product.isPopular && (
               <Badge className="bg-orange-500 hover:bg-orange-600 text-white text-xs">
-                Populaire
+                ⭐ Populaire
               </Badge>
             )}
             {product.originalPrice && (
@@ -96,14 +97,23 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
             </Button>
           </div>
 
-          {/* Image simulée de lunettes */}
+          {/* Enhanced sunglasses illustration for sport products */}
           <div className="absolute inset-0 flex items-center justify-center p-8">
             <div className="relative w-full h-full flex items-center justify-center">
-              <div className="relative">
+              <div className="relative transform group-hover:scale-105 transition-transform duration-300">
                 <div className="flex items-center justify-center gap-1">
-                  <div className="w-16 h-12 rounded-full border-4 border-gray-800 dark:border-gray-200 bg-gradient-to-br from-blue-900/30 to-purple-900/30"></div>
+                  {/* Enhanced lenses with gradient */}
+                  <div className={`w-16 h-12 rounded-full border-4 border-gray-800 dark:border-gray-200 ${
+                    product.collection === 'sport' 
+                      ? 'bg-gradient-to-br from-blue-600/50 to-purple-600/50 shadow-lg' 
+                      : 'bg-gradient-to-br from-blue-900/30 to-purple-900/30'
+                  }`}></div>
                   <div className="w-3 h-1 bg-gray-800 dark:bg-gray-200 rounded"></div>
-                  <div className="w-16 h-12 rounded-full border-4 border-gray-800 dark:border-gray-200 bg-gradient-to-br from-blue-900/30 to-purple-900/30"></div>
+                  <div className={`w-16 h-12 rounded-full border-4 border-gray-800 dark:border-gray-200 ${
+                    product.collection === 'sport' 
+                      ? 'bg-gradient-to-br from-blue-600/50 to-purple-600/50 shadow-lg' 
+                      : 'bg-gradient-to-br from-blue-900/30 to-purple-900/30'
+                  }`}></div>
                 </div>
                 <div className="absolute top-1/2 -left-4 w-6 h-1 bg-gray-800 dark:bg-gray-200 rounded transform -translate-y-1/2 rotate-12"></div>
                 <div className="absolute top-1/2 -right-4 w-6 h-1 bg-gray-800 dark:bg-gray-200 rounded transform -translate-y-1/2 -rotate-12"></div>
