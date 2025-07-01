@@ -22,6 +22,8 @@ const Shop = () => {
     collection: 'all'
   });
 
+  const [activeTab, setActiveTab] = useState('all');
+
   const handleFilterChange = (key: string, value: string) => {
     setFilters(prev => ({ ...prev, [key]: value }));
   };
@@ -35,10 +37,36 @@ const Shop = () => {
       sort: 'popularity',
       collection: 'all'
     });
+    setActiveTab('all');
+  };
+
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    if (tab === 'all') {
+      setFilters(prev => ({ ...prev, category: 'all', sort: 'popularity' }));
+    } else if (tab === 'bestsellers') {
+      setFilters(prev => ({ ...prev, category: 'all', sort: 'popularity' }));
+    } else if (tab === 'sport') {
+      setFilters(prev => ({ ...prev, category: 'sport' }));
+    } else if (tab === 'lifestyle') {
+      setFilters(prev => ({ ...prev, category: 'lifestyle' }));
+    } else if (tab === 'prismatic') {
+      setFilters(prev => ({ ...prev, collection: 'prismatic' }));
+    } else if (tab === 'bundles') {
+      setFilters(prev => ({ ...prev, collection: 'chamelo-bundles' }));
+    }
   };
 
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = products.filter((product) => {
+      // Apply tab-specific filtering
+      if (activeTab === 'bestsellers' && !product.isPopular) return false;
+      if (activeTab === 'sport' && product.category !== 'sport') return false;
+      if (activeTab === 'lifestyle' && product.category !== 'lifestyle') return false;
+      if (activeTab === 'prismatic' && product.collection !== 'prismatic') return false;
+      if (activeTab === 'bundles' && product.collection !== 'chamelo-bundles') return false;
+      
+      // Apply additional filters
       if (filters.category !== 'all' && product.category !== filters.category) return false;
       if (filters.color !== 'all' && !product.color?.includes(filters.color)) return false;
       if (filters.usage !== 'all' && product.usage !== filters.usage) return false;
@@ -68,7 +96,7 @@ const Shop = () => {
     }
 
     return filtered;
-  }, [products, filters]);
+  }, [products, filters, activeTab]);
 
   // Get category products
   const getProductsByCategory = (category: string) => {
@@ -78,6 +106,16 @@ const Shop = () => {
   const sportProducts = getProductsByCategory('sport');
   const lifestyleProducts = getProductsByCategory('lifestyle'); 
   const classicProducts = getProductsByCategory('classic');
+  const bestsellers = products.filter(p => p.isPopular);
+
+  const categoryTabs = [
+    { id: 'all', label: 'ALL', count: products.length },
+    { id: 'bestsellers', label: 'BEST SELLERS', count: bestsellers.length },
+    { id: 'sport', label: 'SPORT', count: sportProducts.length },
+    { id: 'lifestyle', label: 'LIFESTYLE', count: lifestyleProducts.length },
+    { id: 'prismatic', label: 'PRISMATIC™', count: products.filter(p => p.collection === 'prismatic').length },
+    { id: 'bundles', label: 'CHAMELO BUNDLES', count: products.filter(p => p.collection === 'chamelo-bundles').length }
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -123,6 +161,50 @@ const Shop = () => {
 
       {/* Main content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Breadcrumb */}
+        <div className="mb-6">
+          <nav className="text-sm text-gray-600 dark:text-gray-400">
+            <span>HOME</span> / <span className="font-semibold text-gray-900 dark:text-white">SHOP ALL</span>
+          </nav>
+        </div>
+
+        {/* Page Title */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+            Shop All
+          </h1>
+        </div>
+
+        {/* Category Tabs */}
+        <div className="mb-8">
+          <div className="flex flex-wrap gap-2 mb-6">
+            {categoryTabs.map((tab) => (
+              <Button
+                key={tab.id}
+                variant={activeTab === tab.id ? "default" : "outline"}
+                className={`px-6 py-2 font-medium transition-all ${
+                  activeTab === tab.id 
+                    ? "bg-black text-white hover:bg-gray-800" 
+                    : "bg-white text-black border-gray-300 hover:bg-gray-50"
+                }`}
+                onClick={() => handleTabChange(tab.id)}
+              >
+                {tab.label}
+              </Button>
+            ))}
+            
+            {/* Sort & Filter Button */}
+            <div className="ml-auto">
+              <Button 
+                variant="outline" 
+                className="px-6 py-2 font-medium bg-white text-black border-gray-300 hover:bg-gray-50"
+              >
+                🎚️ SORT & FILTER
+              </Button>
+            </div>
+          </div>
+        </div>
+
         <div className="flex gap-8">
           {/* Sidebar - Shop Collections */}
           <motion.div
@@ -141,7 +223,7 @@ const Shop = () => {
                   <Button 
                     variant="ghost" 
                     className="w-full justify-start text-left p-3 h-auto"
-                    onClick={() => handleFilterChange('category', 'all')}
+                    onClick={() => handleTabChange('all')}
                   >
                     <div>
                       <div className="font-medium">SHOP ALL</div>
@@ -152,7 +234,7 @@ const Shop = () => {
                   <Button 
                     variant="ghost" 
                     className="w-full justify-start text-left p-3 h-auto"
-                    onClick={() => handleFilterChange('sort', 'popularity')}
+                    onClick={() => handleTabChange('bestsellers')}
                   >
                     <div>
                       <div className="font-medium">BESTSELLERS</div>
@@ -174,7 +256,7 @@ const Shop = () => {
                   <Button 
                     variant="ghost" 
                     className="w-full justify-start text-left p-3 h-auto"
-                    onClick={() => handleFilterChange('category', 'sport')}
+                    onClick={() => handleTabChange('sport')}
                   >
                     <div>
                       <div className="font-medium">SPORT</div>
@@ -185,7 +267,7 @@ const Shop = () => {
                   <Button 
                     variant="ghost" 
                     className="w-full justify-start text-left p-3 h-auto"
-                    onClick={() => handleFilterChange('category', 'lifestyle')}
+                    onClick={() => handleTabChange('lifestyle')}
                   >
                     <div>
                       <div className="font-medium">LIFESTYLE</div>
@@ -224,7 +306,12 @@ const Shop = () => {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                  Tous les produits
+                  {activeTab === 'all' ? 'Tous les produits' : 
+                   activeTab === 'bestsellers' ? 'Meilleures ventes' :
+                   activeTab === 'sport' ? 'Sport' :
+                   activeTab === 'lifestyle' ? 'Lifestyle' :
+                   activeTab === 'prismatic' ? 'Prismatic™' :
+                   activeTab === 'bundles' ? 'Chamelo Bundles' : 'Tous les produits'}
                 </h2>
                 <p className="text-gray-600 dark:text-gray-400">
                   {filteredAndSortedProducts.length} produit{filteredAndSortedProducts.length > 1 ? 's' : ''} trouvé{filteredAndSortedProducts.length > 1 ? 's' : ''}
