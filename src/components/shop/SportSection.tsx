@@ -3,9 +3,10 @@ import { useProducts } from '@/hooks/useProducts';
 import { ProductCard } from '@/components/ProductCard';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Star, ShoppingCart } from 'lucide-react';
+import { Star, ShoppingCart, Eye } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
 import { useToast } from '@/hooks/use-toast';
+import { Link } from 'react-router-dom';
 
 export const SportSection = () => {
   const { data: products = [], isLoading } = useProducts();
@@ -25,7 +26,7 @@ export const SportSection = () => {
       quantity: 1,
       reference: product.slug,
       category: product.category || 'Lunettes',
-      originalPrice: product.originalPrice
+      originalPrice: product.original_price
     });
 
     toast({
@@ -118,30 +119,45 @@ export const SportSection = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
             {sportProducts.map((product, index) => (
-              <div key={product.id} className="group">
+              <Link key={product.id} to={`/products/${product.slug}`} className="group block">
                 {/* Custom Sport Product Card */}
                 <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden relative">
                   {/* Badges */}
                   <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
-                    {product.isPopular && (
+                    {product.is_popular && (
                       <Badge className="bg-orange-500 text-white font-semibold text-xs">
                         ⭐ BEST
                       </Badge>
                     )}
-                    {product.originalPrice && (
+                    {product.original_price && (
                       <Badge className="bg-red-500 text-white font-semibold text-xs">
                         SOLDÉ
                       </Badge>
                     )}
                   </div>
 
-                  {/* Quick Add Button */}
-                  <div className="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                  {/* Quick Actions */}
+                  <div className="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
                     <Button 
                       size="icon" 
                       variant="secondary" 
                       className="rounded-full h-8 w-8" 
-                      onClick={() => handleAddToCart(product)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                    >
+                      <Eye className="h-4 w-4" />
+                    </Button>
+                    <Button 
+                      size="icon" 
+                      variant="secondary" 
+                      className="rounded-full h-8 w-8" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleAddToCart(product);
+                      }}
                     >
                       <ShoppingCart className="h-4 w-4" />
                     </Button>
@@ -200,7 +216,7 @@ export const SportSection = () => {
                       <span className="text-xs text-gray-500">(4.5)</span>
                     </div>
                     
-                    <h3 className="text-lg font-bold mb-2 line-clamp-1">{product.name}</h3>
+                    <h3 className="text-lg font-bold mb-2 line-clamp-1 group-hover:text-blue-600 transition-colors">{product.name}</h3>
                     
                     {/* Key Features */}
                     <div className="flex flex-wrap gap-1 mb-3">
@@ -218,9 +234,9 @@ export const SportSection = () => {
                           <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
                             {product.price}€
                           </span>
-                          {product.originalPrice && (
+                          {product.original_price && (
                             <span className="text-sm text-gray-500 line-through">
-                              {product.originalPrice}€
+                              {product.original_price}€
                             </span>
                           )}
                         </div>
@@ -228,14 +244,18 @@ export const SportSection = () => {
                       <Button 
                         size="sm"
                         className="bg-blue-600 hover:bg-blue-700 text-white"
-                        onClick={() => handleAddToCart(product)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleAddToCart(product);
+                        }}
                       >
                         Ajouter
                       </Button>
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
