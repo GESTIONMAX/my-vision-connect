@@ -5,12 +5,13 @@ import { ProductCard } from '@/components/ProductCard';
 import { ProductFilters } from '@/components/ProductFilters';
 import { useProducts } from '@/hooks/useProducts';
 import { useCollections } from '@/hooks/useCollections';
-import { useFilterOptions } from '@/hooks/useFilterOptions';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { ArrowRight, Percent } from 'lucide-react';
 
-const Products = () => {
+const Shop = () => {
   const { data: products = [], isLoading: productsLoading } = useProducts();
   const { data: collections = [] } = useCollections();
-  const { data: filterOptions = [] } = useFilterOptions();
 
   const [filters, setFilters] = useState({
     category: 'all',
@@ -69,113 +70,207 @@ const Products = () => {
     return filtered;
   }, [products, filters]);
 
-  // Create a grid with ambient images integrated
-  const createGridWithAmbientImages = () => {
-    if (productsLoading) {
-      return Array.from({ length: 8 }).map((_, i) => (
-        <div key={i} className="animate-pulse">
-          <div className="bg-gray-200 dark:bg-gray-700 rounded-xl aspect-[4/3] mb-4"></div>
-          <div className="bg-gray-200 dark:bg-gray-700 rounded h-4 mb-2"></div>
-          <div className="bg-gray-200 dark:bg-gray-700 rounded h-4 w-3/4"></div>
-        </div>
-      ));
-    }
-
-    const items = [];
-    let productIndex = 0;
-
-    for (let i = 0; i < Math.ceil(filteredAndSortedProducts.length * 1.4); i++) {
-      // Add ambient image every 6-8 products
-      if (i > 0 && i % 7 === 0 && productIndex < filteredAndSortedProducts.length - 2) {
-        items.push(
-          <motion.div
-            key={`ambient-${i}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: i * 0.05 }}
-            className="col-span-1 md:col-span-2 lg:col-span-2 row-span-2"
-          >
-            <div className="relative aspect-[4/3] md:aspect-[3/2] rounded-xl overflow-hidden bg-gradient-to-br from-blue-600 to-purple-600">
-              <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                <div className="text-center text-white p-6">
-                  <h3 className="text-2xl font-bold mb-2">
-                    {i % 14 === 0 ? "Style & Performance" : "Innovation Chamelo"}
-                  </h3>
-                  <p className="text-blue-100">
-                    {i % 14 === 0 
-                      ? "Découvrez l'élégance de la technologie adaptive"
-                      : "La révolution des lunettes connectées"
-                    }
-                  </p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        );
-      } else if (productIndex < filteredAndSortedProducts.length) {
-        items.push(
-          <ProductCard
-            key={filteredAndSortedProducts[productIndex].id}
-            product={filteredAndSortedProducts[productIndex]}
-            index={i}
-          />
-        );
-        productIndex++;
-      }
-    }
-
-    return items;
+  // Get category products
+  const getProductsByCategory = (category: string) => {
+    return products.filter(p => p.category === category);
   };
+
+  const sportProducts = getProductsByCategory('sport');
+  const lifestyleProducts = getProductsByCategory('lifestyle'); 
+  const classicProducts = getProductsByCategory('classic');
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
+      {/* Hero Banner */}
+      <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-8">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Catalogue Chamelo
+            <h1 className="text-3xl md:text-4xl font-bold mb-2">
+              CHAMELO SHOP
             </h1>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-              Découvrez notre collection complète de lunettes connectées à teinte électronique
+            <p className="text-lg text-blue-100">
+              Lunettes connectées à teinte électronique
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Main content with sidebar */}
+      {/* Promotional Banner */}
+      <section className="bg-gradient-to-r from-orange-500 to-red-600 text-white py-6">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center"
+          >
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <Percent className="h-6 w-6" />
+              <h2 className="text-2xl font-bold">NOTRE PLUS GROSSE PROMOTION DE L'ANNÉE!</h2>
+              <Percent className="h-6 w-6" />
+            </div>
+            <p className="text-orange-100 mb-4">Jusqu'à -40% sur une sélection de lunettes connectées</p>
+            <Button variant="secondary" className="bg-white text-orange-600 hover:bg-gray-100">
+              Découvrir les offres
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Main content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex gap-8">
-          {/* Filters sidebar */}
+          {/* Sidebar - Shop Collections */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="hidden lg:block flex-shrink-0"
+            className="hidden lg:block flex-shrink-0 w-64"
           >
-            <ProductFilters
-              filters={filters}
-              onFilterChange={handleFilterChange}
-              onClearFilters={handleClearFilters}
-              resultCount={filteredAndSortedProducts.length}
-            />
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border">
+              <div className="p-6">
+                <h3 className="text-lg font-semibold mb-6 text-gray-900 dark:text-white">
+                  SHOP BY COLLECTION
+                </h3>
+                
+                <div className="space-y-4">
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start text-left p-3 h-auto"
+                    onClick={() => handleFilterChange('category', 'all')}
+                  >
+                    <div>
+                      <div className="font-medium">SHOP ALL</div>
+                      <div className="text-sm text-gray-500">{products.length} produits</div>
+                    </div>
+                  </Button>
+                  
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start text-left p-3 h-auto"
+                    onClick={() => handleFilterChange('sort', 'popularity')}
+                  >
+                    <div>
+                      <div className="font-medium">BESTSELLERS</div>
+                      <div className="text-sm text-gray-500">Nos plus populaires</div>
+                    </div>
+                  </Button>
+                  
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start text-left p-3 h-auto"
+                    onClick={() => handleFilterChange('sort', 'newest')}
+                  >
+                    <div>
+                      <div className="font-medium">NEW ARRIVALS</div>
+                      <div className="text-sm text-gray-500">Dernières nouveautés</div>
+                    </div>
+                  </Button>
+                  
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start text-left p-3 h-auto"
+                    onClick={() => handleFilterChange('category', 'sport')}
+                  >
+                    <div>
+                      <div className="font-medium">SPORT</div>
+                      <div className="text-sm text-gray-500">{sportProducts.length} produits</div>
+                    </div>
+                  </Button>
+                  
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start text-left p-3 h-auto"
+                    onClick={() => handleFilterChange('category', 'lifestyle')}
+                  >
+                    <div>
+                      <div className="font-medium">LIFESTYLE</div>
+                      <div className="text-sm text-gray-500">{lifestyleProducts.length} produits</div>
+                    </div>
+                  </Button>
+                  
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start text-left p-3 h-auto"
+                    onClick={() => handleFilterChange('category', 'classic')}
+                  >
+                    <div>
+                      <div className="font-medium">CLASSIC</div>
+                      <div className="text-sm text-gray-500">{classicProducts.length} produits</div>
+                    </div>
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Filters */}
+            <div className="mt-6">
+              <ProductFilters
+                filters={filters}
+                onFilterChange={handleFilterChange}
+                onClearFilters={handleClearFilters}
+                resultCount={filteredAndSortedProducts.length}
+              />
+            </div>
           </motion.div>
 
-          {/* Main content */}
+          {/* Main Products Grid */}
           <div className="flex-1">
-            {/* Products grid with ambient images */}
+            {/* Sort & Filter Header */}
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  Tous les produits
+                </h2>
+                <p className="text-gray-600 dark:text-gray-400">
+                  {filteredAndSortedProducts.length} produit{filteredAndSortedProducts.length > 1 ? 's' : ''} trouvé{filteredAndSortedProducts.length > 1 ? 's' : ''}
+                </p>
+              </div>
+              
+              <div className="flex items-center gap-4">
+                <select
+                  value={filters.sort}
+                  onChange={(e) => handleFilterChange('sort', e.target.value)}
+                  className="px-4 py-2 border border-gray-300 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-600"
+                >
+                  <option value="popularity">Plus populaires</option>
+                  <option value="price-asc">Prix croissant</option>
+                  <option value="price-desc">Prix décroissant</option>
+                  <option value="newest">Nouveautés</option>
+                  <option value="rating">Mieux notés</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Products Grid */}
             {filteredAndSortedProducts.length > 0 || productsLoading ? (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-max"
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
               >
-                {createGridWithAmbientImages()}
+                {productsLoading ? (
+                  Array.from({ length: 8 }).map((_, i) => (
+                    <div key={i} className="animate-pulse">
+                      <div className="bg-gray-200 dark:bg-gray-700 rounded-xl aspect-[4/3] mb-4"></div>
+                      <div className="bg-gray-200 dark:bg-gray-700 rounded h-4 mb-2"></div>
+                      <div className="bg-gray-200 dark:bg-gray-700 rounded h-4 w-3/4"></div>
+                    </div>
+                  ))
+                ) : (
+                  filteredAndSortedProducts.map((product, index) => (
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                      index={index}
+                    />
+                  ))
+                )}
               </motion.div>
             ) : (
               <motion.div
@@ -194,12 +289,12 @@ const Products = () => {
                   <p className="text-gray-600 dark:text-gray-400 mb-6">
                     Essayez de modifier vos filtres pour voir plus de résultats
                   </p>
-                  <button
+                  <Button
                     onClick={handleClearFilters}
-                    className="text-blue-600 dark:text-blue-400 hover:underline"
+                    variant="outline"
                   >
                     Effacer tous les filtres
-                  </button>
+                  </Button>
                 </div>
               </motion.div>
             )}
@@ -210,4 +305,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default Shop;
