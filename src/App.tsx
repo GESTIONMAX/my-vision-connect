@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { AuthProvider } from "@/hooks/useAuth";
 import { CartProvider } from "@/contexts/CartContext";
@@ -17,7 +17,6 @@ import { OrdersPage } from "@/pages/account/OrdersPage";
 import { CartPage } from "@/pages/account/CartPage";
 import { FavoritesPage } from "@/pages/account/FavoritesPage";
 import { SettingsPage } from "@/pages/account/SettingsPage";
-import Index from "./pages/Index";
 import B2C from "./pages/B2C";
 import B2B from "./pages/B2B";
 import B2BCatalog from "./pages/B2BCatalog";
@@ -48,7 +47,7 @@ const App = () => (
                 <Header />
                 <main className="flex-1">
                   <Routes>
-                    <Route path="/" element={<Index />} />
+                    <Route path="/" element={<Navigate to="/products" replace />} />
                     <Route path="/b2c" element={<B2C />} />
                     <Route path="/b2b" element={<B2B />} />
                     <Route path="/b2b/catalog" element={<B2BCatalog />} />
