@@ -24,6 +24,7 @@ export const Header = () => {
   ] : [
     { name: 'Accueil', href: '/' },
     { name: 'Shop', href: '/shop' },
+    { name: 'Notre sélection', href: '/notre-selection' },
     { name: 'Technologie', href: '/technology' },
     { name: 'FAQ', href: '/faq' },
     { name: 'Carrières', href: '/careers' },
