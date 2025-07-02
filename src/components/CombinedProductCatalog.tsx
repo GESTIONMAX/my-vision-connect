@@ -17,7 +17,6 @@ const CombinedProductCatalog = () => {
   const formatChameleoProduct = (product: any): Product => ({
     id: `chamelo-${product.id}`,
     name: product.name,
-    title: product.name,
     slug: product.handle,
     description: product.description.replace(/<[^>]*>/g, '').substring(0, 150),
     price: product.price_min,

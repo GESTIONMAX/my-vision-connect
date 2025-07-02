@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Search, Filter, Grid, List, RefreshCw } from 'lucide-react';
 import { useChameleoData } from '@/hooks/useChameleoData';
@@ -33,7 +32,6 @@ const ChameloCatalog: React.FC = () => {
   const formatProductForCard = (product: any): Product => ({
     id: product.id,
     name: product.name,
-    title: product.name,
     slug: product.handle,
     description: product.description.replace(/<[^>]*>/g, '').substring(0, 150) + '...',
     price: product.price_min,
@@ -181,7 +179,6 @@ const ChameloCatalog: React.FC = () => {
               <ProductCard 
                 key={product.id} 
                 product={formatProductForCard(product)}
-                className={viewMode === 'list' ? 'flex-row' : ''}
               />
             ))}
           </div>

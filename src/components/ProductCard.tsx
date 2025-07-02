@@ -1,4 +1,3 @@
-
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { Star, ShoppingCart, Eye } from 'lucide-react';
@@ -12,9 +11,10 @@ import { useToast } from '@/hooks/use-toast';
 interface ProductCardProps {
   product: Product;
   index?: number;
+  className?: string;
 }
 
-export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
+export const ProductCard = ({ product, index = 0, className }: ProductCardProps) => {
   const { addItem } = useCart();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
-      className="group"
+      className={`group ${className || ''}`}
     >
       <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 h-full bg-white dark:bg-gray-800">
         <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800">
