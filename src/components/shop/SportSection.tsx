@@ -8,6 +8,8 @@ import { useCart } from '@/hooks/useCart';
 import { useToast } from '@/hooks/use-toast';
 import { Link } from 'react-router-dom';
 
+// Synchronisation GitHub - Version mise à jour le 02/07/2025
+
 export const SportSection = () => {
   const { data: products = [], isLoading } = useProducts();
   const { addItem } = useCart();
