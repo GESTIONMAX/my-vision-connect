@@ -1,7 +1,9 @@
+
 import React, { useState } from 'react';
 import { Search, Filter, Grid, List, RefreshCw } from 'lucide-react';
 import { useChameleoData } from '@/hooks/useChameleoData';
 import { ProductCard } from '@/components/ProductCard';
+import { Product } from '@/hooks/useProducts';
 
 const ChameloCatalog: React.FC = () => {
   const { products, collections, stats, loading, syncData, searchProducts } = useChameleoData();
@@ -28,24 +30,35 @@ const ChameloCatalog: React.FC = () => {
   };
 
   // Convertir les produits Chamelo au format de vos ProductCard existants
-  const formatProductForCard = (product: any) => ({
+  const formatProductForCard = (product: any): Product => ({
     id: product.id,
-    title: product.name,
     name: product.name,
+    title: product.name,
+    slug: product.handle,
     description: product.description.replace(/<[^>]*>/g, '').substring(0, 150) + '...',
     price: product.price_min,
+    original_price: product.compare_at_price,
     originalPrice: product.compare_at_price,
-    image: product.main_image || '/placeholder.jpg',
     images: product.main_image ? [product.main_image] : ['/placeholder.jpg'],
-    category: 'classic', // Valeur par défaut pour éviter les erreurs TypeScript
-    vendor: product.vendor,
-    available: product.available,
+    category: 'lifestyle' as const,
+    collection: 'dragon',
+    color: [],
+    usage: 'quotidien' as const,
+    genre: 'mixte' as const,
+    specifications: {},
+    is_new: false,
+    isNew: false,
+    is_popular: false,
+    isPopular: false,
+    is_featured: false,
+    in_stock: product.available,
     inStock: product.available,
-    tags: product.tags,
-    slug: product.handle,
-    rating: 4.5,
+    stock_quantity: product.available ? 10 : 0,
+    review_count: 0,
     reviewCount: 0,
-    specifications: {}
+    features: [],
+    rating: 4.5,
+    created_at: new Date().toISOString()
   });
 
   return (

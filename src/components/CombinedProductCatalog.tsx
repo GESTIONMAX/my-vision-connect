@@ -1,30 +1,48 @@
+
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useChameleoData } from '@/hooks/useChameleoData';
 import { ProductCard } from '@/components/ProductCard';
+import { Product } from '@/hooks/useProducts';
 
 const CombinedProductCatalog = () => {
   const { products: chameleoProducts, collections, loading } = useChameleoData();
   const [activeTab, setActiveTab] = useState('all');
 
   // Vos produits existants (à adapter selon votre logique)
-  const localProducts = [
+  const localProducts: Product[] = [
     // Récupérer depuis votre source de données locale
   ];
 
-  const formatChameleoProduct = (product: any) => ({
+  const formatChameleoProduct = (product: any): Product => ({
     id: `chamelo-${product.id}`,
+    name: product.name,
     title: product.name,
+    slug: product.handle,
     description: product.description.replace(/<[^>]*>/g, '').substring(0, 150),
     price: product.price_min,
+    original_price: product.compare_at_price,
     originalPrice: product.compare_at_price,
-    image: product.main_image || '/placeholder.jpg',
-    category: product.product_type,
-    vendor: product.vendor,
-    available: product.available,
-    tags: [...(product.tags || []), 'Chamelo'],
-    slug: product.handle,
-    source: 'chamelo'
+    images: product.main_image ? [product.main_image] : ['/placeholder.jpg'],
+    category: 'lifestyle' as const,
+    collection: 'dragon',
+    color: [],
+    usage: 'quotidien' as const,
+    genre: 'mixte' as const,
+    specifications: {},
+    is_new: false,
+    isNew: false,
+    is_popular: false,
+    isPopular: false,
+    is_featured: false,
+    in_stock: product.available,
+    inStock: product.available,
+    stock_quantity: product.available ? 10 : 0,
+    review_count: 0,
+    reviewCount: 0,
+    features: [],
+    rating: 4.5,
+    created_at: new Date().toISOString()
   });
 
   const allProducts = [

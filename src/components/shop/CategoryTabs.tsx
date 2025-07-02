@@ -10,20 +10,36 @@ interface CategoryTabsProps {
   onCategoryChange: (category: string) => void;
 }
 
+interface CategoryWithSubCollections {
+  id: string;
+  label: string;
+  subCollections?: Array<{
+    slug: string;
+    name: string;
+    description: string | null;
+  }>;
+}
+
 export const CategoryTabs = ({ selectedCategory, onCategoryChange }: CategoryTabsProps) => {
   const { data: collections = [], isLoading } = useCollections();
   const { data: allSubCollections = [] } = useSubCollections();
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
 
-  const staticCategories = [
+  const staticCategories: CategoryWithSubCollections[] = [
     { id: 'all', label: 'Tous les produits' },
     { id: 'best-sellers', label: 'Meilleures ventes' },
   ];
 
-  const mainCategories = collections.map(collection => ({
+  const mainCategories: CategoryWithSubCollections[] = collections.map(collection => ({
     id: collection.slug,
     label: collection.name,
-    subCollections: allSubCollections.filter(sub => sub.parent_collection_slug === collection.slug)
+    subCollections: allSubCollections
+      .filter(sub => sub.parent_collection_slug === collection.slug)
+      .map(sub => ({
+        slug: sub.slug,
+        name: sub.name,
+        description: sub.description
+      }))
   }));
 
   const allCategories = [...staticCategories, ...mainCategories];
