@@ -5,6 +5,7 @@ import { X, Filter } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useProducts } from '@/hooks/useProducts';
 import { useCollections } from '@/hooks/useCollections';
+import { useSubCollections } from '@/hooks/useSubCollections';
 
 interface ProductFiltersProps {
   filters: {
@@ -28,6 +29,7 @@ export const ProductFilters = ({
 }: ProductFiltersProps) => {
   const { data: products = [] } = useProducts();
   const { data: collections = [] } = useCollections();
+  const { data: subCollections = [] } = useSubCollections();
 
   const [selectedFilters, setSelectedFilters] = useState<{[key: string]: string[]}>({
     sort: [],
@@ -67,6 +69,23 @@ export const ProductFilters = ({
     onClearFilters();
   };
 
+  // Group sub-collections by parent for better organization
+  const collectionOptions = collections.map(collection => ({
+    value: collection.slug,
+    label: collection.name,
+    count: products.filter(p => {
+      const subCollection = subCollections.find(sub => sub.slug === p.collection);
+      return subCollection?.parent_collection_slug === collection.slug;
+    }).length,
+    subCollections: subCollections
+      .filter(sub => sub.parent_collection_slug === collection.slug)
+      .map(sub => ({
+        value: sub.slug,
+        label: sub.name,
+        count: products.filter(p => p.collection === sub.slug).length
+      }))
+  }));
+
   const filterSections = [
     {
       title: "SORT BY",
@@ -80,11 +99,14 @@ export const ProductFilters = ({
     {
       title: "COLLECTION",
       key: "collection",
-      options: [
-        { value: "lifestyle", label: "Lifestyle", count: 16 },
-        { value: "prismatic", label: "Prismatic", count: 6 },
-        { value: "sport", label: "Sport", count: 36 }
-      ]
+      options: collectionOptions.flatMap(collection => [
+        { value: collection.value, label: collection.label, count: collection.count },
+        ...collection.subCollections.map(sub => ({ 
+          value: sub.value, 
+          label: `  • ${sub.label}`, 
+          count: sub.count 
+        }))
+      ]).filter(option => option.count > 0)
     },
     {
       title: "FRAME COLOR",

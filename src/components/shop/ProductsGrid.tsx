@@ -2,6 +2,7 @@
 import { useProducts } from '@/hooks/useProducts';
 import { ProductCard } from '@/components/ProductCard';
 import { SportSection } from './SportSection';
+import { useSubCollections } from '@/hooks/useSubCollections';
 
 interface ProductsGridProps {
   selectedCategory: string;
@@ -28,6 +29,7 @@ export const ProductsGrid = ({
   filters,
 }: ProductsGridProps) => {
   const { data: products, isLoading, error } = useProducts();
+  const { data: subCollections = [] } = useSubCollections();
 
   // Show specialized Sport section for sport category
   if (selectedCategory === 'sport') {
@@ -66,17 +68,34 @@ export const ProductsGrid = ({
     );
   }
 
+  // Get parent category for sub-collections
+  const getParentCategory = (collection: string) => {
+    const subCollection = subCollections.find(sub => sub.slug === collection);
+    return subCollection?.parent_collection_slug || collection;
+  };
+
   // Filter products based on criteria
   const filteredProducts = products.filter(product => {
-    // Category filter (now includes collection filtering)
+    // Category filter with new hierarchical structure
     if (selectedCategory !== 'all') {
       if (selectedCategory === 'best-sellers' && !product.isPopular) {
         return false;
       }
       
-      // Check if selectedCategory matches a collection slug
-      if (selectedCategory !== 'best-sellers' && product.collection !== selectedCategory) {
-        return false;
+      // Check if selectedCategory is a main category or sub-collection
+      const parentCategory = getParentCategory(product.collection);
+      const isMainCategory = ['sport', 'lifestyle', 'prismatic'].includes(selectedCategory);
+      
+      if (isMainCategory) {
+        // Filter by main category
+        if (parentCategory !== selectedCategory) {
+          return false;
+        }
+      } else {
+        // Filter by specific sub-collection
+        if (selectedCategory !== 'best-sellers' && product.collection !== selectedCategory) {
+          return false;
+        }
       }
     }
 
