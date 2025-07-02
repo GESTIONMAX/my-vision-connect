@@ -18,14 +18,11 @@ export const Header = () => {
   const navigation = isB2B ? [
     { name: 'Accueil Pro', href: '/b2b' },
     { name: 'Catalogue Pro', href: '/b2b/catalog' },
-    { name: 'Catalogue Chamelo', href: '/chamelo-catalog' },
-    { name: 'Dashboard Chamelo', href: '/chamelo-dashboard' },
     { name: 'Devenir Partenaire', href: '/b2b/partnership' },
     { name: 'Support', href: '/b2b/support' },
   ] : [
     { name: 'Shop', href: '/shop' },
     { name: 'Notre sélection', href: '/notre-selection' },
-    { name: 'Catalogue Chamelo', href: '/chamelo-catalog' },
     { name: 'Technologie', href: '/technology' },
     { name: 'FAQ', href: '/faq' },
     { name: 'Carrières', href: '/careers' },
@@ -54,11 +51,7 @@ export const Header = () => {
               <Link
                 key={item.name}
                 to={item.href}
-                className={`font-medium transition-colors duration-200 ${
-                  item.name.includes('Chamelo') 
-                    ? 'text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300' 
-                    : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
-                }`}
+                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-200"
               >
                 {item.name}
               </Link>
@@ -121,15 +114,10 @@ export const Header = () => {
                 <Link
                   key={item.name}
                   to={item.href}
-                  className={`px-3 py-2 font-medium transition-colors duration-200 ${
-                    item.name.includes('Chamelo') 
-                      ? 'text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300' 
-                      : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
-                  }`}
+                  className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-200"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  {item.name.includes('Catalogue Chamelo') ? '🕶️ ' + item.name : item.name}
-                  {item.name.includes('Dashboard Chamelo') ? '📊 ' + item.name : ''}
+                  {item.name}
                 </Link>
               ))}
               
