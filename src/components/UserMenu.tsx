@@ -16,8 +16,15 @@ import { useAuth } from '@/hooks/useAuth';
 import { AuthModal } from './AuthModal';
 
 export const UserMenu = () => {
-  const { user, profile, signOut } = useAuth();
+  const { user, profile, signOut, loading } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+
+  // Afficher un loader pendant l'initialisation de l'auth
+  if (loading) {
+    return (
+      <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
+    );
+  }
 
   const handleSignOut = async () => {
     setIsLoading(true);
