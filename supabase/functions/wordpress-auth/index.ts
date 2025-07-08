@@ -28,11 +28,10 @@ serve(async (req) => {
 
     switch (action) {
       case 'login':
-        endpoint = '/wp-json/jwt-auth/v1/token'
-        body = {
-          username: params.email,
-          password: params.password
-        }
+        // Utiliser l'authentification Application Password WordPress
+        endpoint = '/wp-json/wp/v2/users/me'
+        method = 'GET'
+        // Les credentials seront passés dans l'Authorization header
         break
         
       case 'register':
@@ -73,9 +72,16 @@ serve(async (req) => {
       'Content-Type': 'application/json',
     }
 
-    // Add authentication
-    const credentials = btoa(`${clientKey}:${clientSecret}`)
-    headers['Authorization'] = `Basic ${credentials}`
+    // Add authentication based on action
+    if (action === 'login') {
+      // Use HTTP Basic Auth for login
+      const credentials = btoa(`${params.email}:${params.password}`)
+      headers['Authorization'] = `Basic ${credentials}`
+    } else {
+      // Use API credentials for other actions
+      const credentials = btoa(`${clientKey}:${clientSecret}`)
+      headers['Authorization'] = `Basic ${credentials}`
+    }
 
     console.log('Making WordPress Auth request to:', url.toString())
 
@@ -101,11 +107,13 @@ serve(async (req) => {
     let formattedResponse = data
     
     if (action === 'login') {
+      // For login, we get user info if successful
       formattedResponse = {
-        success: !!data.token,
-        token: data.token,
-        user: data.user_nicename,
-        message: data.message
+        success: !!data.id,
+        token: `${params.email}:${params.password}`, // Store credentials as token
+        user: data.name || data.username,
+        user_data: data,
+        message: 'Connexion réussie'
       }
     } else if (action === 'register') {
       formattedResponse = {
