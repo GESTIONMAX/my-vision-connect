@@ -196,43 +196,18 @@ class WordPressAPI {
   }
 
   private async makeRequest<T>(endpoint: string, params?: WordPressApiParams): Promise<T> {
-    const url = new URL(`${this.config.baseUrl}/wp-json/wp/v2${endpoint}`);
-    
-    if (params) {
-      Object.entries(params).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
-          if (Array.isArray(value)) {
-            url.searchParams.append(key, value.join(','));
-          } else {
-            url.searchParams.append(key, String(value));
-          }
-        }
-      });
-    }
-
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json',
-    };
-
-    // Ajouter l'authentification si disponible
-    if (this.config.username && this.config.password) {
-      const credentials = btoa(`${this.config.username}:${this.config.password}`);
-      headers['Authorization'] = `Basic ${credentials}`;
-    } else if (this.config.jwt) {
-      headers['Authorization'] = `Bearer ${this.config.jwt}`;
-    }
-
     try {
-      const response = await fetch(url.toString(), {
-        method: 'GET',
-        headers,
+      // Use Supabase edge function for secure API calls
+      const { supabase } = await import('@/integrations/supabase/client');
+      
+      const { data, error } = await supabase.functions.invoke('wordpress-api', {
+        body: { endpoint, params }
       });
 
-      if (!response.ok) {
-        throw new Error(`WordPress API Error: ${response.status} ${response.statusText}`);
+      if (error) {
+        throw new Error(`WordPress API Error: ${error.message}`);
       }
 
-      const data = await response.json();
       return data;
     } catch (error) {
       console.error('WordPress API Request failed:', error);
