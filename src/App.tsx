@@ -33,6 +33,8 @@ import NotFound from "./pages/NotFound";
 import { Checkout } from "./pages/Checkout";
 import ChameloCatalog from "./pages/ChameloCatalog";
 import ChameloDashboard from "./components/ChameloDashboard";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 
 const queryClient = new QueryClient();
 
@@ -61,6 +63,8 @@ const App = () => (
                     <Route path="/technology" element={<Technology />} />
                     <Route path="/faq" element={<FAQ />} />
                     <Route path="/careers" element={<Careers />} />
+                    <Route path="/blog" element={<Blog />} />
+                    <Route path="/blog/:slug" element={<BlogPost />} />
                     <Route path="/auth" element={<Auth />} />
                     <Route path="/checkout" element={<Checkout />} />
                     <Route path="/chamelo-catalog" element={<ChameloCatalog />} />
