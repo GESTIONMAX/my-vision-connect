@@ -1,1 +1,4 @@
 project_id = "ggjfuflwmnphnyyfbunr"
+
+[functions.cocart-api]
+verify_jwt = false

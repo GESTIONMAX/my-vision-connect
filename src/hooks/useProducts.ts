@@ -1,6 +1,6 @@
 
 import { useQuery } from '@tanstack/react-query';
-import { useWooCommerceProducts, useWooCommerceProductBySlug } from '@/hooks/useWooCommerce';
+import { useCoCartProducts, useCoCartProductBySlug } from '@/hooks/useCoCart';
 
 export interface Product {
   id: string;
@@ -33,9 +33,9 @@ export interface Product {
 }
 
 export const useProducts = () => {
-  return useWooCommerceProducts();
+  return useCoCartProducts();
 };
 
 export const useProduct = (slug: string) => {
-  return useWooCommerceProductBySlug(slug);
+  return useCoCartProductBySlug(slug);
 };

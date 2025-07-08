@@ -5,6 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useProduct } from '@/hooks/useProducts';
 import { useProductVariants } from '@/hooks/useProductVariants';
+import { useCoCartTest } from '@/hooks/useCoCartTest';
 import { useCart } from '@/hooks/useCart';
 import { useToast } from '@/hooks/use-toast';
 import { Link } from 'react-router-dom';
@@ -18,11 +19,16 @@ const ProductDetail = () => {
   const { slug } = useParams();
   const { data: product, isLoading, error } = useProduct(slug || '');
   const { data: variants = [] } = useProductVariants(slug || '');
+  const { data: coCartTestData, isLoading: isCoCartLoading } = useCoCartTest();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedColor, setSelectedColor] = useState('');
   const { addItem } = useCart();
   const { toast } = useToast();
   const navigate = useNavigate();
+  
+  // Log pour déboguer CoCart
+  console.log('CoCart Test Data:', coCartTestData);
+  console.log('CoCart Test Loading:', isCoCartLoading);
 
   if (isLoading) {
     return (
