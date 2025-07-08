@@ -48,12 +48,12 @@ export const AccountCreation = ({ onAccountCreated, isBusinessUser }: AccountCre
     try {
       const { error } = await signIn(signInData.email, signInData.password);
       
-      if (error) {
-        if (error.message.includes('Invalid login credentials')) {
-          setError('Email ou mot de passe incorrect');
-        } else {
-          setError(error.message);
-        }
+        if (error) {
+          if (error.includes('Invalid login credentials')) {
+            setError('Email ou mot de passe incorrect');
+          } else {
+            setError(error);
+          }
       } else {
         // Connexion réussie - redirection vers l'étape suivante
         console.log('Connexion réussie, redirection...');
@@ -94,12 +94,12 @@ export const AccountCreation = ({ onAccountCreated, isBusinessUser }: AccountCre
         companySector: signUpData.userType === 'business' ? signUpData.companySector : undefined,
       });
       
-      if (error) {
-        if (error.message.includes('User already registered')) {
-          setError('Un compte avec cet email existe déjà');
-        } else {
-          setError(error.message);
-        }
+        if (error) {
+          if (error.includes('User already registered')) {
+            setError('Un compte avec cet email existe déjà');
+          } else {
+            setError(error);
+          }
       } else {
         // Création de compte réussie - redirection vers l'étape suivante
         console.log('Création de compte réussie, redirection...');

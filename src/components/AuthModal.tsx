@@ -52,12 +52,12 @@ export function AuthModal({ children }: AuthModalProps) {
 
     const { error } = await signIn(signInForm.email, signInForm.password);
     
-    if (error) {
-      if (error.message.includes('Invalid login credentials')) {
-        setError('Email ou mot de passe incorrect');
-      } else {
-        setError(error.message);
-      }
+        if (error) {
+          if (error.includes('Invalid login credentials')) {
+            setError('Email ou mot de passe incorrect');
+          } else {
+            setError(error);
+          }
     } else {
       setOpen(false);
       setSignInForm({ email: '', password: '' });
@@ -94,12 +94,12 @@ export function AuthModal({ children }: AuthModalProps) {
       companySector: signUpForm.companySector,
     });
     
-    if (error) {
-      if (error.message.includes('User already registered')) {
-        setError('Un compte avec cet email existe déjà');
-      } else {
-        setError(error.message);
-      }
+        if (error) {
+          if (error.includes('User already registered')) {
+            setError('Un compte avec cet email existe déjà');
+          } else {
+            setError(error);
+          }
     } else {
       setOpen(false);
       setSignUpForm({

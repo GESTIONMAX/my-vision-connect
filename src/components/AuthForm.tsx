@@ -33,10 +33,10 @@ export const AuthForm = () => {
       if (isLogin) {
         const { error } = await signIn(email, password);
         if (error) {
-          if (error.message.includes('Invalid login credentials')) {
+          if (error.includes('Invalid login credentials')) {
             setError('Email ou mot de passe incorrect');
           } else {
-            setError(error.message);
+            setError(error);
           }
         } else {
           // Redirection vers la page de bienvenue après connexion réussie
@@ -51,10 +51,10 @@ export const AuthForm = () => {
           userType: 'customer'
         });
         if (error) {
-          if (error.message.includes('User already registered')) {
+          if (error.includes('User already registered')) {
             setError('Un compte avec cet email existe déjà');
           } else {
-            setError(error.message);
+            setError(error);
           }
         } else {
           setSuccess('Compte créé avec succès ! Vérifiez votre email pour confirmer votre compte.');

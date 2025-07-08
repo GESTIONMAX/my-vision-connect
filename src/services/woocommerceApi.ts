@@ -214,8 +214,45 @@ export const woocommerceApi = new WooCommerceAPI(WORDPRESS_CONFIG.BASE_URL);
 // Export de la classe pour créer d'autres instances si nécessaire
 export { WooCommerceAPI };
 
+// Fonctions utilitaires pour le mapping
+const mapCategory = (wcCategory: string): 'classic' | 'sport' | 'pro' | 'femme' | 'homme' | 'lifestyle' => {
+  const categoryMap: Record<string, 'classic' | 'sport' | 'pro' | 'femme' | 'homme' | 'lifestyle'> = {
+    'classic': 'classic',
+    'sport': 'sport',
+    'pro': 'pro',
+    'femme': 'femme',
+    'homme': 'homme',
+    'lifestyle': 'lifestyle',
+    'classique': 'classic',
+    'professionnel': 'pro',
+    'women': 'femme',
+    'men': 'homme',
+    'style': 'lifestyle'
+  };
+  return categoryMap[wcCategory.toLowerCase()] || 'lifestyle';
+};
+
+const mapUsage = (wcUsage: string): 'quotidien' | 'sport' | 'conduite' | 'travail' => {
+  const usageMap: Record<string, 'quotidien' | 'sport' | 'conduite' | 'travail'> = {
+    'quotidien': 'quotidien',
+    'sport': 'sport',
+    'conduite': 'conduite',
+    'travail': 'travail',
+    'daily': 'quotidien',
+    'driving': 'conduite',
+    'work': 'travail'
+  };
+  return usageMap[wcUsage.toLowerCase()] || 'quotidien';
+};
+
 // Utilitaires pour traiter les données WooCommerce
 export const wcUtils = {
+  // Mapper les catégories WooCommerce vers les catégories de l'app
+  mapCategory,
+
+  // Mapper l'usage WooCommerce vers l'usage de l'app
+  mapUsage,
+
   // Convertir un produit WooCommerce vers le format de l'app
   convertProduct: (wcProduct: WooCommerceProduct) => ({
     id: wcProduct.id.toString(),
@@ -223,14 +260,20 @@ export const wcUtils = {
     name: wcProduct.name,
     description: wcProduct.description || wcProduct.short_description,
     price: parseFloat(wcProduct.price) || 0,
+    original_price: wcProduct.sale_price ? parseFloat(wcProduct.regular_price) : undefined,
     originalPrice: wcProduct.sale_price ? parseFloat(wcProduct.regular_price) : undefined,
-    category: wcProduct.categories[0]?.name || 'Produit',
+    category: mapCategory(wcProduct.categories[0]?.name || 'lifestyle'),
     collection: wcProduct.categories[0]?.slug || 'general',
     images: wcProduct.images.map(img => img.src),
+    in_stock: wcProduct.stock_status === 'instock',
     inStock: wcProduct.stock_status === 'instock',
+    stock_quantity: wcProduct.stock_quantity || 0,
     stockQuantity: wcProduct.stock_quantity || 0,
+    is_new: wcProduct.meta_data?.find(m => m.key === '_is_new')?.value === 'yes',
     isNew: wcProduct.meta_data?.find(m => m.key === '_is_new')?.value === 'yes',
+    is_popular: wcProduct.featured,
     isPopular: wcProduct.featured,
+    is_featured: wcProduct.featured,
     isFeatured: wcProduct.featured,
     features: wcProduct.attributes.map(attr => attr.name),
     specifications: wcProduct.attributes.reduce((acc, attr) => {
@@ -239,9 +282,11 @@ export const wcUtils = {
     }, {} as Record<string, any>),
     rating: 4.5, // Default rating
     reviewCount: Math.floor(Math.random() * 100) + 10,
+    review_count: Math.floor(Math.random() * 100) + 10,
     color: wcProduct.attributes.find(attr => attr.name.toLowerCase().includes('couleur'))?.options || [],
-    genre: wcProduct.meta_data?.find(m => m.key === '_genre')?.value || 'Unisexe',
-    usage: wcProduct.meta_data?.find(m => m.key === '_usage')?.value || 'Quotidien'
+    genre: wcProduct.meta_data?.find(m => m.key === '_genre')?.value || 'mixte',
+    usage: mapUsage(wcProduct.meta_data?.find(m => m.key === '_usage')?.value || 'quotidien'),
+    created_at: new Date().toISOString()
   }),
 
   // Convertir un client WooCommerce vers le format de l'app

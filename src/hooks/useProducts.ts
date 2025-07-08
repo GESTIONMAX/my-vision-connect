@@ -1,6 +1,6 @@
 
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { useWooCommerceProducts, useWooCommerceProductBySlug } from '@/hooks/useWooCommerce';
 
 export interface Product {
   id: string;
@@ -33,74 +33,9 @@ export interface Product {
 }
 
 export const useProducts = () => {
-  return useQuery({
-    queryKey: ['products'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        throw new Error(error.message);
-      }
-
-      // Transform the data to match the expected format
-      const transformedProducts = data.map((product: any): Product => ({
-        ...product,
-        rating: 4.5, // Default rating since it's not in DB yet
-        reviewCount: product.review_count || 0,
-        originalPrice: product.original_price,
-        inStock: product.in_stock,
-        isNew: product.is_new,
-        isPopular: product.is_popular,
-        // Ensure category matches the union type
-        category: (product.category as Product['category']) || 'lifestyle',
-        // Ensure usage matches the union type
-        usage: (product.usage as Product['usage']) || 'quotidien',
-        // Ensure genre matches the union type
-        genre: (product.genre as Product['genre']) || 'mixte',
-        // Include created_at for sorting
-        created_at: product.created_at,
-      }));
-
-      return transformedProducts;
-    },
-  });
+  return useWooCommerceProducts();
 };
 
 export const useProduct = (slug: string) => {
-  return useQuery({
-    queryKey: ['product', slug],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .eq('slug', slug)
-        .single();
-
-      if (error) {
-        throw new Error(error.message);
-      }
-
-      // Transform the data to match the expected format
-      return {
-        ...data,
-        rating: 4.5, // Default rating since it's not in DB yet
-        reviewCount: data.review_count || 0,
-        originalPrice: data.original_price,
-        inStock: data.in_stock,
-        isNew: data.is_new,
-        isPopular: data.is_popular,
-        // Ensure category matches the union type
-        category: (data.category as Product['category']) || 'lifestyle',
-        // Ensure usage matches the union type
-        usage: (data.usage as Product['usage']) || 'quotidien',
-        // Ensure genre matches the union type
-        genre: (data.genre as Product['genre']) || 'mixte',
-        // Include created_at for sorting
-        created_at: data.created_at,
-      } as Product;
-    },
-  });
+  return useWooCommerceProductBySlug(slug);
 };
