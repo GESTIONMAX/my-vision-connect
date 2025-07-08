@@ -1,7 +1,7 @@
 // Configuration centralisée pour WordPress
 export const WORDPRESS_CONFIG = {
   // URL de base de votre site WordPress (à personnaliser)
-  BASE_URL: 'https://your-wordpress-site.com',
+  BASE_URL: 'https://wordpress-t0ccgocs0sk0k0g0s4gocwkg.gestionmax.fr',
   
   // Endpoints de l'API REST WordPress
   API_BASE: '/wp-json/wp/v2',

@@ -1,170 +1,119 @@
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { 
-  wordpressApi, 
-  WordPressPost, 
-  WordPressPage, 
-  WordPressCategory, 
-  WordPressTag,
-  WordPressApiParams 
-} from '@/services/wordpressApi';
+import { useQuery } from '@tanstack/react-query';
+import { wordpressApi, WordPressApiParams } from '@/services/wordpressApi';
+import { WORDPRESS_CONFIG } from '@/config/wordpress';
 
-// Hook pour récupérer les posts
-export const useWordPressPosts = (params?: WordPressApiParams): UseQueryResult<WordPressPost[], Error> => {
+// Hook principal pour récupérer les posts
+export const useWordPressPosts = (params?: WordPressApiParams) => {
   return useQuery({
     queryKey: ['wordpress-posts', params],
     queryFn: () => wordpressApi.getPosts(params),
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: WORDPRESS_CONFIG.CACHE_TIMES.POSTS,
+    enabled: !!WORDPRESS_CONFIG.BASE_URL && WORDPRESS_CONFIG.BASE_URL !== 'https://your-wordpress-site.com',
   });
 };
 
-// Hook pour récupérer un post par ID
-export const useWordPressPost = (id: number): UseQueryResult<WordPressPost, Error> => {
+// Hook pour un post spécifique par slug
+export const useWordPressPostBySlug = (slug: string) => {
   return useQuery({
-    queryKey: ['wordpress-post', id],
-    queryFn: () => wordpressApi.getPost(id, { _embed: true }),
-    enabled: !!id,
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
-  });
-};
-
-// Hook pour récupérer un post par slug
-export const useWordPressPostBySlug = (slug: string): UseQueryResult<WordPressPost | null, Error> => {
-  return useQuery({
-    queryKey: ['wordpress-post-slug', slug],
+    queryKey: ['wordpress-post', slug],
     queryFn: async () => {
       const posts = await wordpressApi.getPostBySlug(slug);
-      return posts.length > 0 ? posts[0] : null;
+      return posts[0] || null;
     },
-    enabled: !!slug,
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
+    staleTime: WORDPRESS_CONFIG.CACHE_TIMES.POSTS,
+    enabled: !!slug && !!WORDPRESS_CONFIG.BASE_URL && WORDPRESS_CONFIG.BASE_URL !== 'https://your-wordpress-site.com',
   });
 };
 
-// Hook pour récupérer les pages
-export const useWordPressPages = (params?: WordPressApiParams): UseQueryResult<WordPressPage[], Error> => {
-  return useQuery({
-    queryKey: ['wordpress-pages', params],
-    queryFn: () => wordpressApi.getPages(params),
-    staleTime: 10 * 60 * 1000, // 10 minutes pour les pages (moins volatiles)
-    gcTime: 20 * 60 * 1000, // 20 minutes
-  });
-};
-
-// Hook pour récupérer une page par slug
-export const useWordPressPageBySlug = (slug: string): UseQueryResult<WordPressPage | null, Error> => {
-  return useQuery({
-    queryKey: ['wordpress-page-slug', slug],
-    queryFn: async () => {
-      const pages = await wordpressApi.getPageBySlug(slug);
-      return pages.length > 0 ? pages[0] : null;
-    },
-    enabled: !!slug,
-    staleTime: 10 * 60 * 1000,
-    gcTime: 20 * 60 * 1000,
-  });
-};
-
-// Hook pour récupérer les catégories
-export const useWordPressCategories = (): UseQueryResult<WordPressCategory[], Error> => {
-  return useQuery({
-    queryKey: ['wordpress-categories'],
-    queryFn: () => wordpressApi.getCategories({ per_page: 100 }),
-    staleTime: 30 * 60 * 1000, // 30 minutes pour les catégories
-    gcTime: 60 * 60 * 1000, // 1 heure
-  });
-};
-
-// Hook pour récupérer les tags
-export const useWordPressTags = (): UseQueryResult<WordPressTag[], Error> => {
-  return useQuery({
-    queryKey: ['wordpress-tags'],
-    queryFn: () => wordpressApi.getTags({ per_page: 100 }),
-    staleTime: 30 * 60 * 1000, // 30 minutes pour les tags
-    gcTime: 60 * 60 * 1000, // 1 heure
-  });
-};
-
-// Hook pour récupérer les posts récents
-export const useRecentWordPressPosts = (count: number = 5): UseQueryResult<WordPressPost[], Error> => {
+// Hook pour les posts récents
+export const useRecentWordPressPosts = (count: number = 5) => {
   return useQuery({
     queryKey: ['wordpress-recent-posts', count],
     queryFn: () => wordpressApi.getRecentPosts(count),
-    staleTime: 2 * 60 * 1000, // 2 minutes pour les posts récents
-    gcTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: WORDPRESS_CONFIG.CACHE_TIMES.POSTS,
+    enabled: !!WORDPRESS_CONFIG.BASE_URL && WORDPRESS_CONFIG.BASE_URL !== 'https://your-wordpress-site.com',
   });
 };
 
-// Hook pour récupérer les posts populaires
-export const usePopularWordPressPosts = (count: number = 5): UseQueryResult<WordPressPost[], Error> => {
-  return useQuery({
-    queryKey: ['wordpress-popular-posts', count],
-    queryFn: () => wordpressApi.getPopularPosts(count),
-    staleTime: 10 * 60 * 1000, // 10 minutes pour les posts populaires
-    gcTime: 20 * 60 * 1000, // 20 minutes
-  });
-};
-
-// Hook pour récupérer les posts featured/épinglés
-export const useFeaturedWordPressPosts = (): UseQueryResult<WordPressPost[], Error> => {
+// Hook pour les posts en vedette
+export const useFeaturedWordPressPosts = () => {
   return useQuery({
     queryKey: ['wordpress-featured-posts'],
     queryFn: () => wordpressApi.getFeaturedPosts(),
-    staleTime: 15 * 60 * 1000, // 15 minutes pour les posts featured
-    gcTime: 30 * 60 * 1000, // 30 minutes
+    staleTime: WORDPRESS_CONFIG.CACHE_TIMES.POSTS,
+    enabled: !!WORDPRESS_CONFIG.BASE_URL && WORDPRESS_CONFIG.BASE_URL !== 'https://your-wordpress-site.com',
+  });
+};
+
+// Hook pour les catégories WordPress
+export const useWordPressCategories = () => {
+  return useQuery({
+    queryKey: ['wordpress-categories'],
+    queryFn: () => wordpressApi.getCategories(),
+    staleTime: WORDPRESS_CONFIG.CACHE_TIMES.CATEGORIES,
+    enabled: !!WORDPRESS_CONFIG.BASE_URL && WORDPRESS_CONFIG.BASE_URL !== 'https://your-wordpress-site.com',
+  });
+};
+
+// Hook pour les tags WordPress
+export const useWordPressTags = () => {
+  return useQuery({
+    queryKey: ['wordpress-tags'],
+    queryFn: () => wordpressApi.getTags(),
+    staleTime: WORDPRESS_CONFIG.CACHE_TIMES.TAGS,
+    enabled: !!WORDPRESS_CONFIG.BASE_URL && WORDPRESS_CONFIG.BASE_URL !== 'https://your-wordpress-site.com',
   });
 };
 
 // Hook pour la recherche
-export const useWordPressSearch = (query: string, params?: WordPressApiParams): UseQueryResult<WordPressPost[], Error> => {
+export const useWordPressSearch = (query: string, params?: WordPressApiParams) => {
   return useQuery({
     queryKey: ['wordpress-search', query, params],
     queryFn: () => wordpressApi.search(query, params),
-    enabled: !!query && query.length > 2, // Activer seulement si la requête fait plus de 2 caractères
-    staleTime: 1 * 60 * 1000, // 1 minute pour les recherches
-    gcTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: WORDPRESS_CONFIG.CACHE_TIMES.SEARCH,
+    enabled: !!query && query.length > 2 && !!WORDPRESS_CONFIG.BASE_URL && WORDPRESS_CONFIG.BASE_URL !== 'https://your-wordpress-site.com',
   });
 };
 
-// Hook pour récupérer les posts d'une catégorie spécifique
-export const useWordPressPostsByCategory = (categoryId: number, params?: WordPressApiParams): UseQueryResult<WordPressPost[], Error> => {
+// Hook pour les pages WordPress
+export const useWordPressPages = (params?: WordPressApiParams) => {
   return useQuery({
-    queryKey: ['wordpress-posts-category', categoryId, params],
-    queryFn: () => wordpressApi.getPosts({ categories: [categoryId], _embed: true, ...params }),
-    enabled: !!categoryId,
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
+    queryKey: ['wordpress-pages', params],
+    queryFn: () => wordpressApi.getPages(params),
+    staleTime: WORDPRESS_CONFIG.CACHE_TIMES.PAGES,
+    enabled: !!WORDPRESS_CONFIG.BASE_URL && WORDPRESS_CONFIG.BASE_URL !== 'https://your-wordpress-site.com',
   });
 };
 
-// Hook pour récupérer les posts avec un tag spécifique
-export const useWordPressPostsByTag = (tagId: number, params?: WordPressApiParams): UseQueryResult<WordPressPost[], Error> => {
+// Hook pour une page spécifique par slug
+export const useWordPressPageBySlug = (slug: string) => {
   return useQuery({
-    queryKey: ['wordpress-posts-tag', tagId, params],
-    queryFn: () => wordpressApi.getPosts({ tags: [tagId], _embed: true, ...params }),
-    enabled: !!tagId,
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
+    queryKey: ['wordpress-page', slug],
+    queryFn: async () => {
+      const pages = await wordpressApi.getPageBySlug(slug);
+      return pages[0] || null;
+    },
+    staleTime: WORDPRESS_CONFIG.CACHE_TIMES.PAGES,
+    enabled: !!slug && !!WORDPRESS_CONFIG.BASE_URL && WORDPRESS_CONFIG.BASE_URL !== 'https://your-wordpress-site.com',
   });
 };
 
-// Hook personnalisé pour combiner posts et catégories avec leurs noms
-export const useWordPressPostsWithCategoryNames = (params?: WordPressApiParams) => {
-  const postsQuery = useWordPressPosts(params);
-  const categoriesQuery = useWordPressCategories();
+// Hook pour les posts populaires
+export const usePopularWordPressPosts = (count: number = 5) => {
+  return useQuery({
+    queryKey: ['wordpress-popular-posts', count],
+    queryFn: () => wordpressApi.getPopularPosts(count),
+    staleTime: WORDPRESS_CONFIG.CACHE_TIMES.POSTS,
+    enabled: !!WORDPRESS_CONFIG.BASE_URL && WORDPRESS_CONFIG.BASE_URL !== 'https://your-wordpress-site.com',
+  });
+};
 
-  return {
-    ...postsQuery,
-    data: postsQuery.data?.map(post => ({
-      ...post,
-      categoryNames: post.categories.map(categoryId => {
-        const category = categoriesQuery.data?.find(cat => cat.id === categoryId);
-        return category?.name || 'Uncategorized';
-      })
-    })),
-    isLoading: postsQuery.isLoading || categoriesQuery.isLoading,
-    error: postsQuery.error || categoriesQuery.error,
-  };
+// Hook pour les médias WordPress
+export const useWordPressMedia = (params?: Omit<WordPressApiParams, 'categories' | 'tags' | 'sticky'>) => {
+  return useQuery({
+    queryKey: ['wordpress-media', params],
+    queryFn: () => wordpressApi.getMedia(params),
+    staleTime: WORDPRESS_CONFIG.CACHE_TIMES.POSTS, // Même durée que les posts
+    enabled: !!WORDPRESS_CONFIG.BASE_URL && WORDPRESS_CONFIG.BASE_URL !== 'https://your-wordpress-site.com',
+  });
 };

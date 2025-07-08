@@ -317,11 +317,13 @@ class WordPressAPI {
   }
 }
 
-// Instance par défaut (à configurer selon votre WordPress)
+// Instance par défaut utilisant la configuration
+import { WORDPRESS_CONFIG } from '@/config/wordpress';
+
 export const wordpressApi = new WordPressAPI({
-  baseUrl: 'https://your-wordpress-site.com', // À remplacer par votre URL WordPress
-  // username: 'your-username', // Optionnel pour les contenus publics
-  // password: 'your-app-password', // Optionnel pour les contenus publics
+  baseUrl: WORDPRESS_CONFIG.BASE_URL,
+  // username: WORDPRESS_CONFIG.AUTH.username, // Optionnel pour les contenus publics
+  // password: WORDPRESS_CONFIG.AUTH.password, // Optionnel pour les contenus publics
 });
 
 // Export de la classe pour créer d'autres instances si nécessaire
