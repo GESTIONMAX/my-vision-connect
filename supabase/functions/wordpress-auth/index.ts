@@ -16,11 +16,11 @@ serve(async (req) => {
     
     // Get WordPress credentials from environment
     const baseUrl = 'https://wordpress-t0ccgocs0sk0k0g0s4gocwkg.gestionmax.fr'
-    const clientKey = Deno.env.get('WORDPRESS_CLIENT_KEY')
-    const clientSecret = Deno.env.get('WORDPRESS_CLIENT_SECRET')
+    const username = Deno.env.get('WORDPRESS_CLIENT_KEY') // WordPress username
+    const appPassword = Deno.env.get('WORDPRESS_CLIENT_SECRET') // Application password
     
-    if (!clientKey || !clientSecret) {
-      throw new Error('WordPress API credentials not configured')
+    if (!username || !appPassword) {
+      throw new Error('WordPress credentials not configured. Please set username and application password.')
     }
 
     let endpoint = ''
@@ -29,8 +29,8 @@ serve(async (req) => {
 
     switch (action) {
       case 'login':
-        // Simple login using WordPress REST API
-        endpoint = '/wp-json/wp/v2/users'
+        // Use Application Password for login verification
+        endpoint = '/wp-json/wp/v2/users/me'
         method = 'GET'
         break
         
@@ -42,7 +42,7 @@ serve(async (req) => {
           password: params.password,
           first_name: params.firstName,
           last_name: params.lastName,
-          roles: params.userType === 'business' ? ['subscriber'] : ['subscriber'], // Both get subscriber role for now
+          roles: params.userType === 'business' ? ['subscriber'] : ['subscriber'],
           meta: {
             user_type: params.userType,
             phone: params.phone || '',
@@ -75,15 +75,17 @@ serve(async (req) => {
 
     const url = new URL(`${baseUrl}${endpoint}`)
     
-    // Set up headers with admin credentials for all operations
+    // Set up headers - use Application Password for login, admin credentials for registration
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
-      'Authorization': `Basic ${btoa(`${clientKey}:${clientSecret}`)}`,
     }
 
-    // For login, we need to find the user by email
     if (action === 'login') {
-      url.searchParams.append('search', params.email)
+      // For login, use the user's credentials with Application Password
+      headers['Authorization'] = `Basic ${btoa(`${params.email}:${params.password}`)}`
+    } else {
+      // For registration and other operations, use admin credentials
+      headers['Authorization'] = `Basic ${btoa(`${username}:${appPassword}`)}`
     }
 
     console.log('Making WordPress Auth request to:', url.toString())
@@ -123,28 +125,24 @@ serve(async (req) => {
     let formattedResponse = data
     
     if (action === 'login') {
-      // For login, verify the user exists and password matches
-      if (Array.isArray(data) && data.length > 0) {
-        const user = data[0]
-        
-        // Simple password verification (in production, use proper authentication)
-        // For now, we'll create a simple token
+      // If we get user data, login was successful (Application Password worked)
+      if (data && data.id) {
         formattedResponse = {
           success: true,
-          token: btoa(`${user.id}:${params.email}:${Date.now()}`),
-          user: user.name || user.username,
+          token: btoa(`${data.id}:${params.email}:${Date.now()}`),
+          user: data.name || data.username,
           user_data: {
-            id: user.id,
-            username: user.username,
-            email: user.email,
-            first_name: user.first_name,
-            last_name: user.last_name,
-            roles: user.roles || ['subscriber']
+            id: data.id,
+            username: data.username,
+            email: data.email,
+            first_name: data.first_name,
+            last_name: data.last_name,
+            roles: data.roles || ['subscriber']
           },
           message: 'Connexion réussie'
         }
       } else {
-        throw new Error('Utilisateur non trouvé ou mot de passe incorrect')
+        throw new Error('Identifiants incorrects ou mot de passe d\'application invalide')
       }
     } else if (action === 'register') {
       formattedResponse = {
