@@ -29,15 +29,16 @@ serve(async (req) => {
 
     switch (action) {
       case 'login':
-        // Use Application Password for login verification
-        endpoint = '/wp-json/wp/v2/users/me'
+        // For login, we need to find the user first by email to get their username
+        endpoint = '/wp-json/wp/v2/users'
         method = 'GET'
         break
         
       case 'register':
         endpoint = '/wp-json/wp/v2/users'
+        const username = params.email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '') + Math.random().toString(36).substring(7)
         body = {
-          username: params.email.split('@')[0], // Use email prefix as username
+          username: username, // Generate unique username
           email: params.email,
           password: params.password,
           first_name: params.firstName,
@@ -75,17 +76,17 @@ serve(async (req) => {
 
     const url = new URL(`${baseUrl}${endpoint}`)
     
-    // Set up headers - use Application Password for login, admin credentials for registration
+    // Set up headers
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
     }
 
+    // Always use admin credentials for all operations
+    headers['Authorization'] = `Basic ${btoa(`${username}:${appPassword}`)}`
+
+    // For login, we need to search by email to find the user
     if (action === 'login') {
-      // For login, use the user's credentials with Application Password
-      headers['Authorization'] = `Basic ${btoa(`${params.email}:${params.password}`)}`
-    } else {
-      // For registration and other operations, use admin credentials
-      headers['Authorization'] = `Basic ${btoa(`${username}:${appPassword}`)}`
+      url.searchParams.append('search', params.email)
     }
 
     console.log('Making WordPress Auth request to:', url.toString())
@@ -125,24 +126,47 @@ serve(async (req) => {
     let formattedResponse = data
     
     if (action === 'login') {
-      // If we get user data, login was successful (Application Password worked)
-      if (data && data.id) {
-        formattedResponse = {
-          success: true,
-          token: btoa(`${data.id}:${params.email}:${Date.now()}`),
-          user: data.name || data.username,
-          user_data: {
-            id: data.id,
-            username: data.username,
-            email: data.email,
-            first_name: data.first_name,
-            last_name: data.last_name,
-            roles: data.roles || ['subscriber']
-          },
-          message: 'Connexion réussie'
+      // Search returned users by email
+      if (Array.isArray(data) && data.length > 0) {
+        const user = data[0]
+        
+        // Now verify the password by trying to authenticate with the user's actual username
+        try {
+          const loginUrl = new URL(`${baseUrl}/wp-json/wp/v2/users/me`)
+          const loginHeaders = {
+            'Content-Type': 'application/json',
+            'Authorization': `Basic ${btoa(`${user.username}:${params.password}`)}`
+          }
+          
+          const loginResponse = await fetch(loginUrl.toString(), {
+            method: 'GET',
+            headers: loginHeaders
+          })
+          
+          if (loginResponse.ok) {
+            const userData = await loginResponse.json()
+            formattedResponse = {
+              success: true,
+              token: btoa(`${userData.id}:${params.email}:${Date.now()}`),
+              user: userData.name || userData.username,
+              user_data: {
+                id: userData.id,
+                username: userData.username,
+                email: userData.email,
+                first_name: userData.first_name,
+                last_name: userData.last_name,
+                roles: userData.roles || ['subscriber']
+              },
+              message: 'Connexion réussie'
+            }
+          } else {
+            throw new Error('Mot de passe incorrect')
+          }
+        } catch (authError) {
+          throw new Error('Identifiants incorrects')
         }
       } else {
-        throw new Error('Identifiants incorrects ou mot de passe d\'application invalide')
+        throw new Error('Utilisateur non trouvé')
       }
     } else if (action === 'register') {
       formattedResponse = {
