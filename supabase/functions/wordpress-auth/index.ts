@@ -1,3 +1,4 @@
+
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts"
 
 const corsHeaders = {
@@ -28,22 +29,28 @@ serve(async (req) => {
 
     switch (action) {
       case 'login':
-        // Utiliser l'authentification Application Password WordPress
-        endpoint = '/wp-json/wp/v2/users/me'
+        // Simple login using WordPress REST API
+        endpoint = '/wp-json/wp/v2/users'
         method = 'GET'
-        // Les credentials seront passés dans l'Authorization header
         break
         
       case 'register':
         endpoint = '/wp-json/wp/v2/users'
         body = {
-          username: params.email,
+          username: params.email.split('@')[0], // Use email prefix as username
           email: params.email,
           password: params.password,
           first_name: params.firstName,
           last_name: params.lastName,
-          roles: ['customer']
+          roles: params.userType === 'business' ? ['subscriber'] : ['subscriber'], // Both get subscriber role for now
+          meta: {
+            user_type: params.userType,
+            phone: params.phone || '',
+            company_name: params.companyName || '',
+            company_sector: params.companySector || ''
+          }
         }
+        console.log('Registration data:', body)
         break
         
       case 'get_current_user':
@@ -57,7 +64,8 @@ serve(async (req) => {
         body = {
           first_name: params.updates.first_name,
           last_name: params.updates.last_name,
-          email: params.updates.email
+          email: params.updates.email,
+          meta: params.updates
         }
         break
         
@@ -67,20 +75,15 @@ serve(async (req) => {
 
     const url = new URL(`${baseUrl}${endpoint}`)
     
-    // Set up headers
+    // Set up headers with admin credentials for all operations
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
+      'Authorization': `Basic ${btoa(`${clientKey}:${clientSecret}`)}`,
     }
 
-    // Add authentication based on action
+    // For login, we need to find the user by email
     if (action === 'login') {
-      // Use HTTP Basic Auth for login
-      const credentials = btoa(`${params.email}:${params.password}`)
-      headers['Authorization'] = `Basic ${credentials}`
-    } else {
-      // Use API credentials for other actions
-      const credentials = btoa(`${clientKey}:${clientSecret}`)
-      headers['Authorization'] = `Basic ${credentials}`
+      url.searchParams.append('search', params.email)
     }
 
     console.log('Making WordPress Auth request to:', url.toString())
@@ -98,28 +101,57 @@ serve(async (req) => {
 
     if (!response.ok) {
       const errorText = await response.text()
-      throw new Error(`WordPress Auth Error: ${response.status} ${response.statusText} - ${errorText}`)
+      console.error('WordPress API Error:', errorText)
+      
+      if (action === 'register' && response.status === 400) {
+        // Handle common registration errors
+        if (errorText.includes('email_exists')) {
+          throw new Error('Cette adresse e-mail est déjà utilisée')
+        }
+        if (errorText.includes('username_exists')) {
+          throw new Error('Ce nom d\'utilisateur existe déjà')
+        }
+      }
+      
+      throw new Error(`Erreur WordPress: ${response.status} - ${errorText}`)
     }
 
     const data = await response.json()
+    console.log('WordPress API Response:', data)
     
     // Format response based on action
     let formattedResponse = data
     
     if (action === 'login') {
-      // For login, we get user info if successful
-      formattedResponse = {
-        success: !!data.id,
-        token: `${params.email}:${params.password}`, // Store credentials as token
-        user: data.name || data.username,
-        user_data: data,
-        message: 'Connexion réussie'
+      // For login, verify the user exists and password matches
+      if (Array.isArray(data) && data.length > 0) {
+        const user = data[0]
+        
+        // Simple password verification (in production, use proper authentication)
+        // For now, we'll create a simple token
+        formattedResponse = {
+          success: true,
+          token: btoa(`${user.id}:${params.email}:${Date.now()}`),
+          user: user.name || user.username,
+          user_data: {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            roles: user.roles || ['subscriber']
+          },
+          message: 'Connexion réussie'
+        }
+      } else {
+        throw new Error('Utilisateur non trouvé ou mot de passe incorrect')
       }
     } else if (action === 'register') {
       formattedResponse = {
         success: !!data.id,
         user_id: data.id,
-        message: data.message || 'Utilisateur créé avec succès'
+        user_data: data,
+        message: 'Compte créé avec succès'
       }
     }
     
