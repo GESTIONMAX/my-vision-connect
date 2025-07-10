@@ -1,0 +1,17 @@
+[
+  {
+    "id": "5e28d713-28ec-44d8-8f5a-4329bdeacb45",
+    "email": "aurelien.lavayssiere@gmail.com",
+    "first_name": "aurelien",
+    "last_name": "LAVAYSSIERE",
+    "phone": null,
+    "avatar_url": null,
+    "user_type": "customer",
+    "company_name": null,
+    "company_siret": null,
+    "company_sector": null,
+    "pricing_group": "standard",
+    "created_at": "2025-06-27T15:20:09.629952+00:00",
+    "updated_at": "2025-06-27T15:20:09.629952+00:00"
+  }
+]
