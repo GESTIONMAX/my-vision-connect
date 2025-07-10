@@ -14,7 +14,7 @@ serve(async (req) => {
     const { endpoint, params } = await req.json()
     
     // Get WordPress credentials from environment
-    const baseUrl = 'https://wordpress-t0ccgocs0sk0k0g0s4gocwkg.gestionmax.fr'
+    const baseUrl = 'https://supabasekong-jgsk88o4084w48wk04kk4080.gestionmax.fr/wordpress'
     const clientKey = Deno.env.get('WORDPRESS_CLIENT_KEY')
     const clientSecret = Deno.env.get('WORDPRESS_CLIENT_SECRET')
     
@@ -46,10 +46,18 @@ serve(async (req) => {
 
     console.log('Making WordPress API request to:', url.toString())
 
-    const response = await fetch(url.toString(), {
+    console.log('Fetching from URL:', url.toString())
+    
+    // Options pour la requête fetch avec SSL vérifié désactivé
+    const fetchOptions = {
       method: 'GET',
       headers,
-    })
+      // Ignorer la vérification SSL pour les environnements de développement
+      //@ts-ignore - L'option suivante est spécifique à Deno
+      client: { caCerts: [] }
+    }
+    
+    const response = await fetch(url.toString(), fetchOptions)
 
     if (!response.ok) {
       throw new Error(`WordPress API Error: ${response.status} ${response.statusText}`)

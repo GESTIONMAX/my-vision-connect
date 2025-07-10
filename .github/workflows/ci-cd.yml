@@ -31,8 +31,8 @@ jobs:
       - name: Build project
         run: npm run build
         env:
-          VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          VITE_SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_KEY: ${{ secrets.VITE_SUPABASE_KEY }}
       
       # Si vous ajoutez des tests plus tard
       # - name: Run tests
@@ -62,8 +62,13 @@ jobs:
         run: |
           # Utilisez le webhook Coolify ou l'API pour déclencher un déploiement
           # Exemple avec curl et un webhook:
-          curl -X POST ${{ secrets.COOLIFY_WEBHOOK_URL }} \
-            -H "Content-Type: application/json" \
-            -d '{"ref": "${{ github.ref }}", "commit": "${{ github.sha }}"}'
+          if [ -n "${{ secrets.COOLIFY_WEBHOOK_URL }}" ]; then
+            curl -X POST ${{ secrets.COOLIFY_WEBHOOK_URL }} \
+              -H "Content-Type: application/json" \
+              -d '{"ref": "${{ github.ref }}", "commit": "${{ github.sha }}"}'  
+          else
+            echo "Attention: COOLIFY_WEBHOOK_URL n'est pas configuré dans les secrets GitHub"
+            exit 1
+          fi
         # Note: Vous devrez configurer COOLIFY_WEBHOOK_URL dans les secrets GitHub
         # Vous pouvez également utiliser d'autres méthodes de déploiement selon votre configuration Coolify

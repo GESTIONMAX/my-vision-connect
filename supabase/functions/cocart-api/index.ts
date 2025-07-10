@@ -14,7 +14,7 @@ serve(async (req) => {
     const { endpoint, params, method = 'GET' } = await req.json()
     
     // Get WordPress credentials from environment
-    const baseUrl = 'https://wordpress-t0ccgocs0sk0k0g0s4gocwkg.gestionmax.fr'
+    const baseUrl = 'https://supabasekong-jgsk88o4084w48wk04kk4080.gestionmax.fr/wordpress'
     
     // Build URL with CoCart endpoint
     const url = new URL(`${baseUrl}/wp-json${endpoint}`)
@@ -42,6 +42,9 @@ serve(async (req) => {
     const requestOptions: RequestInit = {
       method,
       headers,
+      // Ignorer la vérification SSL pour les environnements de développement
+      //@ts-ignore - L'option suivante est spécifique à Deno
+      client: { caCerts: [] }
     }
 
     // Add body for POST/PUT requests
@@ -49,6 +52,7 @@ serve(async (req) => {
       requestOptions.body = JSON.stringify(params)
     }
 
+    console.log('Fetching from URL with options:', url.toString(), method)
     const response = await fetch(url.toString(), requestOptions)
 
     if (!response.ok) {

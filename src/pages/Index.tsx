@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { User, Building2, ShoppingBag, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { SupabaseConnectionTest } from '@/components/SupabaseConnectionTest';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -129,6 +130,16 @@ const Index = () => {
           <p className="text-gray-500 dark:text-gray-400 text-sm">
             Vous pouvez toujours changer de parcours à tout moment
           </p>
+        </motion.div>
+        
+        {/* Composant de test de connexion à Supabase - À retirer après validation */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 0.6 }}
+          className="mt-16"
+        >
+          <SupabaseConnectionTest />
         </motion.div>
       </div>
     </div>
