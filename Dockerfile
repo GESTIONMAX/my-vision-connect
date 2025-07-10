@@ -19,5 +19,5 @@ ARG WOOCOMMERCE_CONSUMER_KEY
 # Build the application
 RUN npm run build
 
-# Le répertoire dist contient les fichiers statiques
-# Coolify saura qu'il faut servir ces fichiers
+# Ajout d'un fichier pour indiquer à Coolify qu'il s'agit d'une SPA
+RUN echo "/* /index.html 200" > /app/dist/_redirects

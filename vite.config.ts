@@ -19,4 +19,16 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  // Configuration pour le build
+  build: {
+    outDir: "dist",
+    // Assurer que l'historique de navigation HTML5 fonctionne correctement
+    rollupOptions: {
+      output: {
+        manualChunks: undefined
+      }
+    }
+  },
+  // Base URL - important pour les sous-dossiers de déploiement
+  base: "/"
 }));
