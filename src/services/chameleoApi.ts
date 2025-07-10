@@ -1,3 +1,5 @@
+import { ChameleoProduct, ChameleoVariant, ChameleoImage, ChameleoCollection, ChameleoFilters } from '@/types/chameleo';
+
 const CHAMELO_BASE_URL = 'https://chamelo.com';
 
 export interface Product {
@@ -14,8 +16,8 @@ export interface Product {
   price_max: number;
   compare_at_price?: number;
   available: boolean;
-  variants: any[];
-  images: any[];
+  variants: ChameleoVariant[];
+  images: ChameleoImage[];
   main_image?: string;
   published_at: string;
   created_at: string;
@@ -108,12 +110,12 @@ class ChameleoApiService {
     }
   }
 
-  processProductData(rawProducts: any[]): Product[] {
+  processProductData(rawProducts: ChameleoProduct[]): Product[] {
     return rawProducts.map(product => {
-      const prices = product.variants?.map((v: any) => parseFloat(v.price)).filter((p: number) => p > 0) || [];
+      const prices = product.variants?.map((v: ChameleoVariant) => parseFloat(v.price)).filter((p: number) => p > 0) || [];
       const priceMin = prices.length > 0 ? Math.min(...prices) : 0;
       const priceMax = prices.length > 0 ? Math.max(...prices) : 0;
-      const isAvailable = product.variants?.some((v: any) => v.available) || false;
+      const isAvailable = product.variants?.some((v: ChameleoVariant) => v.available) || false;
       const mainImage = product.images?.[0]?.src || null;
       
       return {
@@ -142,7 +144,7 @@ class ChameleoApiService {
     });
   }
 
-  processCollectionData(rawCollections: any[]): Collection[] {
+  processCollectionData(rawCollections: ChameleoCollection[]): Collection[] {
     return rawCollections.map(collection => ({
       id: collection.id.toString(),
       external_id: collection.id.toString(),
@@ -183,7 +185,7 @@ class ChameleoApiService {
     }
   }
 
-  getProducts(filters: any = {}): { products: Product[], total: number } {
+  getProducts(filters: ChameleoFilters = {}): { products: Product[], total: number } {
     const stored = localStorage.getItem('chamelo_products');
     if (!stored) return { products: [], total: 0 };
     

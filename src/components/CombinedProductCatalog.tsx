@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useChameleoData } from '@/hooks/useChameleoData';
+import { ChameleoProduct } from '@/types/chameleo';
 import { ProductCard } from '@/components/ProductCard';
 import { Product } from '@/hooks/useProducts';
 
@@ -14,7 +15,7 @@ const CombinedProductCatalog = () => {
     // Récupérer depuis votre source de données locale
   ];
 
-  const formatChameleoProduct = (product: any): Product => ({
+  const formatChameleoProduct = (product: ChameleoProduct): Product => ({
     id: `chamelo-${product.id}`,
     name: product.name,
     slug: product.handle,
