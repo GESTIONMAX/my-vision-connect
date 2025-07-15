@@ -14,7 +14,7 @@ serve(async (req) => {
     const { endpoint, params } = await req.json()
     
     // Get WordPress credentials from environment
-    const baseUrl = 'https://supabasekong-jgsk88o4084w48wk04kk4080.gestionmax.fr/wordpress'
+    const baseUrl = 'https://wordpress-t0ccgocs0sk0k0g0s4gocwkg.gestionmax.fr'
     const clientKey = Deno.env.get('WORDPRESS_CLIENT_KEY')
     const clientSecret = Deno.env.get('WORDPRESS_CLIENT_SECRET')
     
@@ -58,17 +58,34 @@ serve(async (req) => {
     }
     
     const response = await fetch(url.toString(), fetchOptions)
-
+    
+    console.log('WordPress API response status:', response.status)
+    
     if (!response.ok) {
+      const errorText = await response.text()
+      console.error(`WordPress API Error (${response.status}): ${errorText.substring(0, 200)}`)
       throw new Error(`WordPress API Error: ${response.status} ${response.statusText}`)
     }
-
-    const data = await response.json()
     
-    return new Response(JSON.stringify(data), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      status: 200,
-    })
+    try {
+      // Récupérer le texte de la réponse
+      const responseText = await response.text()
+      console.log('WordPress API response preview:', responseText.substring(0, 100) + '...')
+      
+      // Tenter de parser comme JSON
+      const data = JSON.parse(responseText)
+      
+      return new Response(JSON.stringify(data), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 200,
+      })
+    } catch (parseError) {
+      console.error('Failed to parse WordPress API response:', parseError)
+      return new Response(JSON.stringify({ error: `Failed to parse API response: ${parseError.message}` }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 500,
+      })
+    }
   } catch (error) {
     console.error('WordPress API request failed:', error)
     return new Response(JSON.stringify({ error: error.message }), {
