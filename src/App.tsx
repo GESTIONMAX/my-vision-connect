@@ -69,7 +69,7 @@ const App = () => (
                     <Route path="/auth" element={<Auth />} />
                     <Route path="/checkout" element={<Checkout />} />
                     <Route path="/chamelo-catalog" element={<ChameloCatalog />} />
-                    <Route path="/chamelo-catalog/:handle" element={<ChameleoProductDetail />} />
+                    <Route path="/chamelo-catalog/product/:handle" element={<ChameleoProductDetail />} />
                     <Route path="/chamelo-dashboard" element={<ChameloDashboard />} />
                     <Route path="/welcome" element={
                       <ProtectedRoute>

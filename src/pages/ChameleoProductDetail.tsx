@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import useChameleoProducts from '@/hooks/useChameleoData';
+import { useChameleoData } from '@/hooks/useChameleoData';
 import { useCart } from '@/hooks/useCart';
 import { useToast } from '@/hooks/use-toast';
 import { Link } from 'react-router-dom';
@@ -13,7 +13,7 @@ import type { ChameleoProduct } from '@/types/chameleo';
 
 const ChameleoProductDetail = () => {
   const { handle } = useParams();
-  const { products, loading } = useChameleoProducts();
+  const { products, loading } = useChameleoData();
   const [selectedVariant, setSelectedVariant] = useState(0);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
