@@ -14,7 +14,7 @@ serve(async (req) => {
     const { endpoint, params, method = 'GET' } = await req.json()
     
     // Get WordPress credentials from environment
-    const baseUrl = 'https://supabasekong-jgsk88o4084w48wk04kk4080.gestionmax.fr/wordpress'
+    const baseUrl = 'http://wordpress-kk4gw0gs40ock4800ccoogkk.91.99.22.54.sslip.io'
     
     // Build URL with CoCart endpoint
     const url = new URL(`${baseUrl}/wp-json${endpoint}`)
