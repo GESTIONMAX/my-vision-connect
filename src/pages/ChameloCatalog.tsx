@@ -32,7 +32,7 @@ const ChameloCatalog: React.FC = () => {
   const formatProductForCard = (product: any): Product => ({
     id: product.id,
     name: product.name,
-    slug: product.handle,
+    slug: `/chamelo-catalog/${product.handle}`, // Lien vers la page de détail Chamelo
     description: product.description.replace(/<[^>]*>/g, '').substring(0, 150) + '...',
     price: product.price_min,
     original_price: product.compare_at_price,

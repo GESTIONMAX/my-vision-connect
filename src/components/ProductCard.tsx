@@ -126,7 +126,7 @@ export const ProductCard = ({ product, index = 0, className }: ProductCardProps)
           <div className="flex-1">
             <h3 className="font-semibold text-lg mb-2 line-clamp-2">
               <Link 
-                to={`/products/${product.slug}`}
+                to={product.slug.startsWith('/') ? product.slug : `/products/${product.slug}`}
                 className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
               >
                 {product.name}
