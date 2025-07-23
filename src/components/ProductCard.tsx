@@ -128,6 +128,7 @@ export const ProductCard = ({ product, index = 0, className }: ProductCardProps)
               <Link 
                 to={product.slug.startsWith('/') ? product.slug : `/products/${product.slug}`}
                 className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                onClick={() => console.log('Navigation vers:', product.slug.startsWith('/') ? product.slug : `/products/${product.slug}`)}
               >
                 {product.name}
               </Link>

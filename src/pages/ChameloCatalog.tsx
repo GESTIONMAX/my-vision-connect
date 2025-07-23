@@ -28,36 +28,38 @@ const ChameloCatalog: React.FC = () => {
     }
   };
 
-  // Convertir les produits Chamelo au format de vos ProductCard existants
-  const formatProductForCard = (product: any): Product => ({
-    id: product.id,
-    name: product.name,
-    slug: `/chamelo-catalog/product/${product.handle}`, // Lien vers la page de détail Chamelo
-    description: product.description.replace(/<[^>]*>/g, '').substring(0, 150) + '...',
-    price: product.price_min,
-    original_price: product.compare_at_price,
-    originalPrice: product.compare_at_price,
-    images: product.main_image ? [product.main_image] : ['/placeholder.jpg'],
-    category: 'lifestyle' as const,
-    collection: 'dragon',
-    color: [],
-    usage: 'quotidien' as const,
-    genre: 'mixte' as const,
-    specifications: {},
-    is_new: false,
-    isNew: false,
-    is_popular: false,
-    isPopular: false,
-    is_featured: false,
-    in_stock: product.available,
-    inStock: product.available,
-    stock_quantity: product.available ? 10 : 0,
-    review_count: 0,
-    reviewCount: 0,
-    features: [],
-    rating: 4.5,
-    created_at: new Date().toISOString()
-  });
+  const formatProductForCard = (product: any): Product => {
+    console.log('Formatage produit Chamelo:', product.name, 'handle:', product.handle);
+    return {
+      id: product.id,
+      name: product.name,
+      slug: `/chamelo-catalog/product/${product.handle}`, // Lien vers la page de détail Chamelo
+      description: product.description.replace(/<[^>]*>/g, '').substring(0, 150) + '...',
+      price: product.price_min,
+      original_price: product.compare_at_price,
+      originalPrice: product.compare_at_price,
+      images: product.main_image ? [product.main_image] : ['/placeholder.jpg'],
+      category: 'lifestyle' as const,
+      collection: 'dragon',
+      color: [],
+      usage: 'quotidien' as const,
+      genre: 'mixte' as const,
+      specifications: {},
+      is_new: false,
+      isNew: false,
+      is_popular: false,
+      isPopular: false,
+      is_featured: false,
+      in_stock: product.available,
+      inStock: product.available,
+      stock_quantity: product.available ? 10 : 0,
+      review_count: 0,
+      reviewCount: 0,
+      features: [],
+      rating: 4.5,
+      created_at: new Date().toISOString()
+    };
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
