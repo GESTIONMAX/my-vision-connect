@@ -120,9 +120,24 @@ export const ProductCard = ({ product, index = 0, className }: ProductCardProps)
             </Button>
           </div>
 
-          {/* Enhanced sunglasses illustration for sport products */}
+          {/* Image du produit ou illustration par défaut */}
           <div className="absolute inset-0 flex items-center justify-center p-8">
-            <div className="relative w-full h-full flex items-center justify-center">
+            {product.images && product.images.length > 0 ? (
+              // Afficher la première image réelle du produit
+              <img 
+                src={product.images[0]} 
+                alt={product.name}
+                className="w-full h-full object-cover rounded-lg"
+                onError={(e) => {
+                  // Fallback vers l'illustration si l'image ne charge pas
+                  e.currentTarget.style.display = 'none';
+                  e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                }}
+              />
+            ) : null}
+            
+            {/* Illustration de lunettes par défaut (fallback) */}
+            <div className={`relative w-full h-full flex items-center justify-center ${product.images && product.images.length > 0 ? 'hidden' : ''}`}>
               <div className="relative transform group-hover:scale-105 transition-transform duration-300">
                 <div className="flex items-center justify-center gap-1">
                   {/* Enhanced lenses with gradient */}
