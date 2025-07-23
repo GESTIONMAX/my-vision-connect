@@ -97,7 +97,16 @@ export const ProductCard = ({ product, index = 0, className }: ProductCardProps)
 
           {/* Actions */}
           <div className="absolute top-3 right-3 z-10 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            <Button size="icon" variant="secondary" className="rounded-full h-8 w-8">
+            <Button 
+              size="icon" 
+              variant="secondary" 
+              className="rounded-full h-8 w-8"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                navigate(productLink);
+              }}
+            >
               <Eye className="h-4 w-4" />
             </Button>
             <Button 
