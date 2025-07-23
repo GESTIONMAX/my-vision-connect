@@ -116,7 +116,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     if (state.isLoaded) {
       localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(state.items));
-      console.log('Panier sauvegardé:', state.items.length, 'produits');
+      const total = state.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      console.info(`État du panier - Produits: ${state.items.length} Total: ${total.toFixed(2)}€`);
     }
   }, [state.items, state.isLoaded]);
 
