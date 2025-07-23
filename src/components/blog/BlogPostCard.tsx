@@ -23,13 +23,18 @@ export const BlogPostCard = ({ post, variant = 'default', className }: BlogPostC
       <Card className={`hover:shadow-lg transition-all duration-300 ${className || ''}`}>
         <CardContent className="p-4">
           <div className="flex gap-4">
-            {featuredImage && (
-              <img 
-                src={featuredImage} 
-                alt={post.title.rendered}
-                className="w-20 h-20 object-cover rounded-lg flex-shrink-0"
-              />
-            )}
+          {featuredImage && (
+            <img 
+              src={featuredImage} 
+              alt={post.title.rendered}
+              className="w-20 h-20 object-cover rounded-lg flex-shrink-0"
+              onError={(e) => {
+                console.error(`Failed to load image: ${featuredImage}`, e);
+                e.currentTarget.style.display = 'none';
+              }}
+              onLoad={() => console.log(`Successfully loaded image: ${featuredImage}`)}
+            />
+          )}
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold text-sm line-clamp-2 mb-2">
                 <Link 
@@ -59,6 +64,11 @@ export const BlogPostCard = ({ post, variant = 'default', className }: BlogPostC
               src={featuredImage} 
               alt={post.title.rendered}
               className="w-full h-full object-cover"
+              onError={(e) => {
+                console.error(`Failed to load featured image: ${featuredImage}`, e);
+                e.currentTarget.style.display = 'none';
+              }}
+              onLoad={() => console.log(`Successfully loaded featured image: ${featuredImage}`)}
             />
             <div className="absolute top-4 left-4">
               <Badge className="bg-yellow-500 hover:bg-yellow-600 text-yellow-50">
@@ -117,6 +127,11 @@ export const BlogPostCard = ({ post, variant = 'default', className }: BlogPostC
             src={featuredImage} 
             alt={post.title.rendered}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            onError={(e) => {
+              console.error(`Failed to load default image: ${featuredImage}`, e);
+              e.currentTarget.style.display = 'none';
+            }}
+            onLoad={() => console.log(`Successfully loaded default image: ${featuredImage}`)}
           />
           {post.sticky && (
             <div className="absolute top-3 left-3">

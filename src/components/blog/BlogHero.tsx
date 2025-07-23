@@ -88,6 +88,11 @@ export const BlogHero = () => {
                         src={wpUtils.getFeaturedImage(featuredPost) || '/placeholder.svg'} 
                         alt={featuredPost.title.rendered}
                         className="w-full h-48 lg:h-64 object-cover rounded-lg"
+                        onError={(e) => {
+                          console.error(`Failed to load hero image: ${wpUtils.getFeaturedImage(featuredPost)}`, e);
+                          e.currentTarget.style.display = 'none';
+                        }}
+                        onLoad={() => console.log(`Successfully loaded hero image: ${wpUtils.getFeaturedImage(featuredPost)}`)}
                       />
                     </div>
                   )}
