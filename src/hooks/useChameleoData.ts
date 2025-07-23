@@ -15,9 +15,16 @@ export const useChameleoData = () => {
   const loadData = () => {
     setLoading(true);
     try {
+      console.log('useChameleoData - Chargement des données...');
       const statsData = chameleoApi.getStats();
       const { products: productsData } = chameleoApi.getProducts();
       const collectionsData = chameleoApi.getCollections();
+
+      console.log('useChameleoData - Données chargées:', {
+        stats: statsData,
+        productsCount: productsData.length,
+        collectionsCount: collectionsData.length
+      });
 
       setStats(statsData);
       setProducts(productsData);
