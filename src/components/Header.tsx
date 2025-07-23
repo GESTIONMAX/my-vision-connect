@@ -23,8 +23,6 @@ export const Header = () => {
     { name: 'Devenir Partenaire', href: '/b2b/partnership' },
     { name: 'Support', href: '/b2b/support' },
   ] : [
-    { name: 'Shop', href: '/shop' },
-    { name: 'Notre sélection', href: '/notre-selection' },
     { name: 'Catalogue Chamelo', href: '/chamelo-catalog' },
     { name: 'Blog', href: '/blog' },
     { name: 'Technologie', href: '/technology' },
@@ -40,7 +38,7 @@ export const Header = () => {
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link to={isB2B ? '/b2b' : '/shop'} className="flex items-center space-x-2">
+          <Link to={isB2B ? '/b2b' : '/chamelo-catalog'} className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">EG</span>
             </div>
