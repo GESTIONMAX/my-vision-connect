@@ -2,17 +2,16 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-// Utilisation des variables d'environnement pour la connexion Supabase
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_KEY as string;
-
-// Vérification que les variables d'environnement sont bien définies
-if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
-  console.warn("ATTENTION: Les variables d'environnement Supabase ne sont pas toutes définies.");
-  console.warn("Assurez-vous d'avoir VITE_SUPABASE_URL et VITE_SUPABASE_KEY dans votre fichier .env");
-}
+const SUPABASE_URL = "https://eoujlhsgseydxcpoledz.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVvdWpsaHNnc2V5ZHhjcG9sZWR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyNjk4MzgsImV4cCI6MjA2ODg0NTgzOH0.PjwqMIbAm4Zsqn3c7c0I1yR6ij1uBVJLZsVLVD9u4C8";
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
-export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+  auth: {
+    storage: localStorage,
+    persistSession: true,
+    autoRefreshToken: true,
+  }
+});
