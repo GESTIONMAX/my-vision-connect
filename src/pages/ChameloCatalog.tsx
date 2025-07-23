@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Filter, Grid, List, RefreshCw } from 'lucide-react';
 import { useChameleoData } from '@/hooks/useChameleoData';
 import { ProductCard } from '@/components/ProductCard';
@@ -16,6 +16,7 @@ const ChameloCatalog: React.FC = () => {
   });
 
   const handleSearch = () => {
+    console.log('Recherche avec filtres:', filters);
     searchProducts(filters);
   };
 
@@ -27,6 +28,11 @@ const ChameloCatalog: React.FC = () => {
       alert('Erreur lors de la synchronisation');
     }
   };
+
+  // Filtrage automatique en temps réel
+  useEffect(() => {
+    handleSearch();
+  }, [filters]);
 
   const formatProductForCard = (product: any): Product => {
     console.log('Formatage produit Chamelo:', product.name, 'handle:', product.handle);
@@ -139,14 +145,7 @@ const ChameloCatalog: React.FC = () => {
               <option value="false">En rupture</option>
             </select>
 
-            {/* Boutons */}
-            <button
-              onClick={handleSearch}
-              className="flex items-center gap-2 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-            >
-              <Filter className="w-4 h-4" />
-              Filtrer
-            </button>
+            {/* Vue grille/liste */}
 
             <div className="flex border border-gray-300 rounded-lg overflow-hidden">
               <button

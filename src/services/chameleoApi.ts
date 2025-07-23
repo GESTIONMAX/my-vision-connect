@@ -191,12 +191,21 @@ class ChameleoApiService {
     
     let products: Product[] = JSON.parse(stored);
     
+    console.log('🔍 Filtrage des produits avec:', filters);
+    
     if (filters.search) {
       const search = filters.search.toLowerCase();
       products = products.filter(p => 
         p.name.toLowerCase().includes(search) || 
-        p.description.toLowerCase().includes(search)
+        p.description.toLowerCase().includes(search) ||
+        p.tags?.some(tag => tag.toLowerCase().includes(search))
       );
+    }
+    
+    if (filters.collection) {
+      // Pour le filtrage par collection, on pourra utiliser l'API Chamelo
+      // Pour l'instant, on désactive cette fonctionnalité jusqu'à avoir la logique appropriée
+      console.log('⚠️ Filtrage par collection pas encore implémenté pour les collections Chamelo');
     }
     
     if (filters.category) {
@@ -207,6 +216,8 @@ class ChameleoApiService {
       const isAvailable = typeof filters.available === 'boolean' ? filters.available : filters.available === 'true';
       products = products.filter(p => p.available === isAvailable);
     }
+    
+    console.log(`📊 Filtrage: ${JSON.parse(stored).length} → ${products.length} produits`);
     
     return { products, total: products.length };
   }
