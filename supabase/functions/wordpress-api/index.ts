@@ -14,7 +14,7 @@ serve(async (req) => {
     const { endpoint, params } = await req.json()
     
     // Get WordPress credentials from environment
-    const baseUrl = 'https://wordpress-t0ccgocs0sk0k0g0s4gocwkg.gestionmax.fr'
+    const baseUrl = 'http://wordpress-kk4gw0gs40ock4800ccoogkk.91.99.22.54.sslip.io'
     const clientKey = Deno.env.get('WORDPRESS_CLIENT_KEY')
     const clientSecret = Deno.env.get('WORDPRESS_CLIENT_SECRET')
     
