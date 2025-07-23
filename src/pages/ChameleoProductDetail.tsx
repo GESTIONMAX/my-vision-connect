@@ -10,6 +10,7 @@ import { useChameleoData } from '@/hooks/useChameleoData';
 import { useCart } from '@/hooks/useCart';
 import { useToast } from '@/hooks/use-toast';
 import { Link } from 'react-router-dom';
+import { chameleoApi } from '@/services/chameleoApi';
 
 const ChameleoProductDetail = () => {
   const { handle } = useParams();
@@ -22,12 +23,20 @@ const ChameleoProductDetail = () => {
   const navigate = useNavigate();
 
   console.log('ChameleoProductDetail - handle:', handle);
-  console.log('ChameleoProductDetail - products:', products.length);
+  console.log('ChameleoProductDetail - products du hook:', products.length);
 
-  // Trouver le produit par handle
-  const product = products.find((p) => p.handle === handle);
+  // Solution de fallback : récupérer directement depuis l'API si pas de produits dans le hook
+  let product = products.find((p) => p.handle === handle);
+  
+  // Si pas trouvé dans le hook, essayer de récupérer depuis l'API directement
+  if (!product && !loading) {
+    console.log('Produit non trouvé dans le hook, tentative via API directe...');
+    const { products: apiProducts } = chameleoApi.getProducts();
+    product = apiProducts.find((p) => p.handle === handle);
+    console.log('Produit trouvé via API directe:', product ? product.name : 'Non trouvé');
+  }
 
-  console.log('ChameleoProductDetail - product trouvé:', product ? product.name : 'Non trouvé');
+  console.log('ChameleoProductDetail - product final:', product ? product.name : 'Non trouvé');
 
   if (loading) {
     return (
