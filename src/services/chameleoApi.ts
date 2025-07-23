@@ -131,7 +131,7 @@ class ChameleoApiService {
         price_min: priceMin,
         price_max: priceMax,
         compare_at_price: product.variants?.[0]?.compare_at_price ? 
-          parseFloat(product.variants[0].compare_at_price) : undefined,
+          parseFloat(product.variants[0].compare_at_price.toString()) : undefined,
         available: isAvailable,
         variants: product.variants || [],
         images: product.images || [],
@@ -152,7 +152,7 @@ class ChameleoApiService {
       handle: collection.handle,
       description: collection.description || '',
       products_count: collection.products_count || 0,
-      image_url: collection.image?.src || undefined,
+      image_url: typeof collection.image === 'string' ? collection.image : collection.image?.src || undefined,
       published_at: collection.published_at,
       updated_at: collection.updated_at,
       scraped_at: new Date().toISOString()
@@ -203,8 +203,9 @@ class ChameleoApiService {
       products = products.filter(p => p.product_type === filters.category);
     }
     
-    if (filters.available !== 'all') {
-      products = products.filter(p => p.available === (filters.available === 'true'));
+    if (filters.available !== undefined && filters.available !== 'all') {
+      const isAvailable = typeof filters.available === 'boolean' ? filters.available : filters.available === 'true';
+      products = products.filter(p => p.available === isAvailable);
     }
     
     return { products, total: products.length };

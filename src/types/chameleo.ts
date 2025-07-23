@@ -49,7 +49,7 @@ export interface ChameleoCollection {
   title: string;
   handle: string;
   description?: string;
-  image?: string;
+  image?: string | { src?: string };
   products_count?: number;
   published_at?: string;
   updated_at?: string;
@@ -57,6 +57,7 @@ export interface ChameleoCollection {
 
 export interface ChameleoFilters {
   collection_id?: string;
+  collection?: string;
   tags?: string[];
   search?: string;
   sort_by?: string;
@@ -64,5 +65,5 @@ export interface ChameleoFilters {
   page?: number;
   limit?: number;
   category?: string;
-  available?: boolean;
+  available?: boolean | string;
 }
