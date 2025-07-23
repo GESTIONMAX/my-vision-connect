@@ -2,18 +2,17 @@
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useChameleoData } from '@/hooks/useChameleoData';
+import { useProducts } from '@/hooks/useProducts'; // Nouveau hook Supabase
 import { ChameleoProduct } from '@/types/chameleo';
 import { ProductCard } from '@/components/ProductCard';
 import { Product } from '@/hooks/useProducts';
 
 const CombinedProductCatalog = () => {
-  const { products: chameleoProducts, collections, loading } = useChameleoData();
+  const { products: chameleoProducts, collections, loading: chameleoLoading } = useChameleoData();
+  const { data: supabaseProducts = [], isLoading: supabaseLoading } = useProducts(); // Nouveau hook
   const [activeTab, setActiveTab] = useState('all');
 
-  // Vos produits existants (à adapter selon votre logique)
-  const localProducts: Product[] = [
-    // Récupérer depuis votre source de données locale
-  ];
+  const loading = chameleoLoading || supabaseLoading;
 
   const formatChameleoProduct = (product: ChameleoProduct): Product => ({
     id: `chamelo-${product.id}`,
@@ -45,12 +44,22 @@ const CombinedProductCatalog = () => {
     created_at: new Date().toISOString()
   });
 
+  const chameleoOnlyProducts = chameleoProducts.map(formatChameleoProduct);
   const allProducts = [
-    ...localProducts,
-    ...chameleoProducts.map(formatChameleoProduct)
+    ...supabaseProducts, // Utilisation des produits Supabase
+    ...chameleoOnlyProducts
   ];
 
-  const chameleoOnlyProducts = chameleoProducts.map(formatChameleoProduct);
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+          <span className="ml-2 text-gray-600">Chargement des produits...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -66,7 +75,7 @@ const CombinedProductCatalog = () => {
               Chamelo ({chameleoOnlyProducts.length})
             </TabsTrigger>
             <TabsTrigger value="local">
-              Nos Produits ({localProducts.length})
+              Nos Produits ({supabaseProducts.length})
             </TabsTrigger>
           </TabsList>
 
@@ -88,7 +97,7 @@ const CombinedProductCatalog = () => {
 
           <TabsContent value="local" className="mt-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {localProducts.map(product => (
+              {supabaseProducts.map(product => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
