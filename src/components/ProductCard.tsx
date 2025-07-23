@@ -1,3 +1,4 @@
+
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { Star, ShoppingCart, Eye } from 'lucide-react';
@@ -47,6 +48,19 @@ export const ProductCard = ({ product, index = 0, className }: ProductCardProps)
       )
     });
   };
+
+  // Déterminer le bon lien selon le type de produit
+  const getProductLink = () => {
+    if (product.slug.startsWith('/chamelo-catalog/product/')) {
+      return product.slug;
+    } else if (product.slug.startsWith('/')) {
+      return product.slug;
+    } else {
+      return `/products/${product.slug}`;
+    }
+  };
+
+  const productLink = getProductLink();
 
   return (
     <motion.div
@@ -126,9 +140,8 @@ export const ProductCard = ({ product, index = 0, className }: ProductCardProps)
           <div className="flex-1">
             <h3 className="font-semibold text-lg mb-2 line-clamp-2">
               <Link 
-                to={product.slug.startsWith('/') ? product.slug : `/products/${product.slug}`}
+                to={productLink}
                 className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                onClick={() => console.log('Navigation vers:', product.slug.startsWith('/') ? product.slug : `/products/${product.slug}`)}
               >
                 {product.name}
               </Link>

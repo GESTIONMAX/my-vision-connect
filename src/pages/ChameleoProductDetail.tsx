@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useParams, Navigate, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Star, Heart, Share2, ShoppingCart, Truck, Shield, RefreshCw } from 'lucide-react';
@@ -9,7 +10,6 @@ import { useChameleoData } from '@/hooks/useChameleoData';
 import { useCart } from '@/hooks/useCart';
 import { useToast } from '@/hooks/use-toast';
 import { Link } from 'react-router-dom';
-import type { ChameleoProduct } from '@/types/chameleo';
 
 const ChameleoProductDetail = () => {
   const { handle } = useParams();
@@ -21,8 +21,13 @@ const ChameleoProductDetail = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  console.log('ChameleoProductDetail - handle:', handle);
+  console.log('ChameleoProductDetail - products:', products.length);
+
   // Trouver le produit par handle
   const product = products.find((p) => p.handle === handle);
+
+  console.log('ChameleoProductDetail - product trouvé:', product ? product.name : 'Non trouvé');
 
   if (loading) {
     return (
@@ -33,6 +38,7 @@ const ChameleoProductDetail = () => {
   }
 
   if (!product) {
+    console.log('Produit non trouvé, redirection vers catalogue');
     return <Navigate to="/chamelo-catalog" replace />;
   }
 
