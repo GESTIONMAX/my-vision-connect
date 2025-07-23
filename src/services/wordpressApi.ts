@@ -319,7 +319,8 @@ export const wpUtils = {
       if (embedded && embedded['wp:featuredmedia'] && embedded['wp:featuredmedia'][0]) {
         const originalUrl = embedded['wp:featuredmedia'][0].source_url;
         // Utiliser le proxy d'images pour éviter les blocages CORS/ad-blocker
-        return `/functions/v1/image-proxy?url=${encodeURIComponent(originalUrl)}`;
+        const supabaseUrl = 'https://eoujlhsgseydxcpoledz.supabase.co';
+        return `${supabaseUrl}/functions/v1/image-proxy?url=${encodeURIComponent(originalUrl)}`;
       }
     }
     return null;
