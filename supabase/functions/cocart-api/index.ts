@@ -41,10 +41,7 @@ serve(async (req) => {
 
     const requestOptions: RequestInit = {
       method,
-      headers,
-      // Ignorer la vérification SSL pour les environnements de développement
-      //@ts-ignore - L'option suivante est spécifique à Deno
-      client: { caCerts: [] }
+      headers
     }
 
     // Add body for POST/PUT requests

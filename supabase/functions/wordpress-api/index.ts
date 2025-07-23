@@ -48,13 +48,10 @@ serve(async (req) => {
 
     console.log('Fetching from URL:', url.toString())
     
-    // Options pour la requête fetch avec SSL vérifié désactivé
+    // Options pour la requête fetch
     const fetchOptions = {
       method: 'GET',
-      headers,
-      // Ignorer la vérification SSL pour les environnements de développement
-      //@ts-ignore - L'option suivante est spécifique à Deno
-      client: { caCerts: [] }
+      headers
     }
     
     const response = await fetch(url.toString(), fetchOptions)
