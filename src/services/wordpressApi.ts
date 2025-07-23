@@ -311,13 +311,15 @@ export const wpUtils = {
     return html.replace(/<[^>]*>/g, '');
   },
 
-  // Extraire l'image featured d'un post
+  // Extraire l'image featured d'un post avec proxy
   getFeaturedImage: (post: WordPressPost): string | null => {
     if (post._links && post._links['wp:featuredmedia']) {
       // L'URL de l'image est généralement dans les données embedded
       const embedded = (post as any)._embedded;
       if (embedded && embedded['wp:featuredmedia'] && embedded['wp:featuredmedia'][0]) {
-        return embedded['wp:featuredmedia'][0].source_url;
+        const originalUrl = embedded['wp:featuredmedia'][0].source_url;
+        // Utiliser le proxy d'images pour éviter les blocages CORS/ad-blocker
+        return `/functions/v1/image-proxy?url=${encodeURIComponent(originalUrl)}`;
       }
     }
     return null;
