@@ -79,7 +79,11 @@ export const CategoryTabs = ({ selectedCategory, onCategoryChange }: CategoryTab
       }))
   }));
 
-  const allCategories = [...staticCategories, ...customCategories, ...mainCategories];
+  // Éviter les doublons entre customCategories et mainCategories
+  const mainCategoryIds = mainCategories.map(cat => cat.id);
+  const filteredCustomCategories = customCategories.filter(cat => !mainCategoryIds.includes(cat.id));
+  
+  const allCategories = [...staticCategories, ...filteredCustomCategories, ...mainCategories];
 
   if (isLoading) {
     return (
