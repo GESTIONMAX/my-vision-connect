@@ -102,6 +102,41 @@ const parseSpecifications = (ecommerceReadiness: string, lensTechnology: string)
   return specs;
 };
 
+// Fonction pour transformer un produit Supabase en Product
+const transformProduct = (item: any): Product => {
+  return {
+    id: item.id,
+    name: item.name,
+    slug: item.sku || item.id,
+    description: item.description || '',
+    price: Number(item.price) || 0,
+    original_price: undefined,
+    specifications: parseSpecifications(item.ecommerce_readiness || '', item.lens_technology || ''),
+    is_new: item.created_at ? new Date(item.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) : false,
+    is_popular: item.rating >= 4.5 && item.review_count > 100,
+    is_featured: item.is_featured || false,
+    in_stock: item.is_active && item.stock_quantity > 0,
+    stock_quantity: item.stock_quantity || 0,
+    review_count: item.review_count || 0,
+    images: item.images || [],
+    features: [],
+    collection: item.collection_slug || '',
+    category: mapCategory(item.category || 'Lifestyle'),
+    color: [],
+    usage: mapUsage(item.category || 'Lifestyle'),
+    genre: 'mixte',
+    rating: Number(item.rating) || 0,
+    reviewCount: item.review_count || 0,
+    originalPrice: undefined,
+    inStock: item.is_active && item.stock_quantity > 0,
+    isNew: item.created_at ? new Date(item.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) : false,
+    isPopular: item.rating >= 4.5 && item.review_count > 100,
+    created_at: item.created_at,
+    lens_technology: item.lens_technology,
+    ecommerce_readiness: item.ecommerce_readiness
+  };
+};
+
 // Hook principal pour récupérer les produits depuis Supabase
 export const useProducts = (filters?: ProductFilters) => {
   return useQuery({
@@ -207,51 +242,43 @@ export const useProduct = (slug: string) => {
   return useQuery({
     queryKey: ['supabase-product', slug],
     queryFn: async () => {
-      const { data, error } = await supabase
+      // D'abord essayer par SKU
+      const { data: productBySku, error: skuError } = await supabase
         .from('products')
         .select('*')
-        .or(`sku.eq.${slug},id.eq.${slug}`)
+        .eq('sku', slug)
         .eq('is_active', true)
         .maybeSingle();
 
-      if (error) {
-        throw new Error(error.message);
+      if (skuError) {
+        throw new Error(skuError.message);
       }
 
-      if (!data) {
-        return null;
+      if (productBySku) {
+        return transformProduct(productBySku);
       }
 
-      // Conversion similaire à useProducts
-      return {
-        id: data.id,
-        name: data.name,
-        slug: data.sku || data.id,
-        description: data.description || '',
-        price: Number(data.price) || 0,
-        original_price: undefined, // Pas encore dans le schéma
-        specifications: parseSpecifications(data.ecommerce_readiness || '', data.lens_technology || ''),
-        is_new: data.created_at ? new Date(data.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) : false,
-        is_popular: data.rating >= 4.5 && data.review_count > 100,
-        is_featured: data.is_featured || false,
-        in_stock: data.is_active && data.stock_quantity > 0,
-        stock_quantity: data.stock_quantity || 0,
-        review_count: data.review_count || 0,
-        images: data.images || [],
-        features: [],
-        collection: data.collection_slug || '',
-        category: mapCategory(data.category || 'Lifestyle'),
-        color: [],
-        usage: mapUsage(data.category || 'Lifestyle'),
-        genre: 'mixte',
-        rating: Number(data.rating) || 0,
-        reviewCount: data.review_count || 0,
-        originalPrice: undefined, // Pas encore dans le schéma
-        inStock: data.is_active && data.stock_quantity > 0,
-        isNew: data.created_at ? new Date(data.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) : false,
-        isPopular: data.rating >= 4.5 && data.review_count > 100,
-        created_at: data.created_at
-      } as Product;
+      // Si pas trouvé par SKU, essayer par ID uniquement si le slug ressemble à un UUID
+      const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug);
+      
+      if (isUUID) {
+        const { data: productById, error: idError } = await supabase
+          .from('products')
+          .select('*')
+          .eq('id', slug)
+          .eq('is_active', true)
+          .maybeSingle();
+
+        if (idError) {
+          throw new Error(idError.message);
+        }
+
+        if (productById) {
+          return transformProduct(productById);
+        }
+      }
+
+      return null;
     },
     staleTime: 5 * 60 * 1000,
     enabled: !!slug,
