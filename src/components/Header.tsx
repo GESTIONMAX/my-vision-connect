@@ -18,12 +18,12 @@ export const Header = () => {
   const navigation = isB2B ? [
     { name: 'Accueil Pro', href: '/b2b' },
     { name: 'Catalogue Pro', href: '/b2b/catalog' },
-    { name: 'Catalogue Chamelo', href: '/chamelo-catalog' },
+    { name: 'Accessoires', href: '/chamelo-catalog' },
     { name: 'Dashboard Chamelo', href: '/chamelo-dashboard' },
     { name: 'Devenir Partenaire', href: '/b2b/partnership' },
     { name: 'Support', href: '/b2b/support' },
   ] : [
-    { name: 'Catalogue Chamelo', href: '/chamelo-catalog' },
+    { name: 'Accessoires', href: '/chamelo-catalog' },
     { name: 'Blog', href: '/blog' },
     { name: 'FAQ', href: '/faq' },
   ];
@@ -125,7 +125,7 @@ export const Header = () => {
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  {item.name.includes('Catalogue Chamelo') ? '🕶️ ' + item.name : item.name}
+                  {item.name === 'Accessoires' ? '🕶️ ' + item.name : item.name}
                   {item.name.includes('Dashboard Chamelo') ? '📊 ' + item.name : ''}
                 </Link>
               ))}
