@@ -166,7 +166,9 @@ const CustomCatalog = () => {
                           />
                           <div className="absolute top-4 right-4">
                             <Badge variant="secondary" className="bg-background/90 text-foreground">
-                              {collection.productCount} produits
+                              {collection.slug === 'shields' ? 'Sport' : 
+                               collection.slug === 'music-shield' ? 'Sport' :
+                               `${collection.productCount} produits`}
                             </Badge>
                           </div>
                           <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300" />
