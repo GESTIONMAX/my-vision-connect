@@ -54,6 +54,7 @@ const App = () => (
                 <main className="flex-1">
                   <Routes>
                     <Route path="/" element={<Navigate to="/shop" replace />} />
+                    <Route path="/products" element={<Navigate to="/shop" replace />} />
                     <Route path="/b2c" element={<B2C />} />
                     <Route path="/b2b" element={<B2B />} />
                     <Route path="/b2b/catalog" element={<B2BCatalog />} />
