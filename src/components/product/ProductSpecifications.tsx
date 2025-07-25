@@ -1,4 +1,5 @@
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -8,26 +9,63 @@ interface ProductSpecificationsProps {
 }
 
 export const ProductSpecifications = ({ specifications, productSlug }: ProductSpecificationsProps) => {
-  // Spécifications détaillées pour Music Shield
-  const getMusicShieldSpecs = () => ({
-    "Technologie des verres": "Polycarbonate avec technologie électrochrome",
-    "Plage d'ajustement": "Catégorie 0 à 3 (adaptatif)",
-    "Connectivité": "Bluetooth 5.0",
-    "Type d'audio": "Haut-parleurs à conduction osseuse",
-    "Autonomie batterie": "8-10 heures d'utilisation",
-    "Temps de charge": "1.5 heures (charge rapide)",
-    "Poids": "45 grammes",
-    "Matériau monture": "Alliage ultra-léger TR90",
-    "Résistance à l'eau": "IPX4 (résistant aux éclaboussures)",
-    "Compatibilité": "iOS/Android",
-    "Protection UV": "100% UV400",
-    "Contrôle": "Tactile et vocal",
-    ...specifications
-  });
+  // Fonction pour parser les spécifications depuis ecommerce_readiness
+  const parseSpecifications = (ecommerceReadiness: string) => {
+    if (!ecommerceReadiness) return {};
+    
+    // Diviser par • et créer des paires clé-valeur
+    const specs: Record<string, string> = {};
+    const items = ecommerceReadiness.split(' • ');
+    
+    items.forEach((item, index) => {
+      const trimmed = item.trim();
+      if (trimmed) {
+        // Essayer de séparer par le premier espace pour avoir une clé descriptive
+        const parts = trimmed.split(' ');
+        if (parts.length > 1) {
+          const key = parts[0];
+          const value = parts.slice(1).join(' ');
+          specs[key] = value;
+        } else {
+          specs[`Spécification ${index + 1}`] = trimmed;
+        }
+      }
+    });
+    
+    return specs;
+  };
 
-  const finalSpecs = productSlug?.includes('music-shield') 
-    ? getMusicShieldSpecs() 
-    : specifications;
+  // Récupérer les spécifications depuis useProducts si disponible
+  const [productSpecs, setProductSpecs] = useState<Record<string, string>>({});
+  
+  useEffect(() => {
+    const fetchProductSpecs = async () => {
+      try {
+        const { supabase } = await import('@/integrations/supabase/client');
+        const { data } = await supabase
+          .from('products')
+          .select('ecommerce_readiness, lens_technology')
+          .or(`sku.eq.${productSlug},id.eq.${productSlug}`)
+          .maybeSingle();
+        
+        if (data?.ecommerce_readiness) {
+          const parsedSpecs = parseSpecifications(data.ecommerce_readiness);
+          if (data.lens_technology) {
+            parsedSpecs['Technologie des verres'] = data.lens_technology;
+          }
+          setProductSpecs(parsedSpecs);
+        }
+      } catch (error) {
+        console.error('Erreur lors de la récupération des spécifications:', error);
+      }
+    };
+
+    if (productSlug) {
+      fetchProductSpecs();
+    }
+  }, [productSlug]);
+
+  const finalSpecs = Object.keys(productSpecs).length > 0 ? productSpecs : specifications;
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
