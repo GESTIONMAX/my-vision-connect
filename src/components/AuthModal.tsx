@@ -126,7 +126,7 @@ export function AuthModal({ children }: AuthModalProps) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Connexion à EUROGLOBAL</DialogTitle>
+          <DialogTitle>Connexion à My Vision Connect</DialogTitle>
           <DialogDescription>
             Connectez-vous ou créez votre compte pour accéder à nos services
           </DialogDescription>

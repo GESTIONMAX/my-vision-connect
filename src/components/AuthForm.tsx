@@ -87,8 +87,8 @@ export const AuthForm = () => {
             </CardTitle>
             <CardDescription>
               {isLogin 
-                ? 'Connectez-vous à votre compte EUROGLOBAL'
-                : 'Rejoignez la communauté EUROGLOBAL'
+                ? 'Connectez-vous à votre compte My Vision Connect'
+                : 'Rejoignez la communauté My Vision Connect'
               }
             </CardDescription>
           </CardHeader>

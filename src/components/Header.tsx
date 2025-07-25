@@ -43,7 +43,7 @@ export const Header = () => {
               <span className="text-white font-bold text-sm">EG</span>
             </div>
             <span className="font-bold text-xl text-gray-900 dark:text-white">
-              {isB2B ? 'EUROGLOBAL PRO' : 'EUROGLOBAL'}
+              {isB2B ? 'My Vision Connect PRO' : 'My Vision Connect'}
             </span>
           </Link>
 
