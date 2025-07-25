@@ -54,7 +54,7 @@ const Shop = () => {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-2 mb-8 bg-muted/50">
             <TabsTrigger value="catalog" className="text-lg font-medium">
-              Catalogue Personnalisé
+              Lunettes connectées
             </TabsTrigger>
             <TabsTrigger value="browse" className="text-lg font-medium">
               Parcourir Tous les Produits
