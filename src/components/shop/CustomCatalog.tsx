@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -23,6 +24,7 @@ interface CategoryData {
 }
 
 const CustomCatalog = () => {
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('sport');
 
   const catalogData: CategoryData[] = [
@@ -101,9 +103,7 @@ const CustomCatalog = () => {
   ];
 
   const handleCollectionClick = (categoryId: string, collectionSlug: string) => {
-    // Navigate to products filtered by this collection
-    console.log(`Navigation vers: ${categoryId}/${collectionSlug}`);
-    // TODO: Implement navigation logic
+    navigate(`/collection/${collectionSlug}`);
   };
 
   return (
