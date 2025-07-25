@@ -30,6 +30,9 @@ export interface Product {
   isNew: boolean;
   isPopular: boolean;
   created_at?: string;
+  // Nouvelles propriétés enrichies
+  lens_technology?: string;
+  ecommerce_readiness?: string;
 }
 
 export interface ProductFilters {
@@ -66,6 +69,37 @@ const mapUsage = (dbCategory: string): 'quotidien' | 'sport' | 'conduite' | 'tra
     'Lifestyle': 'quotidien'
   };
   return usageMap[dbCategory] || 'quotidien';
+};
+
+// Fonction pour parser les spécifications depuis ecommerce_readiness
+const parseSpecifications = (ecommerceReadiness: string, lensTechnology: string): Record<string, string> => {
+  const specs: Record<string, string> = {};
+  
+  if (ecommerceReadiness) {
+    const items = ecommerceReadiness.split(' • ');
+    items.forEach((spec, index) => {
+      const trimmed = spec.trim();
+      if (trimmed) {
+        const colonIndex = trimmed.indexOf(':');
+        if (colonIndex > 0) {
+          specs[trimmed.substring(0, colonIndex)] = trimmed.substring(colonIndex + 1).trim();
+        } else {
+          const parts = trimmed.split(' ');
+          if (parts.length > 1) {
+            specs[parts[0]] = parts.slice(1).join(' ');
+          } else {
+            specs[`Caractéristique ${index + 1}`] = trimmed;
+          }
+        }
+      }
+    });
+  }
+  
+  if (lensTechnology) {
+    specs['Technologie des verres'] = lensTechnology;
+  }
+  
+  return specs;
 };
 
 // Hook principal pour récupérer les produits depuis Supabase
@@ -140,7 +174,7 @@ export const useProducts = (filters?: ProductFilters) => {
         description: item.description || '',
         price: Number(item.price) || 0,
         original_price: undefined, // Pas encore dans le schéma
-        specifications: {}, // Pas encore dans le schéma
+        specifications: parseSpecifications(item.ecommerce_readiness || '', item.lens_technology || ''),
         is_new: item.created_at ? new Date(item.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) : false, // Nouveau si créé dans les 30 derniers jours
         is_popular: item.rating >= 4.5 && item.review_count > 100, // Populaire si note >= 4.5 et >100 avis
         is_featured: item.is_featured || false,
@@ -196,7 +230,7 @@ export const useProduct = (slug: string) => {
         description: data.description || '',
         price: Number(data.price) || 0,
         original_price: undefined, // Pas encore dans le schéma
-        specifications: {}, // Pas encore dans le schéma
+        specifications: parseSpecifications(data.ecommerce_readiness || '', data.lens_technology || ''),
         is_new: data.created_at ? new Date(data.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) : false,
         is_popular: data.rating >= 4.5 && data.review_count > 100,
         is_featured: data.is_featured || false,

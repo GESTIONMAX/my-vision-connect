@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Link } from 'react-router-dom';
 import { EnhancedProductImageGallery } from '@/components/product/EnhancedProductImageGallery';
 import { EnhancedProductActions } from '@/components/product/EnhancedProductActions';
+import { EnhancedProductDescription } from '@/components/product/EnhancedProductDescription';
 import { ProductKeyFeatures } from '@/components/product/ProductKeyFeatures';
 import { ProductBenefits } from '@/components/product/ProductBenefits';
 import { ProductSpecifications } from '@/components/product/ProductSpecifications';
@@ -181,16 +182,21 @@ const ProductDetail = () => {
             <div className="p-8">
               <TabsContent value="description" className="mt-0">
                 <div className="space-y-6">
-                  <div className="prose prose-gray max-w-none dark:prose-invert">
-                    <p className="text-muted-foreground leading-relaxed text-lg">
-                      {product.description}
-                    </p>
-                  </div>
+                  {/* Description enrichie */}
+                  <EnhancedProductDescription 
+                    product={{
+                      name: product.name,
+                      description: product.description,
+                      lens_technology: product.lens_technology,
+                      category: product.category,
+                      collection: product.collection
+                    }} 
+                  />
                   
-                  {/* Key Features in Description Tab */}
+                  {/* Caractéristiques clés */}
                   <ProductKeyFeatures productSlug={product.slug} />
                   
-                  {/* Benefits */}
+                  {/* Bénéfices utilisateur */}
                   <ProductBenefits productSlug={product.slug} />
                 </div>
               </TabsContent>
@@ -210,11 +216,40 @@ const ProductDetail = () => {
               <TabsContent value="reviews" className="mt-0">
                 <div className="space-y-6">
                   <div className="text-center py-12">
-                    <Star className="h-16 w-16 text-yellow-400 mx-auto mb-4" />
+                    <Star className="h-16 w-16 text-yellow-400 mx-auto mb-4 fill-current" />
                     <h3 className="text-xl font-semibold mb-2">Excellent produit</h3>
-                    <p className="text-muted-foreground">
-                      Note moyenne de {product.rating}/5 basée sur {product.reviewCount} avis clients
+                    <p className="text-muted-foreground mb-4">
+                      Note moyenne de <span className="font-bold text-primary">{product.rating}/5</span> basée sur <span className="font-bold">{product.reviewCount} avis</span> clients vérifiés
                     </p>
+                    
+                    {/* Répartition des étoiles */}
+                    <div className="max-w-md mx-auto space-y-2">
+                      {[5, 4, 3, 2, 1].map((stars) => (
+                        <div key={stars} className="flex items-center gap-4">
+                          <div className="flex items-center gap-1 min-w-[100px]">
+                            <span className="text-sm">{stars}</span>
+                            <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                          </div>
+                          <div className="flex-1 bg-muted rounded-full h-2">
+                            <div 
+                              className="bg-yellow-400 h-2 rounded-full" 
+                              style={{ 
+                                width: stars === 5 ? '60%' : 
+                                       stars === 4 ? '25%' : 
+                                       stars === 3 ? '10%' : 
+                                       stars === 2 ? '3%' : '2%' 
+                              }}
+                            />
+                          </div>
+                          <span className="text-sm text-muted-foreground min-w-[40px]">
+                            {stars === 5 ? '60%' : 
+                             stars === 4 ? '25%' : 
+                             stars === 3 ? '10%' : 
+                             stars === 2 ? '3%' : '2%'}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </TabsContent>
