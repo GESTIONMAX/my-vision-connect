@@ -9,6 +9,7 @@ interface AuthContextType {
   profile: Profile | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signInWithGoogle: () => Promise<{ error: any }>;
   signUp: (data: SignUpData) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   updateProfile: (updates: Partial<Profile>) => Promise<{ error: any }>;
@@ -74,6 +75,35 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     return () => subscription.unsubscribe();
   }, []);
+
+  const signInWithGoogle = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/`,
+        }
+      });
+
+      if (error) {
+        toast({
+          title: "Erreur de connexion Google",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
+
+      return { error };
+    } catch (error) {
+      const authError = error as Error;
+      toast({
+        title: "Erreur de connexion Google",
+        description: authError.message,
+        variant: "destructive",
+      });
+      return { error: authError };
+    }
+  };
 
   const signIn = async (email: string, password: string) => {
     try {
@@ -241,6 +271,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     profile,
     loading,
     signIn,
+    signInWithGoogle,
     signUp,
     signOut,
     updateProfile,
