@@ -16,6 +16,8 @@ import { ProductKeyFeatures } from '@/components/product/ProductKeyFeatures';
 import { ProductBenefits } from '@/components/product/ProductBenefits';
 import { ProductSpecifications } from '@/components/product/ProductSpecifications';
 import { ProductPackageContent } from '@/components/product/ProductPackageContent';
+import { FavoriteButton } from '@/components/FavoriteButton';
+import { ShareButton } from '@/components/ShareButton';
 
 const ProductDetail = () => {
   const { slug } = useParams();
@@ -100,9 +102,22 @@ const ProductDetail = () => {
 
             {/* Product Title */}
             <div>
-              <h1 className="text-3xl font-bold text-foreground mb-3">
-                {product.name}
-              </h1>
+              <div className="flex items-start justify-between mb-3">
+                <h1 className="text-3xl font-bold text-foreground flex-1">
+                  {product.name}
+                </h1>
+                <div className="flex items-center gap-2 ml-4">
+                  <FavoriteButton 
+                    productId={product.id} 
+                    size="lg"
+                  />
+                  <ShareButton 
+                    productName={product.name}
+                    productUrl={window.location.href}
+                    size="lg"
+                  />
+                </div>
+              </div>
               
               {/* Rating */}
               <div className="flex items-center gap-4 mb-4">

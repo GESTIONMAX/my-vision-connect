@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Heart, Share2, ShoppingCart, Star, Minus, Plus, Truck, Shield, RotateCcw } from 'lucide-react';
+import { ShoppingCart, Star, Minus, Plus, Truck, Shield, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -7,6 +7,8 @@ import { useCart } from '@/hooks/useCart';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { FavoriteButton } from './FavoriteButton';
+import { ShareButton } from './ShareButton';
 
 interface Product {
   id: string;
@@ -133,12 +135,15 @@ export const EnhancedProductCard = ({ product, index = 0, className = "" }: Enha
 
               {/* Quick Actions */}
               <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <Button size="sm" variant="secondary" className="h-8 w-8 p-0">
-                  <Heart className="h-4 w-4" />
-                </Button>
-                <Button size="sm" variant="secondary" className="h-8 w-8 p-0">
-                  <Share2 className="h-4 w-4" />
-                </Button>
+                <FavoriteButton 
+                  productId={product.id} 
+                  size="sm"
+                />
+                <ShareButton 
+                  productName={product.name}
+                  productUrl={`${window.location.origin}${getProductLink()}`}
+                  size="sm"
+                />
               </div>
             </div>
 
