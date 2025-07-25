@@ -1,2 +1,2 @@
-// Migration vers WordPress - ce fichier redirige vers useWordPressAuth
-export { useAuth, AuthProvider } from './useWordPressAuth';
+// Migration vers Supabase - ce fichier redirige vers useSupabaseAuth
+export { useAuth, AuthProvider } from './useSupabaseAuth';

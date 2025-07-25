@@ -1,13 +1,7 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
-
-interface Profile {
-  first_name: string | null;
-  last_name: string | null;
-  user_type: 'customer' | 'business' | 'admin' | 'partner';
-  company_name?: string | null;
-}
+import { Profile } from '@/types/auth';
 
 interface WelcomeHeroProps {
   profile: Profile | null;
