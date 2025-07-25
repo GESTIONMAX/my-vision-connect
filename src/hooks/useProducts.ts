@@ -46,6 +46,28 @@ export interface ProductFilters {
   limit?: number;
 }
 
+// Fonctions de mapping
+const mapCategory = (dbCategory: string): 'classic' | 'sport' | 'pro' | 'femme' | 'homme' | 'lifestyle' => {
+  const categoryMap: { [key: string]: 'classic' | 'sport' | 'pro' | 'femme' | 'homme' | 'lifestyle' } = {
+    'Sport': 'sport',
+    'Lifestyle': 'lifestyle', 
+    'Technology': 'pro', // Mapper Technology vers pro
+    'Classic': 'classic',
+    'Femme': 'femme',
+    'Homme': 'homme'
+  };
+  return categoryMap[dbCategory] || 'lifestyle';
+};
+
+const mapUsage = (dbCategory: string): 'quotidien' | 'sport' | 'conduite' | 'travail' => {
+  const usageMap: { [key: string]: 'quotidien' | 'sport' | 'conduite' | 'travail' } = {
+    'Sport': 'sport',
+    'Technology': 'travail',
+    'Lifestyle': 'quotidien'
+  };
+  return usageMap[dbCategory] || 'quotidien';
+};
+
 // Hook principal pour récupérer les produits depuis Supabase
 export const useProducts = (filters?: ProductFilters) => {
   return useQuery({
@@ -119,8 +141,8 @@ export const useProducts = (filters?: ProductFilters) => {
         price: Number(item.price) || 0,
         original_price: undefined, // Pas encore dans le schéma
         specifications: {}, // Pas encore dans le schéma
-        is_new: false, // Pas encore dans le schéma
-        is_popular: false, // Pas encore dans le schéma
+        is_new: item.created_at ? new Date(item.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) : false, // Nouveau si créé dans les 30 derniers jours
+        is_popular: item.rating >= 4.5 && item.review_count > 100, // Populaire si note >= 4.5 et >100 avis
         is_featured: item.is_featured || false,
         in_stock: item.is_active && item.stock_quantity > 0,
         stock_quantity: item.stock_quantity || 0,
@@ -128,17 +150,17 @@ export const useProducts = (filters?: ProductFilters) => {
         images: item.images || [],
         features: [], // À implémenter si nécessaire
         collection: item.collection_slug || '',
-        category: item.category || 'lifestyle',
+        category: mapCategory(item.category || 'Lifestyle'), // Mapper les catégories correctement
         color: [], // À extraire des spécifications si nécessaire
-        usage: 'quotidien', // À mapper depuis les données si nécessaire
+        usage: mapUsage(item.category || 'Lifestyle'), // Mapper usage depuis category
         genre: 'mixte', // À mapper depuis les données si nécessaire
         rating: Number(item.rating) || 0,
         // Alias pour compatibilité
         reviewCount: item.review_count || 0,
         originalPrice: undefined, // Pas encore dans le schéma
         inStock: item.is_active && item.stock_quantity > 0,
-        isNew: false, // Pas encore dans le schéma
-        isPopular: false, // Pas encore dans le schéma
+        isNew: item.created_at ? new Date(item.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) : false,
+        isPopular: item.rating >= 4.5 && item.review_count > 100,
         created_at: item.created_at
       })) as Product[];
     },
@@ -175,8 +197,8 @@ export const useProduct = (slug: string) => {
         price: Number(data.price) || 0,
         original_price: undefined, // Pas encore dans le schéma
         specifications: {}, // Pas encore dans le schéma
-        is_new: false, // Pas encore dans le schéma
-        is_popular: false, // Pas encore dans le schéma
+        is_new: data.created_at ? new Date(data.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) : false,
+        is_popular: data.rating >= 4.5 && data.review_count > 100,
         is_featured: data.is_featured || false,
         in_stock: data.is_active && data.stock_quantity > 0,
         stock_quantity: data.stock_quantity || 0,
@@ -184,16 +206,16 @@ export const useProduct = (slug: string) => {
         images: data.images || [],
         features: [],
         collection: data.collection_slug || '',
-        category: data.category || 'lifestyle',
+        category: mapCategory(data.category || 'Lifestyle'),
         color: [],
-        usage: 'quotidien',
+        usage: mapUsage(data.category || 'Lifestyle'),
         genre: 'mixte',
         rating: Number(data.rating) || 0,
         reviewCount: data.review_count || 0,
         originalPrice: undefined, // Pas encore dans le schéma
         inStock: data.is_active && data.stock_quantity > 0,
-        isNew: false, // Pas encore dans le schéma
-        isPopular: false, // Pas encore dans le schéma
+        isNew: data.created_at ? new Date(data.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) : false,
+        isPopular: data.rating >= 4.5 && data.review_count > 100,
         created_at: data.created_at
       } as Product;
     },
