@@ -27,7 +27,6 @@ export const Header = () => {
     { name: 'Blog', href: '/blog' },
     { name: 'Technologie', href: '/technology' },
     { name: 'FAQ', href: '/faq' },
-    { name: 'Carrières', href: '/careers' },
   ];
 
   return (
