@@ -31,10 +31,7 @@ export const ProductsGrid = ({
   const { data: products, isLoading, error } = useProducts();
   const { data: subCollections = [] } = useSubCollections();
 
-  // Show specialized Sport section for sport category
-  if (selectedCategory === 'sport') {
-    return <SportSection />;
-  }
+  // Remove specialized Sport section to show all products in grid format
 
   if (isLoading) {
     return (
@@ -83,18 +80,37 @@ export const ProductsGrid = ({
       }
       
       // Check if selectedCategory is a main category or sub-collection
-      const parentCategory = getParentCategory(product.collection);
+      const productCollection = product.collection; // collection vient de collection_slug dans la DB
       const isMainCategory = ['sport', 'lifestyle', 'prismatic'].includes(selectedCategory);
       
       if (isMainCategory) {
-        // Filter by main category
-        if (parentCategory !== selectedCategory) {
+        // Filter by main category using collection
+        if (productCollection !== selectedCategory) {
           return false;
         }
       } else {
-        // Filter by specific sub-collection
-        if (selectedCategory !== 'best-sellers' && product.collection !== selectedCategory) {
-          return false;
+        // Filter by specific sub-collection or product name patterns
+        if (selectedCategory !== 'best-sellers') {
+          // Pour les sous-collections spécifiques comme 'shields', 'music-shield', etc.
+          const productName = product.name.toLowerCase();
+          if (selectedCategory === 'shields' && !productName.includes('shield')) {
+            return false;
+          }
+          if (selectedCategory === 'music-shield' && !productName.includes('music shield')) {
+            return false;
+          }
+          if (selectedCategory === 'veil' && !productName.includes('veil')) {
+            return false;
+          }
+          if (selectedCategory === 'dragon' && !productName.includes('dragon')) {
+            return false;
+          }
+          if (selectedCategory === 'euphoria' && !productName.includes('euphoria')) {
+            return false;
+          }
+          if (selectedCategory === 'auria' && !productName.includes('auria')) {
+            return false;
+          }
         }
       }
     }
