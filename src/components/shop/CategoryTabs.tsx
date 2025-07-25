@@ -100,6 +100,8 @@ export const CategoryTabs = ({ selectedCategory, onCategoryChange }: CategoryTab
       onCategoryChange(categoryId);
       setExpandedCategory(null);
     } else {
+      // Pour les catégories principales (Sport, Lifestyle, Prismatic), sélectionner directement
+      onCategoryChange(categoryId);
       if (expandedCategory === categoryId) {
         setExpandedCategory(null);
       } else {
