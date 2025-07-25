@@ -4,9 +4,12 @@ import { PromotionalBanner } from '@/components/shop/PromotionalBanner';
 import { CategoryTabs } from '@/components/shop/CategoryTabs';
 import { ProductsGrid } from '@/components/shop/ProductsGrid';
 import { ProductFilters } from '@/components/ProductFilters';
+import CustomCatalog from '@/components/shop/CustomCatalog';
 import { useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const Shop = () => {
+  const [activeTab, setActiveTab] = useState<string>('catalog');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [filters, setFilters] = useState({
     category: 'all',
@@ -48,30 +51,47 @@ const Shop = () => {
           </h1>
         </div>
         
-        <CategoryTabs 
-          selectedCategory={selectedCategory}
-          onCategoryChange={setSelectedCategory}
-        />
-        
-        <div className="flex flex-col lg:flex-row gap-8 mt-8">
-          <ProductsGrid
-            selectedCategory={selectedCategory}
-            searchQuery=""
-            sortBy={filters.sort}
-            priceRange={[0, 1000]}
-            selectedBrands={[]}
-            filters={filters}
-          />
-          
-          <div className="lg:w-80">
-            <ProductFilters
-              filters={filters}
-              onFilterChange={handleFilterChange}
-              onClearFilters={handleClearFilters}
-              resultCount={0}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-8 bg-muted/50">
+            <TabsTrigger value="catalog" className="text-lg font-medium">
+              Catalogue Personnalisé
+            </TabsTrigger>
+            <TabsTrigger value="browse" className="text-lg font-medium">
+              Parcourir Tous les Produits
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="catalog" className="mt-0">
+            <CustomCatalog />
+          </TabsContent>
+
+          <TabsContent value="browse" className="mt-0">
+            <CategoryTabs 
+              selectedCategory={selectedCategory}
+              onCategoryChange={setSelectedCategory}
             />
-          </div>
-        </div>
+            
+            <div className="flex flex-col lg:flex-row gap-8 mt-8">
+              <ProductsGrid
+                selectedCategory={selectedCategory}
+                searchQuery=""
+                sortBy={filters.sort}
+                priceRange={[0, 1000]}
+                selectedBrands={[]}
+                filters={filters}
+              />
+              
+              <div className="lg:w-80">
+                <ProductFilters
+                  filters={filters}
+                  onFilterChange={handleFilterChange}
+                  onClearFilters={handleClearFilters}
+                  resultCount={0}
+                />
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
