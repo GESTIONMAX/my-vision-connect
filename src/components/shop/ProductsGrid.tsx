@@ -1,6 +1,6 @@
 
 import { useProducts } from '@/hooks/useProducts';
-import { ProductCard } from '@/components/ProductCard';
+import { EnhancedProductCard } from '@/components/EnhancedProductCard';
 import { SportSection } from './SportSection';
 import { useSubCollections } from '@/hooks/useSubCollections';
 
@@ -186,9 +186,9 @@ export const ProductsGrid = ({
 
   return (
     <div className="flex-1">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {sortedProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        {sortedProducts.map((product, index) => (
+          <EnhancedProductCard key={product.id} product={product} index={index} />
         ))}
       </div>
     </div>
