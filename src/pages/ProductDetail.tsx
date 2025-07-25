@@ -14,6 +14,9 @@ import { ProductInfo } from '@/components/product/ProductInfo';
 import { ProductActions } from '@/components/product/ProductActions';
 import { ProductSpecifications } from '@/components/product/ProductSpecifications';
 import { ProductVariants } from '@/components/product/ProductVariants';
+import { ProductKeyFeatures } from '@/components/product/ProductKeyFeatures';
+import { ProductBenefits } from '@/components/product/ProductBenefits';
+import { ProductPackageContent } from '@/components/product/ProductPackageContent';
 
 const ProductDetail = () => {
   const { slug } = useParams();
@@ -126,8 +129,20 @@ const ProductDetail = () => {
           </div>
         </div>
 
+        {/* Key Features */}
+        <ProductKeyFeatures productSlug={product.slug} />
+
+        {/* Benefits */}
+        <ProductBenefits productSlug={product.slug} />
+
         {/* Technical specifications */}
-        <ProductSpecifications specifications={product.specifications} />
+        <ProductSpecifications 
+          specifications={product.specifications} 
+          productSlug={product.slug} 
+        />
+
+        {/* Package Content */}
+        <ProductPackageContent productSlug={product.slug} />
       </div>
     </div>
   );
