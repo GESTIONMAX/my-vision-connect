@@ -173,51 +173,72 @@ export type Database = {
           collection_slug: string | null
           created_at: string
           description: string | null
+          description_length: number | null
+          ecommerce_readiness: string | null
           id: string
           images: string[] | null
+          images_count: number | null
           is_active: boolean | null
           is_featured: boolean | null
+          lens_technology: string | null
           name: string
           price: number | null
+          quality_score: number | null
           rating: number | null
           review_count: number | null
           sku: string | null
+          source: string | null
           stock_quantity: number | null
           updated_at: string
+          url: string | null
         }
         Insert: {
           category?: string | null
           collection_slug?: string | null
           created_at?: string
           description?: string | null
+          description_length?: number | null
+          ecommerce_readiness?: string | null
           id?: string
           images?: string[] | null
+          images_count?: number | null
           is_active?: boolean | null
           is_featured?: boolean | null
+          lens_technology?: string | null
           name: string
           price?: number | null
+          quality_score?: number | null
           rating?: number | null
           review_count?: number | null
           sku?: string | null
+          source?: string | null
           stock_quantity?: number | null
           updated_at?: string
+          url?: string | null
         }
         Update: {
           category?: string | null
           collection_slug?: string | null
           created_at?: string
           description?: string | null
+          description_length?: number | null
+          ecommerce_readiness?: string | null
           id?: string
           images?: string[] | null
+          images_count?: number | null
           is_active?: boolean | null
           is_featured?: boolean | null
+          lens_technology?: string | null
           name?: string
           price?: number | null
+          quality_score?: number | null
           rating?: number | null
           review_count?: number | null
           sku?: string | null
+          source?: string | null
           stock_quantity?: number | null
           updated_at?: string
+          url?: string | null
         }
         Relationships: [
           {
