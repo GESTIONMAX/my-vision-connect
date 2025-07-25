@@ -21,22 +21,55 @@ const CollectionDetailPage = () => {
   
   const currentCollection = collections?.find(c => c.slug === collectionSlug);
   
-  const sortedProducts = React.useMemo(() => {
-    if (!products) return [];
+  // Group products by ranges/models
+  const productRanges = React.useMemo(() => {
+    if (!products) return {};
     
-    const sorted = [...products];
-    switch (sortBy) {
-      case 'price-asc':
-        return sorted.sort((a, b) => a.price - b.price);
-      case 'price-desc':
-        return sorted.sort((a, b) => b.price - a.price);
-      case 'rating':
-        return sorted.sort((a, b) => b.rating - a.rating);
-      case 'newest':
-        return sorted.sort((a, b) => (b.is_new ? 1 : 0) - (a.is_new ? 1 : 0));
-      default:
-        return sorted.sort((a, b) => a.name.localeCompare(b.name));
-    }
+    const ranges: { [key: string]: any[] } = {};
+    
+    products.forEach(product => {
+      // Extract base model name (Shield, Music Shield, etc.)
+      let rangeKey = 'Autres';
+      
+      if (product.name.toLowerCase().includes('shield') && product.name.toLowerCase().includes('music')) {
+        rangeKey = 'Music Shield';
+      } else if (product.name.toLowerCase().includes('shield')) {
+        rangeKey = 'Shield';
+      } else if (product.name.toLowerCase().includes('veil')) {
+        rangeKey = 'Veil';
+      } else if (product.name.toLowerCase().includes('dragon')) {
+        rangeKey = 'Dragon';
+      } else if (product.name.toLowerCase().includes('euphoria')) {
+        rangeKey = 'Euphoria';
+      } else if (product.name.toLowerCase().includes('auria')) {
+        rangeKey = 'Auria';
+      }
+      
+      if (!ranges[rangeKey]) {
+        ranges[rangeKey] = [];
+      }
+      ranges[rangeKey].push(product);
+    });
+    
+    // Sort products within each range
+    Object.keys(ranges).forEach(rangeKey => {
+      ranges[rangeKey].sort((a, b) => {
+        switch (sortBy) {
+          case 'price-asc':
+            return a.price - b.price;
+          case 'price-desc':
+            return b.price - a.price;
+          case 'rating':
+            return b.rating - a.rating;
+          case 'newest':
+            return (b.is_new ? 1 : 0) - (a.is_new ? 1 : 0);
+          default:
+            return a.name.localeCompare(b.name);
+        }
+      });
+    });
+    
+    return ranges;
   }, [products, sortBy]);
 
   if (isLoading) {
@@ -173,13 +206,13 @@ const CollectionDetailPage = () => {
           </div>
         </motion.div>
 
-        {/* Products Grid */}
+        {/* Products by Ranges */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          {sortedProducts.length === 0 ? (
+          {Object.keys(productRanges).length === 0 ? (
             <div className="text-center py-16">
               <h3 className="text-2xl font-semibold text-foreground mb-4">
                 Aucun produit dans cette collection
@@ -192,22 +225,50 @@ const CollectionDetailPage = () => {
               </Button>
             </div>
           ) : (
-            <div className={`grid gap-6 ${
-              viewMode === 'grid' 
-                ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' 
-                : 'grid-cols-1 max-w-4xl mx-auto'
-            }`}>
-              {sortedProducts.map((product, index) => (
+            <div className="space-y-12">
+              {Object.entries(productRanges).map(([rangeName, rangeProducts]) => (
                 <motion.div
-                  key={product.id}
+                  key={rangeName}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
+                  transition={{ delay: 0.1 }}
+                  className="space-y-6"
                 >
-                  <ProductCard 
-                    product={product} 
-                    className={viewMode === 'list' ? 'flex flex-row h-48' : ''}
-                  />
+                  {/* Range Header */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h2 className="text-3xl font-bold text-foreground mb-2">
+                        Gamme {rangeName}
+                      </h2>
+                      <p className="text-muted-foreground">
+                        {rangeProducts.length} modèle{rangeProducts.length > 1 ? 's' : ''} disponible{rangeProducts.length > 1 ? 's' : ''}
+                      </p>
+                    </div>
+                    <Badge variant="secondary" className="text-lg px-4 py-2">
+                      {rangeProducts.length}
+                    </Badge>
+                  </div>
+                  
+                  {/* Range Products */}
+                  <div className={`grid gap-6 ${
+                    viewMode === 'grid' 
+                      ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' 
+                      : 'grid-cols-1 max-w-4xl mx-auto'
+                  }`}>
+                    {rangeProducts.map((product, index) => (
+                      <motion.div
+                        key={product.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.05 }}
+                      >
+                        <ProductCard 
+                          product={product} 
+                          className={viewMode === 'list' ? 'flex flex-row h-48' : ''}
+                        />
+                      </motion.div>
+                    ))}
+                  </div>
                 </motion.div>
               ))}
             </div>
