@@ -28,6 +28,7 @@ export const Header = () => {
     { name: 'Accessoires', href: '/chamelo-catalog' },
     { name: 'Blog', href: '/blog' },
     { name: 'FAQ', href: '/faq' },
+    { name: 'Contact', href: '/contact' },
   ];
 
   return (

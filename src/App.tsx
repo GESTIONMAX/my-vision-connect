@@ -37,6 +37,7 @@ import ChameloDashboard from "./components/ChameloDashboard";
 import CollectionDetail from "./pages/CollectionDetail";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import Contact from "./pages/Contact";
 
 const queryClient = new QueryClient();
 
@@ -65,6 +66,7 @@ const App = () => (
                     <Route path="/products/:slug" element={<ProductDetail />} />
                     <Route path="/technology" element={<Technology />} />
                     <Route path="/faq" element={<FAQ />} />
+                    <Route path="/contact" element={<Contact />} />
                     <Route path="/careers" element={<Careers />} />
                     <Route path="/blog" element={<Blog />} />
                     <Route path="/blog/:slug" element={<BlogPost />} />
