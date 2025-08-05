@@ -31,9 +31,6 @@ import Auth from "./pages/Auth";
 import Welcome from "./pages/Welcome";
 import NotFound from "./pages/NotFound";
 import { Checkout } from "./pages/Checkout";
-import ChameloCatalog from "./pages/ChameloCatalog";
-import ChameleoProductDetail from "./pages/ChameleoProductDetail";
-import ChameloDashboard from "./components/ChameloDashboard";
 import CollectionDetail from "./pages/CollectionDetail";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
@@ -72,10 +69,7 @@ const App = () => (
                     <Route path="/blog/:slug" element={<BlogPost />} />
                     <Route path="/auth" element={<Auth />} />
                     <Route path="/checkout" element={<Checkout />} />
-                    <Route path="/chamelo-catalog" element={<ChameloCatalog />} />
-                    <Route path="/chamelo-catalog/product/:handle" element={<ChameleoProductDetail />} />
                     <Route path="/collection/:collectionSlug" element={<CollectionDetail />} />
-                    <Route path="/chamelo-dashboard" element={<ChameloDashboard />} />
                     <Route path="/welcome" element={
                       <ProtectedRoute>
                         <Welcome />

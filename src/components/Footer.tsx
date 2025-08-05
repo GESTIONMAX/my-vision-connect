@@ -8,7 +8,7 @@ export const Footer = () => {
       { name: 'Lunettes Connectées', href: '/shop/smart-glasses' },
       { name: 'Notre sélection', href: '/notre-selection' },
       { name: 'Teinte Électronique', href: '/shop/electronic-tint' },
-      { name: 'Accessoires', href: '/shop/accessories' },
+      
       { name: 'Garantie', href: '/warranty' },
     ],
     Professionnels: [
