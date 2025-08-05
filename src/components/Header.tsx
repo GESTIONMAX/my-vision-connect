@@ -18,11 +18,11 @@ export const Header = () => {
   const navigation = isB2B ? [
     { name: 'Accueil Pro', href: '/b2b' },
     { name: 'Catalogue Pro', href: '/b2b/catalog' },
-    { name: 'Lunettes connectées', href: '/shop' },
+    { name: 'Shop', href: '/shop' },
     { name: 'Devenir Partenaire', href: '/b2b/partnership' },
     { name: 'Support', href: '/b2b/support' },
   ] : [
-    { name: 'Lunettes connectées', href: '/shop' },
+    { name: 'Shop', href: '/shop' },
     { name: 'Blog', href: '/blog' },
     { name: 'FAQ', href: '/faq' },
     { name: 'Contact', href: '/contact' },
