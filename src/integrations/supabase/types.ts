@@ -107,6 +107,42 @@ export type Database = {
           },
         ]
       }
+      product_configurations: {
+        Row: {
+          created_at: string
+          final_price: number
+          id: string
+          is_available: boolean | null
+          option_ids: string[] | null
+          product_id: string
+          sku: string | null
+          stock_quantity: number | null
+          variant_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          final_price: number
+          id?: string
+          is_available?: boolean | null
+          option_ids?: string[] | null
+          product_id: string
+          sku?: string | null
+          stock_quantity?: number | null
+          variant_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          final_price?: number
+          id?: string
+          is_available?: boolean | null
+          option_ids?: string[] | null
+          product_id?: string
+          sku?: string | null
+          stock_quantity?: number | null
+          variant_id?: string | null
+        }
+        Relationships: []
+      }
       product_filters: {
         Row: {
           filter_option_id: string
@@ -137,6 +173,120 @@ export type Database = {
           },
         ]
       }
+      product_images: {
+        Row: {
+          alt_text: string | null
+          caption: string | null
+          created_at: string
+          id: string
+          image_type: string
+          image_url: string
+          is_primary: boolean | null
+          product_id: string
+          sort_order: number | null
+          variant_id: string | null
+        }
+        Insert: {
+          alt_text?: string | null
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_type: string
+          image_url: string
+          is_primary?: boolean | null
+          product_id: string
+          sort_order?: number | null
+          variant_id?: string | null
+        }
+        Update: {
+          alt_text?: string | null
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_type?: string
+          image_url?: string
+          is_primary?: boolean | null
+          product_id?: string
+          sort_order?: number | null
+          variant_id?: string | null
+        }
+        Relationships: []
+      }
+      product_options: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_available: boolean | null
+          is_default: boolean | null
+          name: string
+          option_type: string
+          price_modifier: number | null
+          product_id: string
+          sort_order: number | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_available?: boolean | null
+          is_default?: boolean | null
+          name: string
+          option_type: string
+          price_modifier?: number | null
+          product_id: string
+          sort_order?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_available?: boolean | null
+          is_default?: boolean | null
+          name?: string
+          option_type?: string
+          price_modifier?: number | null
+          product_id?: string
+          sort_order?: number | null
+        }
+        Relationships: []
+      }
+      product_specifications: {
+        Row: {
+          created_at: string
+          display_order: number | null
+          id: string
+          is_highlight: boolean | null
+          product_id: string
+          spec_category: string
+          spec_name: string
+          spec_unit: string | null
+          spec_value: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_highlight?: boolean | null
+          product_id: string
+          spec_category: string
+          spec_name: string
+          spec_unit?: string | null
+          spec_value: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_highlight?: boolean | null
+          product_id?: string
+          spec_category?: string
+          spec_name?: string
+          spec_unit?: string | null
+          spec_value?: string
+        }
+        Relationships: []
+      }
       product_tags: {
         Row: {
           product_id: string
@@ -166,6 +316,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      product_variants: {
+        Row: {
+          created_at: string
+          frame_color: string | null
+          hex_color: string | null
+          id: string
+          images: string[] | null
+          is_default: boolean | null
+          lens_color: string | null
+          name: string
+          price_modifier: number | null
+          product_id: string
+          sku: string | null
+          sort_order: number | null
+          stock_quantity: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          frame_color?: string | null
+          hex_color?: string | null
+          id?: string
+          images?: string[] | null
+          is_default?: boolean | null
+          lens_color?: string | null
+          name: string
+          price_modifier?: number | null
+          product_id: string
+          sku?: string | null
+          sort_order?: number | null
+          stock_quantity?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          frame_color?: string | null
+          hex_color?: string | null
+          id?: string
+          images?: string[] | null
+          is_default?: boolean | null
+          lens_color?: string | null
+          name?: string
+          price_modifier?: number | null
+          product_id?: string
+          sku?: string | null
+          sort_order?: number | null
+          stock_quantity?: number | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       products: {
         Row: {
@@ -298,6 +499,48 @@ export type Database = {
         }
         Relationships: []
       }
+      size_guides: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          max_value: number | null
+          measurement_name: string
+          min_value: number | null
+          product_id: string
+          recommended_value: number | null
+          size_type: string
+          sort_order: number | null
+          unit: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          max_value?: number | null
+          measurement_name: string
+          min_value?: number | null
+          product_id: string
+          recommended_value?: number | null
+          size_type: string
+          sort_order?: number | null
+          unit: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          max_value?: number | null
+          measurement_name?: string
+          min_value?: number | null
+          product_id?: string
+          recommended_value?: number | null
+          size_type?: string
+          sort_order?: number | null
+          unit?: string
+        }
+        Relationships: []
+      }
       sub_collections: {
         Row: {
           created_at: string
@@ -403,7 +646,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      calculate_configuration_price: {
+        Args: {
+          p_product_id: string
+          p_variant_id?: string
+          p_option_ids?: string[]
+        }
+        Returns: number
+      }
     }
     Enums: {
       [_ in never]: never
