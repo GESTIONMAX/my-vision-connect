@@ -16,6 +16,8 @@ import { ProductKeyFeatures } from '@/components/product/ProductKeyFeatures';
 import { ProductBenefits } from '@/components/product/ProductBenefits';
 import { ProductSpecifications } from '@/components/product/ProductSpecifications';
 import { ProductPackageContent } from '@/components/product/ProductPackageContent';
+import { ProductConfigurator } from '@/components/product/ProductConfigurator';
+import { ProductSpecificationsView } from '@/components/product/ProductSpecificationsView';
 import { FavoriteButton } from '@/components/FavoriteButton';
 import { ShareButton } from '@/components/ShareButton';
 
@@ -25,6 +27,17 @@ const ProductDetail = () => {
   const { data: variants = [] } = useProductVariants(slug || '');
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [activeTab, setActiveTab] = useState('description');
+  const [configuration, setConfiguration] = useState<{
+    variantId?: string;
+    optionIds: string[];
+    finalPrice: number;
+    isValid: boolean;
+  }>({
+    variantId: undefined,
+    optionIds: [],
+    finalPrice: product?.price || 0,
+    isValid: true,
+  });
   const { addItem } = useCart();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -45,16 +58,19 @@ const ProductDetail = () => {
     addItem({
       id: product.slug,
       name: product.name,
-      price: product.price,
+      price: configuration.finalPrice,
       quantity: 1,
       reference: product.slug,
       category: product.category || 'Lunettes',
-      originalPrice: product.originalPrice
+      originalPrice: product.originalPrice,
+      // Ajouter les informations de configuration
+      variantId: configuration.variantId,
+      selectedOptions: configuration.optionIds,
     });
 
     toast({
       title: "Produit ajouté",
-      description: `${product.name} a été ajouté à votre panier`,
+      description: `${product.name} configuré a été ajouté à votre panier`,
       action: (
         <Button
           variant="outline"
@@ -139,14 +155,21 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            {/* Price */}
+            {/* Configuration du produit */}
+            <ProductConfigurator
+              product={product}
+              onConfigurationChange={setConfiguration}
+              className="mb-6"
+            />
+
+            {/* Prix dynamique */}
             <div className="space-y-2">
               <div className="text-4xl font-bold text-foreground">
-                {product.price.toFixed(2)} €
+                {configuration.finalPrice.toFixed(2)} €
               </div>
-              {product.originalPrice && (
+              {product.originalPrice && product.price !== configuration.finalPrice && (
                 <div className="text-lg text-muted-foreground line-through">
-                  {product.originalPrice.toFixed(2)} €
+                  {product.price.toFixed(2)} €
                 </div>
               )}
               <div className="text-green-600 text-sm font-medium flex items-center gap-1">
@@ -159,6 +182,7 @@ const ProductDetail = () => {
             <EnhancedProductActions
               product={product}
               onAddToCart={handleAddToCart}
+              disabled={!configuration.isValid}
             />
 
             {/* Service Badges */}
@@ -182,12 +206,15 @@ const ProductDetail = () => {
         {/* Tabbed Content */}
         <div className="bg-card rounded-xl border border-border overflow-hidden">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-3 h-14 bg-muted/50">
+            <TabsList className="grid w-full grid-cols-4 h-14 bg-muted/50">
               <TabsTrigger value="description" className="text-base font-medium">
                 Description
               </TabsTrigger>
               <TabsTrigger value="specifications" className="text-base font-medium">
                 Caractéristiques
+              </TabsTrigger>
+              <TabsTrigger value="technical" className="text-base font-medium">
+                Technique
               </TabsTrigger>
               <TabsTrigger value="reviews" className="text-base font-medium">
                 Avis clients
@@ -226,6 +253,10 @@ const ProductDetail = () => {
                   {/* Package Content */}
                   <ProductPackageContent productSlug={product.slug} />
                 </div>
+              </TabsContent>
+              
+              <TabsContent value="technical" className="mt-0">
+                <ProductSpecificationsView productId={product.id} />
               </TabsContent>
               
               <TabsContent value="reviews" className="mt-0">

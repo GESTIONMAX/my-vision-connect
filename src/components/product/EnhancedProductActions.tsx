@@ -19,9 +19,10 @@ import {
 interface EnhancedProductActionsProps {
   product: any;
   onAddToCart: () => void;
+  disabled?: boolean;
 }
 
-export const EnhancedProductActions = ({ product, onAddToCart }: EnhancedProductActionsProps) => {
+export const EnhancedProductActions = ({ product, onAddToCart, disabled = false }: EnhancedProductActionsProps) => {
   return (
     <div className="space-y-6">
       {/* Quantity Selector */}
@@ -45,7 +46,7 @@ export const EnhancedProductActions = ({ product, onAddToCart }: EnhancedProduct
       <div className="space-y-3">
         <Button 
           className="w-full h-12 text-lg font-medium"
-          disabled={!product.inStock}
+          disabled={!product.inStock || disabled}
           onClick={onAddToCart}
         >
           <ShoppingCart className="h-5 w-5 mr-2" />
