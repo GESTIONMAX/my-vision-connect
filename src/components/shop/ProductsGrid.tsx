@@ -73,6 +73,11 @@ export const ProductsGrid = ({
 
   // Filter products based on criteria
   const filteredProducts = products.filter(product => {
+    // Add null/undefined checks
+    if (!product) {
+      return false;
+    }
+
     // Category filter with new hierarchical structure
     if (selectedCategory !== 'all') {
       if (selectedCategory === 'best-sellers' && !product.isPopular) {
@@ -80,7 +85,7 @@ export const ProductsGrid = ({
       }
       
       // Check if selectedCategory is a main category or sub-collection
-      const productCollection = product.collection; // collection vient de collection_slug dans la DB
+      const productCollection = product.collection || ''; // collection vient de collection_slug dans la DB
       const isMainCategory = ['sport', 'lifestyle', 'prismatic'].includes(selectedCategory);
       
       if (isMainCategory) {
