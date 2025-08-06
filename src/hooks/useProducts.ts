@@ -144,7 +144,10 @@ export const useProducts = (filters?: ProductFilters) => {
     queryFn: async () => {
       let query = supabase
         .from('products')
-        .select('*')
+        .select(`
+          *,
+          product_collections!inner(collection_slug)
+        `)
         .eq('is_active', true);
 
       // Application des filtres
@@ -153,7 +156,7 @@ export const useProducts = (filters?: ProductFilters) => {
       }
 
       if (filters?.collection && filters.collection !== 'all') {
-        query = query.eq('collection_slug', filters.collection);
+        query = query.eq('product_collections.collection_slug', filters.collection);
       }
 
       if (filters?.search) {
