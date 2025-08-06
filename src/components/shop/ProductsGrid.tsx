@@ -114,10 +114,16 @@ export const ProductsGrid = ({
           }
           
           // Mapping pour les modèles lifestyle
-          if (selectedCategory === 'veil' && !productName.includes('veil')) {
+          if (selectedCategory === 'prima' && !productName.includes('prima')) {
+            return false;
+          }
+          if (selectedCategory === 'dark-classic' && !productName.includes('dark classic')) {
             return false;
           }
           if (selectedCategory === 'dragon' && !productName.includes('dragon')) {
+            return false;
+          }
+          if (selectedCategory === 'veil' && !productName.includes('veil')) {
             return false;
           }
           
