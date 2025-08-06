@@ -104,7 +104,8 @@ const ProductDetail = () => {
           {/* Image Gallery */}
           <EnhancedProductImageGallery
             productName={product.name}
-            images={product.images}
+            productSlug={slug || ''}
+            variantSlug={variants.find(v => v.id === configuration.variantId)?.name}
             selectedImageIndex={selectedImageIndex}
             onImageSelect={setSelectedImageIndex}
           />
