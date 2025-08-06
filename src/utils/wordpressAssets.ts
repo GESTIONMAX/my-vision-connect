@@ -4,7 +4,7 @@
 
 // Configuration WordPress Media Library
 export const WORDPRESS_CONFIG = {
-  baseUrl: process.env.WORDPRESS_URL || 'https://votre-wordpress.com',
+  baseUrl: 'https://votre-wordpress.com', // ⬅️ À modifier avec votre URL WordPress
   mediaPath: '/wp-content/uploads',
   apiEndpoint: '/wp-json/wp/v2/media'
 };
