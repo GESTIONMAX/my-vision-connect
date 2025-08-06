@@ -79,27 +79,27 @@ export type Database = {
       }
       product_collections: {
         Row: {
-          collection_slug: string
+          collection_id: string
           product_id: string
         }
         Insert: {
-          collection_slug: string
+          collection_id: string
           product_id: string
         }
         Update: {
-          collection_slug?: string
+          collection_id?: string
           product_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "product_collections_collection_slug_fkey"
-            columns: ["collection_slug"]
+            foreignKeyName: "product_collections_new_collection_id_fkey"
+            columns: ["collection_id"]
             isOneToOne: false
             referencedRelation: "collections"
-            referencedColumns: ["slug"]
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "product_collections_product_id_fkey"
+            foreignKeyName: "product_collections_new_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "products"
@@ -253,39 +253,45 @@ export type Database = {
       }
       product_specifications: {
         Row: {
-          created_at: string
           display_order: number | null
-          id: string
           is_highlight: boolean | null
           product_id: string
-          spec_category: string
-          spec_name: string
-          spec_unit: string | null
-          spec_value: string
+          specification_id: string
+          unit: string | null
+          value: string | null
         }
         Insert: {
-          created_at?: string
           display_order?: number | null
-          id?: string
           is_highlight?: boolean | null
           product_id: string
-          spec_category: string
-          spec_name: string
-          spec_unit?: string | null
-          spec_value: string
+          specification_id: string
+          unit?: string | null
+          value?: string | null
         }
         Update: {
-          created_at?: string
           display_order?: number | null
-          id?: string
           is_highlight?: boolean | null
           product_id?: string
-          spec_category?: string
-          spec_name?: string
-          spec_unit?: string | null
-          spec_value?: string
+          specification_id?: string
+          unit?: string | null
+          value?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "product_specifications_new_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_specifications_new_specification_id_fkey"
+            columns: ["specification_id"]
+            isOneToOne: false
+            referencedRelation: "specifications"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       product_tags: {
         Row: {
@@ -319,137 +325,72 @@ export type Database = {
       }
       product_variants: {
         Row: {
+          color_frame: string | null
+          color_lens: string | null
           created_at: string
-          frame_color: string | null
-          hex_color: string | null
+          has_audio: boolean | null
           id: string
-          images: string[] | null
-          is_default: boolean | null
-          lens_color: string | null
-          name: string
-          price_modifier: number | null
+          price: number
           product_id: string
           sku: string | null
-          sort_order: number | null
-          stock_quantity: number | null
           updated_at: string
         }
         Insert: {
+          color_frame?: string | null
+          color_lens?: string | null
           created_at?: string
-          frame_color?: string | null
-          hex_color?: string | null
+          has_audio?: boolean | null
           id?: string
-          images?: string[] | null
-          is_default?: boolean | null
-          lens_color?: string | null
-          name: string
-          price_modifier?: number | null
+          price: number
           product_id: string
           sku?: string | null
-          sort_order?: number | null
-          stock_quantity?: number | null
           updated_at?: string
         }
         Update: {
+          color_frame?: string | null
+          color_lens?: string | null
           created_at?: string
-          frame_color?: string | null
-          hex_color?: string | null
+          has_audio?: boolean | null
           id?: string
-          images?: string[] | null
-          is_default?: boolean | null
-          lens_color?: string | null
-          name?: string
-          price_modifier?: number | null
+          price?: number
           product_id?: string
           sku?: string | null
-          sort_order?: number | null
-          stock_quantity?: number | null
           updated_at?: string
         }
         Relationships: []
       }
       products: {
         Row: {
-          category: string | null
-          collection_slug: string | null
           created_at: string
-          description: string | null
-          description_length: number | null
-          ecommerce_readiness: string | null
+          description_long: string | null
+          description_short: string | null
           id: string
-          images: string[] | null
-          images_count: number | null
           is_active: boolean | null
-          is_featured: boolean | null
-          lens_technology: string | null
           name: string
-          price: number | null
-          quality_score: number | null
-          rating: number | null
-          review_count: number | null
-          sku: string | null
-          source: string | null
-          stock_quantity: number | null
+          price_base: number
           updated_at: string
-          url: string | null
         }
         Insert: {
-          category?: string | null
-          collection_slug?: string | null
           created_at?: string
-          description?: string | null
-          description_length?: number | null
-          ecommerce_readiness?: string | null
+          description_long?: string | null
+          description_short?: string | null
           id?: string
-          images?: string[] | null
-          images_count?: number | null
           is_active?: boolean | null
-          is_featured?: boolean | null
-          lens_technology?: string | null
           name: string
-          price?: number | null
-          quality_score?: number | null
-          rating?: number | null
-          review_count?: number | null
-          sku?: string | null
-          source?: string | null
-          stock_quantity?: number | null
+          price_base: number
           updated_at?: string
-          url?: string | null
         }
         Update: {
-          category?: string | null
-          collection_slug?: string | null
           created_at?: string
-          description?: string | null
-          description_length?: number | null
-          ecommerce_readiness?: string | null
+          description_long?: string | null
+          description_short?: string | null
           id?: string
-          images?: string[] | null
-          images_count?: number | null
           is_active?: boolean | null
-          is_featured?: boolean | null
-          lens_technology?: string | null
           name?: string
-          price?: number | null
-          quality_score?: number | null
-          rating?: number | null
-          review_count?: number | null
-          sku?: string | null
-          source?: string | null
-          stock_quantity?: number | null
+          price_base?: number
           updated_at?: string
-          url?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "products_collection_slug_fkey"
-            columns: ["collection_slug"]
-            isOneToOne: false
-            referencedRelation: "collections"
-            referencedColumns: ["slug"]
-          },
-        ]
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -538,6 +479,30 @@ export type Database = {
           size_type?: string
           sort_order?: number | null
           unit?: string
+        }
+        Relationships: []
+      }
+      specifications: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          icon_url: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          icon_url?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          icon_url?: string | null
+          id?: string
+          name?: string
         }
         Relationships: []
       }
