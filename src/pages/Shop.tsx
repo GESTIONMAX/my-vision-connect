@@ -1,4 +1,5 @@
 
+import { LifestyleCollection } from '@/components/LifestyleCollection';
 import { ShopHero } from '@/components/shop/ShopHero';
 import { PromotionalBanner } from '@/components/shop/PromotionalBanner';
 import { CategoryTabs } from '@/components/shop/CategoryTabs';
@@ -35,6 +36,9 @@ const Shop = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Lifestyle Collection Section */}
+      <LifestyleCollection />
+      
       <ShopHero />
       <PromotionalBanner />
       
