@@ -17,7 +17,7 @@ import { ProductBenefits } from '@/components/product/ProductBenefits';
 import { ProductSpecifications } from '@/components/product/ProductSpecifications';
 import { ProductPackageContent } from '@/components/product/ProductPackageContent';
 import { ProductConfigurator } from '@/components/product/ProductConfigurator';
-import { ProductSpecificationsView } from '@/components/product/ProductSpecificationsView';
+// import { ProductSpecificationsView } from '@/components/product/ProductSpecificationsView';
 import { FavoriteButton } from '@/components/FavoriteButton';
 import { ShareButton } from '@/components/ShareButton';
 
@@ -60,7 +60,7 @@ const ProductDetail = () => {
       name: product.name,
       price: configuration.finalPrice,
       quantity: 1,
-      reference: product.sku || product.id,
+      reference: product.id,
       category: product.category || 'Lunettes',
       originalPrice: product.price || 0,
       // Ajouter les informations de configuration
@@ -105,7 +105,7 @@ const ProductDetail = () => {
           <EnhancedProductImageGallery
             productName={product.name}
             productSlug={slug || ''}
-            variantSlug={variants.find(v => v.id === configuration.variantId)?.name}
+            variantSlug={variants.find(v => v.id === configuration.variantId)?.color_frame}
             selectedImageIndex={selectedImageIndex}
             onImageSelect={setSelectedImageIndex}
           />
@@ -228,15 +228,14 @@ const ProductDetail = () => {
               <TabsContent value="description" className="mt-0">
                 <div className="space-y-6">
                   {/* Description enrichie */}
-                  <EnhancedProductDescription 
-                    product={{
-                      name: product.name,
-                      description: product.description,
-                      lens_technology: product.lens_technology,
-                      category: product.category,
-                      collection: product.collection_slug
-                    }} 
-                  />
+                   <EnhancedProductDescription 
+                     product={{
+                       name: product.name,
+                       description: product.description,
+                       category: product.category,
+                       collection: product.collection
+                     }} 
+                   />
                   
                   {/* Caractéristiques clés */}
                   <ProductKeyFeatures productSlug={slug || ''} />
@@ -259,7 +258,12 @@ const ProductDetail = () => {
               </TabsContent>
               
               <TabsContent value="technical" className="mt-0">
-                <ProductSpecificationsView productId={product.id} />
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold">Spécifications techniques</h3>
+                  <p className="text-muted-foreground">
+                    Les spécifications techniques détaillées seront bientôt disponibles.
+                  </p>
+                </div>
               </TabsContent>
               
               <TabsContent value="reviews" className="mt-0">

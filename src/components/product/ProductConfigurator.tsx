@@ -3,10 +3,10 @@ import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { ProductVariantSelector } from './ProductVariantSelector';
+// import { ProductVariantSelector } from './ProductVariantSelector';
 import { ProductOptionSelector } from './ProductOptionSelector';
 import { useProductConfigurationState } from '@/hooks/useProductConfiguration';
-import { useDefaultVariant } from '@/hooks/useProductVariants';
+// import { useDefaultVariant } from '@/hooks/useProductVariants';
 import { useDefaultOptions } from '@/hooks/useProductOptions';
 import { Product } from '@/hooks/useProducts';
 import { Loader2, Euro } from 'lucide-react';
@@ -35,15 +35,10 @@ export const ProductConfigurator: React.FC<ProductConfiguratorProps> = ({
     isCalculating,
   } = useProductConfigurationState(product.id);
 
-  const { data: defaultVariant } = useDefaultVariant(product.id);
+  // const { data: defaultVariant } = useDefaultVariant(product.id);
   const { data: defaultOptions } = useDefaultOptions(product.id);
 
-  // Initialiser avec les valeurs par défaut
-  useEffect(() => {
-    if (defaultVariant && !configuration.selectedVariantId) {
-      selectVariant(defaultVariant.id);
-    }
-  }, [defaultVariant, configuration.selectedVariantId, selectVariant]);
+  // Initialiser avec les valeurs par défaut (désactivé temporairement)
 
   useEffect(() => {
     if (defaultOptions && configuration.selectedOptionIds.length === 0) {
@@ -76,12 +71,10 @@ export const ProductConfigurator: React.FC<ProductConfiguratorProps> = ({
       </CardHeader>
       
       <CardContent className="space-y-6">
-        {/* Sélecteur de variant */}
-        <ProductVariantSelector
-          productId={product.id}
-          selectedVariantId={configuration.selectedVariantId}
-          onVariantSelect={(variant) => selectVariant(variant.id)}
-        />
+        {/* Sélecteur de variant - temporairement désactivé */}
+        <div className="p-4 border border-dashed border-gray-300 rounded-lg text-center text-gray-500">
+          Sélecteur de variants (en développement)
+        </div>
         
         <Separator />
         

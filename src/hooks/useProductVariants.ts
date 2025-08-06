@@ -4,16 +4,11 @@ import { supabase } from '@/integrations/supabase/client';
 export interface ProductVariant {
   id: string;
   product_id: string;
-  name: string;
   sku?: string;
-  frame_color?: string;
-  lens_color?: string;
-  hex_color?: string;
-  price_modifier: number;
-  images: string[];
-  stock_quantity: number;
-  is_default: boolean;
-  sort_order: number;
+  color_frame?: string;
+  color_lens?: string;
+  price: number;
+  has_audio: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -57,41 +52,18 @@ export const useProductVariants = (productSlug: string) => {
         throw new Error(error.message);
       }
 
-      return data as ProductVariant[];
+      return data.map(variant => ({
+        id: variant.id,
+        product_id: variant.product_id,
+        sku: variant.sku,
+        color_frame: variant.color_frame,
+        color_lens: variant.color_lens,
+        price: variant.price,
+        has_audio: variant.has_audio,
+        created_at: variant.created_at,
+        updated_at: variant.updated_at
+      })) as ProductVariant[];
     },
     enabled: !!productSlug,
-  });
-};
-
-export const useDefaultVariant = (productId: string) => {
-  return useQuery({
-    queryKey: ['default_variant', productId],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('product_variants')
-        .select('*')
-        .eq('product_id', productId)
-        .eq('is_default', true)
-        .single();
-
-      if (error) {
-        // Si pas de variant par défaut, prendre le premier
-        const { data: fallback, error: fallbackError } = await supabase
-          .from('product_variants')
-          .select('*')
-          .eq('product_id', productId)
-          .order('sort_order', { ascending: true })
-          .limit(1)
-          .single();
-
-        if (fallbackError) {
-          return null;
-        }
-        return fallback as ProductVariant;
-      }
-
-      return data as ProductVariant;
-    },
-    enabled: !!productId,
   });
 };

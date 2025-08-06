@@ -29,7 +29,7 @@ export const ProductCard = ({ product, index = 0, className }: ProductCardProps)
       name: product.name,
       price: product.price || 0,
       quantity: 1,
-      reference: product.sku || product.id,
+      reference: product.id,
       category: product.category || 'Lunettes',
       originalPrice: product.price || 0
     });
@@ -168,11 +168,6 @@ export const ProductCard = ({ product, index = 0, className }: ProductCardProps)
 
             {/* Affichage simplifié - les features seront ajoutées plus tard */}
             <div className="flex flex-wrap gap-1 mb-3">
-              {product.lens_technology && (
-                <Badge variant="outline" className="text-xs">
-                  {product.lens_technology}
-                </Badge>
-              )}
               {product.category && (
                 <Badge variant="outline" className="text-xs">
                   {product.category}

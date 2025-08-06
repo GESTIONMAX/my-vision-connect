@@ -5,6 +5,8 @@ import { Product } from './useProducts';
 /**
  * Génère un slug à partir du nom du produit
  */
+export type { Product } from './useProducts';
+
 export const generateProductSlug = (name: string): string => {
   return name
     .toLowerCase()
