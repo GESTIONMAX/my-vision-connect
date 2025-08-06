@@ -89,7 +89,7 @@ export const ProductsGrid = ({
       const isMainCategory = ['sport', 'lifestyle', 'prismatic'].includes(selectedCategory);
       
       if (isMainCategory) {
-        // Filter by main category using collection
+        // Filter by main category using collection_slug
         if (productCollection !== selectedCategory) {
           return false;
         }
@@ -98,18 +98,30 @@ export const ProductsGrid = ({
         if (selectedCategory !== 'best-sellers') {
           // Pour les sous-collections spécifiques comme 'shields', 'music-shield', etc.
           const productName = product.name.toLowerCase();
-          if (selectedCategory === 'shields' && !productName.includes('shield')) {
+          
+          // Mapping pour les modèles de la gamme sport
+          if (selectedCategory === 'shields' && !(productName.includes('shield') && !productName.includes('music'))) {
             return false;
           }
           if (selectedCategory === 'music-shield' && !productName.includes('music shield')) {
             return false;
           }
+          if (selectedCategory === 'falcon' && !productName.includes('falcon')) {
+            return false;
+          }
+          if (selectedCategory === 'bouvet' && !productName.includes('bouvet')) {
+            return false;
+          }
+          
+          // Mapping pour les modèles lifestyle
           if (selectedCategory === 'veil' && !productName.includes('veil')) {
             return false;
           }
           if (selectedCategory === 'dragon' && !productName.includes('dragon')) {
             return false;
           }
+          
+          // Mapping pour les modèles prismatic
           if (selectedCategory === 'euphoria' && !productName.includes('euphoria')) {
             return false;
           }
