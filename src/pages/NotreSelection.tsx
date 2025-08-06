@@ -2,7 +2,7 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ProductCard } from '@/components/ProductCard';
-import { useProducts } from '@/hooks/useProducts';
+import { useProducts } from '@/hooks/useProduct';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Award, Star, Heart } from 'lucide-react';
@@ -13,16 +13,16 @@ const NotreSelection = () => {
 
   // Simuler une sélection de produits avec des critères spécifiques
   const selectedProducts = useMemo(() => {
-    // Prendre les produits populaires, nouveaux, ou avec de bonnes notes
+    // Prendre les produits en vedette ou avec de bonnes notes
     return products.filter(product => 
-      product.isPopular || product.isNew || product.rating >= 4.5
+      product.is_featured || (product.rating && product.rating >= 4.5)
     );
   }, [products]);
 
   const filteredProducts = useMemo(() => {
     if (activeFilter === 'all') return selectedProducts;
-    if (activeFilter === 'bestsellers') return selectedProducts.filter(p => p.isPopular);
-    if (activeFilter === 'new') return selectedProducts.filter(p => p.isNew);
+    if (activeFilter === 'bestsellers') return selectedProducts.filter(p => p.is_featured);
+    if (activeFilter === 'new') return selectedProducts.filter(p => p.is_featured); // Tous les produits vedettes sont considérés comme nouveaux
     if (activeFilter === 'sport') return selectedProducts.filter(p => p.category === 'sport');
     if (activeFilter === 'lifestyle') return selectedProducts.filter(p => p.category === 'lifestyle');
     return selectedProducts;
