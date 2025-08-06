@@ -18,14 +18,39 @@ export interface ProductVariant {
   updated_at: string;
 }
 
-export const useProductVariants = (productId: string) => {
+export const useProductVariants = (productSlug: string) => {
   return useQuery({
-    queryKey: ['product_variants', productId],
+    queryKey: ['product_variants', productSlug],
     queryFn: async () => {
+      if (!productSlug) throw new Error('Product slug is required');
+      
+      // D'abord, récupérer le produit par son slug
+      const { data: products, error: productError } = await supabase
+        .from('products')
+        .select('id, name')
+        .eq('is_active', true);
+        
+      if (productError) throw productError;
+      
+      // Importer la fonction generateProductSlug
+      const generateProductSlug = (name: string): string => {
+        return name
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/(^-|-$)/g, '');
+      };
+      
+      // Trouver le produit par slug généré
+      const product = products?.find(p => generateProductSlug(p.name) === productSlug);
+      
+      if (!product) {
+        throw new Error('Product not found');
+      }
+
       const { data, error } = await supabase
         .from('product_variants')
         .select('*')
-        .eq('product_id', productId)
+        .eq('product_id', product.id)
         .order('sort_order', { ascending: true });
 
       if (error) {
@@ -34,7 +59,7 @@ export const useProductVariants = (productId: string) => {
 
       return data as ProductVariant[];
     },
-    enabled: !!productId,
+    enabled: !!productSlug,
   });
 };
 

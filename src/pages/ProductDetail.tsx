@@ -4,7 +4,7 @@ import { ArrowLeft, Star, Truck, Shield, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useProduct } from '@/hooks/useProducts';
+import { useProduct } from '@/hooks/useProduct';
 import { useProductVariants } from '@/hooks/useProductVariants';
 import { useCart } from '@/hooks/useCart';
 import { useToast } from '@/hooks/use-toast';
@@ -56,13 +56,13 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     addItem({
-      id: product.slug,
+      id: product.id,
       name: product.name,
       price: configuration.finalPrice,
       quantity: 1,
-      reference: product.slug,
+      reference: product.sku || product.id,
       category: product.category || 'Lunettes',
-      originalPrice: product.originalPrice,
+      originalPrice: product.price || 0,
       // Ajouter les informations de configuration
       variantId: configuration.variantId,
       selectedOptions: configuration.optionIds,
@@ -143,32 +143,34 @@ const ProductDetail = () => {
                     <Star
                       key={i}
                       className={`h-5 w-5 ${
-                        i < Math.floor(product.rating)
+                        i < Math.floor(product.rating || 0)
                           ? 'text-yellow-400 fill-current'
                           : 'text-gray-300'
                       }`}
                     />
                   ))}
                   <span className="text-sm text-muted-foreground ml-2">
-                    ({product.rating}) • {product.reviewCount} avis
+                    ({product.rating || 0}) • {product.review_count || 0} avis
                   </span>
                 </div>
               </div>
             </div>
 
             {/* Configuration du produit */}
-            <ProductConfigurator
-              product={product}
-              onConfigurationChange={setConfiguration}
-              className="mb-6"
-            />
+            {/* Configuration simplifiée - à adapter selon vos besoins */}
+            <div className="mb-6 p-4 border border-border rounded-lg">
+              <h3 className="font-semibold mb-2">Configuration du produit</h3>
+              <p className="text-sm text-muted-foreground">
+                Variants et options disponibles à configurer
+              </p>
+            </div>
 
             {/* Prix dynamique */}
             <div className="space-y-2">
               <div className="text-4xl font-bold text-foreground">
                 {configuration.finalPrice.toFixed(2)} €
               </div>
-              {product.originalPrice && product.price !== configuration.finalPrice && (
+              {product.price && product.price !== configuration.finalPrice && (
                 <div className="text-lg text-muted-foreground line-through">
                   {product.price.toFixed(2)} €
                 </div>
@@ -232,27 +234,27 @@ const ProductDetail = () => {
                       description: product.description,
                       lens_technology: product.lens_technology,
                       category: product.category,
-                      collection: product.collection
+                      collection: product.collection_slug
                     }} 
                   />
                   
                   {/* Caractéristiques clés */}
-                  <ProductKeyFeatures productSlug={product.slug} />
+                  <ProductKeyFeatures productSlug={slug || ''} />
                   
                   {/* Bénéfices utilisateur */}
-                  <ProductBenefits productSlug={product.slug} />
+                  <ProductBenefits productSlug={slug || ''} />
                 </div>
               </TabsContent>
               
               <TabsContent value="specifications" className="mt-0">
                 <div className="space-y-6">
                   <ProductSpecifications 
-                    specifications={product.specifications} 
-                    productSlug={product.slug} 
+                    specifications={{}} 
+                    productSlug={slug || ''} 
                   />
                   
                   {/* Package Content */}
-                  <ProductPackageContent productSlug={product.slug} />
+                  <ProductPackageContent productSlug={slug || ''} />
                 </div>
               </TabsContent>
               
@@ -266,7 +268,7 @@ const ProductDetail = () => {
                     <Star className="h-16 w-16 text-yellow-400 mx-auto mb-4 fill-current" />
                     <h3 className="text-xl font-semibold mb-2">Excellent produit</h3>
                     <p className="text-muted-foreground mb-4">
-                      Note moyenne de <span className="font-bold text-primary">{product.rating}/5</span> basée sur <span className="font-bold">{product.reviewCount} avis</span> clients vérifiés
+                      Note moyenne de <span className="font-bold text-primary">{product.rating || 0}/5</span> basée sur <span className="font-bold">{product.review_count || 0} avis</span> clients vérifiés
                     </p>
                     
                     {/* Répartition des étoiles */}

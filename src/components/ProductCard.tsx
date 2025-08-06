@@ -5,7 +5,7 @@ import { Star, ShoppingCart, Eye } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Product } from '@/hooks/useProducts';
+import { Product } from '@/hooks/useProduct';
 import { useCart } from '@/hooks/useCart';
 import { useToast } from '@/hooks/use-toast';
 
@@ -25,13 +25,13 @@ export const ProductCard = ({ product, index = 0, className }: ProductCardProps)
     e.stopPropagation();
     
     addItem({
-      id: product.slug,
+      id: product.id,
       name: product.name,
-      price: product.price,
+      price: product.price || 0,
       quantity: 1,
-      reference: product.slug,
+      reference: product.sku || product.id,
       category: product.category || 'Lunettes',
-      originalPrice: product.originalPrice
+      originalPrice: product.price || 0
     });
 
     toast({
@@ -51,13 +51,8 @@ export const ProductCard = ({ product, index = 0, className }: ProductCardProps)
 
   // Déterminer le bon lien selon le type de produit
   const getProductLink = () => {
-    if (product.slug.startsWith('/chamelo-catalog/product/')) {
-      return product.slug;
-    } else if (product.slug.startsWith('/')) {
-      return product.slug;
-    } else {
-      return `/products/${product.slug}`;
-    }
+    const generateSlug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    return `/produit/${generateSlug(product.name)}`;
   };
 
   const productLink = getProductLink();
@@ -73,22 +68,18 @@ export const ProductCard = ({ product, index = 0, className }: ProductCardProps)
         <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800">
           {/* Badges */}
           <div className="absolute top-3 left-3 z-10 flex flex-col gap-2">
-            {product.isNew && (
+            {product.is_featured && (
               <Badge className="bg-green-500 hover:bg-green-600 text-white text-xs">
                 Nouveau
               </Badge>
             )}
-            {product.isPopular && (
+            {product.is_featured && (
               <Badge className="bg-orange-500 hover:bg-orange-600 text-white text-xs">
                 ⭐ Populaire
               </Badge>
             )}
-            {product.originalPrice && (
-              <Badge variant="destructive" className="text-xs">
-                -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
-              </Badge>
-            )}
-            {!product.inStock && (
+            {/* Pas de système de discount pour le moment */}
+            {(product.stock_quantity || 0) === 0 && (
               <Badge variant="secondary" className="text-xs">
                 Rupture
               </Badge>
@@ -113,7 +104,7 @@ export const ProductCard = ({ product, index = 0, className }: ProductCardProps)
               size="icon" 
               variant="secondary" 
               className="rounded-full h-8 w-8" 
-              disabled={!product.inStock}
+              disabled={(product.stock_quantity || 0) === 0}
               onClick={handleAddToCart}
             >
               <ShoppingCart className="h-4 w-4" />
@@ -142,13 +133,13 @@ export const ProductCard = ({ product, index = 0, className }: ProductCardProps)
                 <div className="flex items-center justify-center gap-1">
                   {/* Enhanced lenses with gradient */}
                   <div className={`w-16 h-12 rounded-full border-4 border-gray-800 dark:border-gray-200 ${
-                    product.collection === 'sport' 
+                    product.category === 'sport' 
                       ? 'bg-gradient-to-br from-blue-600/50 to-purple-600/50 shadow-lg' 
                       : 'bg-gradient-to-br from-blue-900/30 to-purple-900/30'
                   }`}></div>
                   <div className="w-3 h-1 bg-gray-800 dark:bg-gray-200 rounded"></div>
                   <div className={`w-16 h-12 rounded-full border-4 border-gray-800 dark:border-gray-200 ${
-                    product.collection === 'sport' 
+                    product.category === 'sport' 
                       ? 'bg-gradient-to-br from-blue-600/50 to-purple-600/50 shadow-lg' 
                       : 'bg-gradient-to-br from-blue-900/30 to-purple-900/30'
                   }`}></div>
@@ -175,16 +166,16 @@ export const ProductCard = ({ product, index = 0, className }: ProductCardProps)
               {product.description}
             </p>
 
-            {/* Features */}
+            {/* Affichage simplifié - les features seront ajoutées plus tard */}
             <div className="flex flex-wrap gap-1 mb-3">
-              {product.features && product.features.slice(0, 2).map((feature) => (
-                <Badge key={feature} variant="outline" className="text-xs">
-                  {feature}
-                </Badge>
-              ))}
-              {product.features && product.features.length > 2 && (
+              {product.lens_technology && (
                 <Badge variant="outline" className="text-xs">
-                  +{product.features.length - 2}
+                  {product.lens_technology}
+                </Badge>
+              )}
+              {product.category && (
+                <Badge variant="outline" className="text-xs">
+                  {product.category}
                 </Badge>
               )}
             </div>
@@ -195,7 +186,7 @@ export const ProductCard = ({ product, index = 0, className }: ProductCardProps)
                   <Star
                     key={i}
                     className={`h-4 w-4 ${
-                      i < Math.floor(product.rating)
+                      i < Math.floor(product.rating || 0)
                         ? 'text-yellow-400 fill-current'
                         : 'text-gray-300'
                     }`}
@@ -203,7 +194,7 @@ export const ProductCard = ({ product, index = 0, className }: ProductCardProps)
                 ))}
               </div>
               <span className="text-sm text-gray-600 dark:text-gray-400">
-                ({product.reviewCount})
+                ({product.review_count || 0})
               </span>
             </div>
           </div>
@@ -213,22 +204,18 @@ export const ProductCard = ({ product, index = 0, className }: ProductCardProps)
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
                 <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
-                  {product.price}€
+                  {product.price || 0}€
                 </span>
-                {product.originalPrice && (
-                  <span className="text-sm text-gray-500 line-through">
-                    {product.originalPrice}€
-                  </span>
-                )}
+                {/* Pas de prix original pour le moment */}
               </div>
             </div>
             <Button 
-              variant={product.inStock ? "default" : "secondary"} 
+              variant={(product.stock_quantity || 0) > 0 ? "default" : "secondary"} 
               size="sm"
-              disabled={!product.inStock}
+              disabled={(product.stock_quantity || 0) === 0}
               onClick={handleAddToCart}
             >
-              {product.inStock ? "Ajouter" : "Rupture"}
+              {(product.stock_quantity || 0) > 0 ? "Ajouter" : "Rupture"}
             </Button>
           </div>
         </CardContent>
