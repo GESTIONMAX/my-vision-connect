@@ -35,6 +35,7 @@ import CollectionDetail from "./pages/CollectionDetail";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import Contact from "./pages/Contact";
+import AdminSync from "./pages/AdminSync";
 
 const queryClient = new QueryClient();
 
@@ -75,7 +76,7 @@ const App = () => (
                         <Welcome />
                       </ProtectedRoute>
                     } />
-                    
+                    <Route path="/admin/sync" element={<AdminSync />} />
                     {/* Account Routes - Protected */}
                     <Route path="/account" element={
                       <ProtectedRoute>
@@ -89,7 +90,6 @@ const App = () => (
                       <Route path="favorites" element={<FavoritesPage />} />
                       <Route path="settings" element={<SettingsPage />} />
                     </Route>
-                    
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                     <Route path="*" element={<NotFound />} />
                   </Routes>
