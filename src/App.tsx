@@ -31,11 +31,11 @@ import Auth from "./pages/Auth";
 import Welcome from "./pages/Welcome";
 import NotFound from "./pages/NotFound";
 import { Checkout } from "./pages/Checkout";
-import ChameloCatalog from "./pages/ChameloCatalog";
-import ChameleoProductDetail from "./pages/ChameleoProductDetail";
-import ChameloDashboard from "./components/ChameloDashboard";
+import CollectionDetail from "./pages/CollectionDetail";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import Contact from "./pages/Contact";
+import AdminSync from "./pages/AdminSync";
 
 const queryClient = new QueryClient();
 
@@ -53,6 +53,7 @@ const App = () => (
                 <main className="flex-1">
                   <Routes>
                     <Route path="/" element={<Navigate to="/shop" replace />} />
+                    <Route path="/products" element={<Navigate to="/shop" replace />} />
                     <Route path="/b2c" element={<B2C />} />
                     <Route path="/b2b" element={<B2B />} />
                     <Route path="/b2b/catalog" element={<B2BCatalog />} />
@@ -60,23 +61,22 @@ const App = () => (
                     <Route path="/b2b/support" element={<B2BSupport />} />
                     <Route path="/shop" element={<Shop />} />
                     <Route path="/notre-selection" element={<NotreSelection />} />
-                    <Route path="/products/:slug" element={<ProductDetail />} />
+                    <Route path="/produit/:slug" element={<ProductDetail />} />
                     <Route path="/technology" element={<Technology />} />
                     <Route path="/faq" element={<FAQ />} />
+                    <Route path="/contact" element={<Contact />} />
                     <Route path="/careers" element={<Careers />} />
                     <Route path="/blog" element={<Blog />} />
                     <Route path="/blog/:slug" element={<BlogPost />} />
                     <Route path="/auth" element={<Auth />} />
                     <Route path="/checkout" element={<Checkout />} />
-                    <Route path="/chamelo-catalog" element={<ChameloCatalog />} />
-                    <Route path="/chamelo-catalog/product/:handle" element={<ChameleoProductDetail />} />
-                    <Route path="/chamelo-dashboard" element={<ChameloDashboard />} />
+                    <Route path="/collection/:collectionSlug" element={<CollectionDetail />} />
                     <Route path="/welcome" element={
                       <ProtectedRoute>
                         <Welcome />
                       </ProtectedRoute>
                     } />
-                    
+                    <Route path="/admin/sync" element={<AdminSync />} />
                     {/* Account Routes - Protected */}
                     <Route path="/account" element={
                       <ProtectedRoute>
@@ -90,7 +90,6 @@ const App = () => (
                       <Route path="favorites" element={<FavoritesPage />} />
                       <Route path="settings" element={<SettingsPage />} />
                     </Route>
-                    
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                     <Route path="*" element={<NotFound />} />
                   </Routes>

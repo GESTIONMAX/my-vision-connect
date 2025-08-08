@@ -4,9 +4,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface ProductSpecificationsProps {
   specifications: Record<string, string>;
+  productSlug?: string;
 }
 
 export const ProductSpecifications = ({ specifications }: ProductSpecificationsProps) => {
+  // Les spécifications sont déjà parsées dans useProducts, on les utilise directement
+  if (Object.keys(specifications).length === 0) {
+    return null;
+  }
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -21,9 +26,9 @@ export const ProductSpecifications = ({ specifications }: ProductSpecificationsP
         <CardContent>
           <div className="grid md:grid-cols-2 gap-6">
             {Object.entries(specifications).map(([key, value]) => (
-              <div key={key} className="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-800">
-                <span className="font-medium">{key}</span>
-                <span className="text-gray-600 dark:text-gray-400">{value}</span>
+              <div key={key} className="flex justify-between items-start py-3 border-b border-border/50">
+                <span className="font-medium text-foreground flex-1">{key}</span>
+                <span className="text-muted-foreground text-sm text-right flex-1">{value}</span>
               </div>
             ))}
           </div>

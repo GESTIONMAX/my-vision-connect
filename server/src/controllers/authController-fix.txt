@@ -1,0 +1,43 @@
+/**
+ * CODE CORRECTIF POUR LA FONCTION LOGIN
+ * 
+ * À insérer dans la fonction login pour résoudre l'erreur P2002 (conflit d'unicité des refresh tokens)
+ * 
+ * À placer juste avant la création du nouveau refresh token
+ */
+
+// Supprimer les anciens refresh tokens pour cet utilisateur
+await prisma.refreshToken.deleteMany({
+  where: {
+    userId: user.id
+  }
+});
+
+/**
+ * Le reste du code existant reste inchangé :
+ * 
+ * await prisma.refreshToken.create({
+ *   data: {
+ *     token: refreshToken,
+ *     userId: user.id,
+ *     expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 jours
+ *   }
+ * });
+ */
+
+/**
+ * EXPLICATION DU PROBLÈME ET DE LA SOLUTION
+ * 
+ * Problème : 
+ * Erreur P2002 (violation de contrainte d'unicité) sur le modèle RefreshToken
+ * Cela se produit car le schéma Prisma définit probablement 'token' comme champ unique,
+ * mais lors de la reconnexion d'un utilisateur qui a déjà un refresh token dans la base,
+ * nous essayons d'en créer un nouveau sans supprimer l'ancien.
+ * 
+ * Solution :
+ * Avant de créer un nouveau refresh token, nous supprimons tous les tokens existants
+ * pour cet utilisateur. Cela garantit que nous n'aurons pas de conflit d'unicité.
+ * 
+ * Cette approche est également recommandée pour la sécurité, car elle invalide
+ * automatiquement toutes les sessions précédentes lorsqu'un utilisateur se reconnecte.
+ */

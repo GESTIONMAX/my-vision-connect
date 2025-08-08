@@ -1,44 +1,69 @@
 version: '3.8'
 
 services:
+  # Service pour le frontend React/Vite
   frontend:
     build:
-      context: .
+      context: ./client
       dockerfile: Dockerfile
-      args:
-        - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
-        - VITE_SUPABASE_KEY=${VITE_SUPABASE_KEY}
-        - WORDPRESS_CLIENT_KEY=${WORDPRESS_CLIENT_KEY}
-        - WORDPRESS_CLIENT_SECRET=${WORDPRESS_CLIENT_SECRET}
-        - WOOCOMMERCE_CONSUMER_KEY=${WOOCOMMERCE_CONSUMER_KEY}
+    image: my-vision-connect-frontend
+    container_name: my-vision-connect-frontend
     restart: unless-stopped
-    # Configuration pour un frontend statique (React/Vite)
-    # Pas besoin d'exposer un port car Coolify s'en charge
+    environment:
+      - VITE_API_URL=http://backend:5000/api # URL de l'API interne au réseau Docker
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${COOLIFY_SERVICE_NAME}.rule=Host(`${DOMAIN:-$COOLIFY_DOMAIN}`)"
-      - "traefik.http.routers.${COOLIFY_SERVICE_NAME}.entrypoints=websecure"
-      - "traefik.http.routers.${COOLIFY_SERVICE_NAME}.tls=true"
-      - "traefik.http.services.${COOLIFY_SERVICE_NAME}.loadbalancer.server.port=80"
-      # Nécessaire pour les SPA React avec routing côté client
-      - "traefik.http.middlewares.${COOLIFY_SERVICE_NAME}-spa.errors.status=404"
-      - "traefik.http.middlewares.${COOLIFY_SERVICE_NAME}-spa.errors.service=${COOLIFY_SERVICE_NAME}"
-      - "traefik.http.middlewares.${COOLIFY_SERVICE_NAME}-spa.errors.query=/{path:.*}"
-      - "traefik.http.routers.${COOLIFY_SERVICE_NAME}.middlewares=${COOLIFY_SERVICE_NAME}-spa"
+      - "traefik.http.routers.frontend.rule=Host(`${FRONTEND_DOMAIN:-my-vision-connect.gestionmax.fr}`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls=true"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
     networks:
-      - web
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 5s
+      - app-network
+    depends_on:
+      - backend
+
+  # Service pour le backend Express/Prisma
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    image: my-vision-connect-backend
+    container_name: my-vision-connect-backend
+    restart: unless-stopped
     environment:
-      # Variables d'environnement pour le conteneur (runtime)
       - NODE_ENV=production
-      - TZ=Europe/Paris
+      - PORT=5000
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - FRONTEND_URL=https://${FRONTEND_DOMAIN:-my-vision-connect.gestionmax.fr}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`api.${FRONTEND_DOMAIN:-my-vision-connect.gestionmax.fr}`)"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.routers.backend.tls=true"
+      - "traefik.http.services.backend.loadbalancer.server.port=5000"
+    networks:
+      - app-network
+    depends_on:
+      - postgres
+
+  # Service pour la base de données PostgreSQL
+  postgres:
+    image: postgres:14-alpine
+    container_name: my-vision-connect-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_DB=${POSTGRES_DB:-my_vision_connect}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
 
 networks:
-  web:
-    external: ${COOLIFY_NETWORK_EXTERNAL:-false}
-    name: ${COOLIFY_NETWORK_NAME:-coolify_user_network}
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres-data:

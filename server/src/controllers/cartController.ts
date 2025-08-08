@@ -17,11 +17,13 @@ export const getCartByUser = async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'Utilisateur non trouvé' });
     }
 
-    // Rechercher le panier actif de l'utilisateur
+    // Rechercher le panier le plus récent de l'utilisateur
     let cart = await prisma.cart.findFirst({
       where: { 
-        userId,
-        active: true
+        userId
+      },
+      orderBy: {
+        createdAt: 'desc'
       },
       include: {
         items: {
@@ -32,22 +34,27 @@ export const getCartByUser = async (req: Request, res: Response) => {
       }
     });
 
-    // Si aucun panier actif n'existe, en créer un nouveau
+    // Si aucun panier n'existe, en créer un nouveau
     if (!cart) {
       cart = await prisma.cart.create({
         data: {
-          userId,
-          active: true
+          userId
         },
         include: {
-          items: true
+          items: {
+            include: {
+              product: true
+            }
+          }
         }
       });
     }
 
     res.json(cart);
+    return;
   } catch (error: any) {
     res.status(500).json({ message: error.message });
+    return;
   }
 };
 
@@ -67,11 +74,13 @@ export const createCart = async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'Utilisateur non trouvé' });
     }
 
-    // Vérifier si un panier actif existe déjà
+    // Vérifier si un panier récent existe déjà
     const existingCart = await prisma.cart.findFirst({
       where: {
-        userId,
-        active: true
+        userId
+      },
+      orderBy: {
+        createdAt: 'desc'
       }
     });
 
@@ -85,14 +94,15 @@ export const createCart = async (req: Request, res: Response) => {
     // Créer un nouveau panier
     const cart = await prisma.cart.create({
       data: {
-        userId,
-        active: true
+        userId
       }
     });
 
     res.status(201).json(cart);
+    return;
   } catch (error: any) {
     res.status(400).json({ message: error.message });
+    return;
   }
 };
 
@@ -158,8 +168,10 @@ export const addItemToCart = async (req: Request, res: Response) => {
     });
 
     res.status(201).json(cartItem);
+    return;
   } catch (error: any) {
     res.status(400).json({ message: error.message });
+    return;
   }
 };
 
@@ -206,8 +218,10 @@ export const updateCartItem = async (req: Request, res: Response) => {
     });
 
     res.json(updatedItem);
+    return;
   } catch (error: any) {
     res.status(400).json({ message: error.message });
+    return;
   }
 };
 
@@ -245,8 +259,10 @@ export const removeCartItem = async (req: Request, res: Response) => {
     });
 
     res.json({ message: 'Item supprimé du panier' });
+    return;
   } catch (error: any) {
     res.status(500).json({ message: error.message });
+    return;
   }
 };
 
@@ -272,8 +288,10 @@ export const clearCart = async (req: Request, res: Response) => {
     });
 
     res.json({ message: 'Panier vidé' });
+    return;
   } catch (error: any) {
     res.status(500).json({ message: error.message });
+    return;
   }
 };
 
@@ -311,7 +329,9 @@ export const getCartTotal = async (req: Request, res: Response) => {
       itemCount: cart.items.reduce((sum, item) => sum + item.quantity, 0),
       items: cart.items
     });
+    return;
   } catch (error: any) {
     res.status(500).json({ message: error.message });
+    return;
   }
 };

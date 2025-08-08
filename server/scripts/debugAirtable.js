@@ -2,7 +2,7 @@ require('dotenv').config({ path: '../.env' });
 const Airtable = require('airtable');
 
 // Configuration Airtable avec le PAT
-const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY || 'pat6Ipg6brWdZAG2K.a78ab830b351b7400dfd1144d92b96caf38f19105e97cfce3818de0809897759';
+const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY || 'ppat6Ipg6brWdZAG2K.a78ab830b351b7400dfd1144d92b96caf38f19105e97cfce3818de0809897759';
 const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID || 'appVH6EitfYVkeG9S';
 
 // Initialiser Airtable

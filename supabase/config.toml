@@ -29,3 +29,6 @@ verify_jwt = false
 
 [functions.wordpress-auth]
 verify_jwt = false
+
+[functions.airtable-sync]
+verify_jwt = false

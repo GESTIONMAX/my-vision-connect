@@ -48,12 +48,14 @@ const Shop = () => {
           </h1>
         </div>
         
-        <CategoryTabs 
-          selectedCategory={selectedCategory}
-          onCategoryChange={setSelectedCategory}
-        />
+        <div className="mb-8">
+          <CategoryTabs 
+            selectedCategory={selectedCategory}
+            onCategoryChange={setSelectedCategory}
+          />
+        </div>
         
-        <div className="flex flex-col lg:flex-row gap-8 mt-8">
+        <div className="flex flex-col lg:flex-row gap-8">
           <ProductsGrid
             selectedCategory={selectedCategory}
             searchQuery=""

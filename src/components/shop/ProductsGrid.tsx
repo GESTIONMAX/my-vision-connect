@@ -1,6 +1,6 @@
 
 import { useProducts } from '@/hooks/useProducts';
-import { ProductCard } from '@/components/ProductCard';
+import { EnhancedProductCard } from '@/components/EnhancedProductCard';
 import { SportSection } from './SportSection';
 import { useSubCollections } from '@/hooks/useSubCollections';
 
@@ -31,10 +31,7 @@ export const ProductsGrid = ({
   const { data: products, isLoading, error } = useProducts();
   const { data: subCollections = [] } = useSubCollections();
 
-  // Show specialized Sport section for sport category
-  if (selectedCategory === 'sport') {
-    return <SportSection />;
-  }
+  // Remove specialized Sport section to show all products in grid format
 
   if (isLoading) {
     return (
@@ -76,6 +73,11 @@ export const ProductsGrid = ({
 
   // Filter products based on criteria
   const filteredProducts = products.filter(product => {
+    // Add null/undefined checks
+    if (!product) {
+      return false;
+    }
+
     // Category filter with new hierarchical structure
     if (selectedCategory !== 'all') {
       if (selectedCategory === 'best-sellers' && !product.isPopular) {
@@ -83,18 +85,55 @@ export const ProductsGrid = ({
       }
       
       // Check if selectedCategory is a main category or sub-collection
-      const parentCategory = getParentCategory(product.collection);
+      const productCollection = product.collection || ''; // collection vient de collection_slug dans la DB
       const isMainCategory = ['sport', 'lifestyle', 'prismatic'].includes(selectedCategory);
       
       if (isMainCategory) {
-        // Filter by main category
-        if (parentCategory !== selectedCategory) {
+        // Filter by main category using collection_slug
+        if (productCollection !== selectedCategory) {
           return false;
         }
       } else {
-        // Filter by specific sub-collection
-        if (selectedCategory !== 'best-sellers' && product.collection !== selectedCategory) {
-          return false;
+        // Filter by specific sub-collection or product name patterns
+        if (selectedCategory !== 'best-sellers') {
+          // Pour les sous-collections spécifiques comme 'shields', 'music-shield', etc.
+          const productName = product.name.toLowerCase();
+          
+          // Mapping pour les modèles de la gamme sport
+          if (selectedCategory === 'shields' && !(productName.includes('shield') && !productName.includes('music'))) {
+            return false;
+          }
+          if (selectedCategory === 'music-shield' && !productName.includes('music shield')) {
+            return false;
+          }
+          if (selectedCategory === 'falcon' && !productName.includes('falcon')) {
+            return false;
+          }
+          if (selectedCategory === 'bouvet' && !productName.includes('bouvet')) {
+            return false;
+          }
+          
+          // Mapping pour les modèles lifestyle
+          if (selectedCategory === 'prima' && !productName.includes('prima')) {
+            return false;
+          }
+          if (selectedCategory === 'dark-classic' && !productName.includes('dark classic')) {
+            return false;
+          }
+          if (selectedCategory === 'dragon' && !productName.includes('dragon')) {
+            return false;
+          }
+          if (selectedCategory === 'veil' && !productName.includes('veil')) {
+            return false;
+          }
+          
+          // Mapping pour les modèles prismatic
+          if (selectedCategory === 'euphoria' && !productName.includes('euphoria')) {
+            return false;
+          }
+          if (selectedCategory === 'auria' && !productName.includes('auria')) {
+            return false;
+          }
         }
       }
     }
@@ -170,9 +209,9 @@ export const ProductsGrid = ({
 
   return (
     <div className="flex-1">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {sortedProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        {sortedProducts.map((product, index) => (
+          <EnhancedProductCard key={product.id} product={product} index={index} />
         ))}
       </div>
     </div>

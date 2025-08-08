@@ -1,10 +1,7 @@
 
 import React from 'react'
 
-interface Profile {
-  first_name: string | null;
-  user_type: 'customer' | 'business' | 'admin' | 'partner';
-}
+import { Profile } from '@/types/auth';
 
 interface WelcomeHeaderProps {
   profile: Profile | null;

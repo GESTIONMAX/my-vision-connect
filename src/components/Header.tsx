@@ -18,16 +18,14 @@ export const Header = () => {
   const navigation = isB2B ? [
     { name: 'Accueil Pro', href: '/b2b' },
     { name: 'Catalogue Pro', href: '/b2b/catalog' },
-    { name: 'Catalogue Chamelo', href: '/chamelo-catalog' },
-    { name: 'Dashboard Chamelo', href: '/chamelo-dashboard' },
+    { name: 'Shop', href: '/shop' },
     { name: 'Devenir Partenaire', href: '/b2b/partnership' },
     { name: 'Support', href: '/b2b/support' },
   ] : [
-    { name: 'Catalogue Chamelo', href: '/chamelo-catalog' },
+    { name: 'Shop', href: '/shop' },
     { name: 'Blog', href: '/blog' },
-    { name: 'Technologie', href: '/technology' },
     { name: 'FAQ', href: '/faq' },
-    { name: 'Carrières', href: '/careers' },
+    { name: 'Contact', href: '/contact' },
   ];
 
   return (
@@ -43,7 +41,7 @@ export const Header = () => {
               <span className="text-white font-bold text-sm">EG</span>
             </div>
             <span className="font-bold text-xl text-gray-900 dark:text-white">
-              {isB2B ? 'EUROGLOBAL PRO' : 'EUROGLOBAL'}
+              {isB2B ? 'My Vision Connect PRO' : 'My Vision Connect'}
             </span>
           </Link>
 
@@ -127,8 +125,7 @@ export const Header = () => {
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  {item.name.includes('Catalogue Chamelo') ? '🕶️ ' + item.name : item.name}
-                  {item.name.includes('Dashboard Chamelo') ? '📊 ' + item.name : ''}
+                  {item.name}
                 </Link>
               ))}
               

@@ -11,6 +11,9 @@ export interface CartItem {
   reference: string;
   category: string;
   originalPrice?: number;
+  // Nouvelles propriétés pour la configuration
+  variantId?: string;
+  selectedOptions?: string[];
 }
 
 interface CartState {

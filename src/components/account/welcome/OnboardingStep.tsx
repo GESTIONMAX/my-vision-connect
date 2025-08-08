@@ -11,13 +11,7 @@ import {
   Package,
   CheckCircle
 } from 'lucide-react'
-
-interface Profile {
-  first_name: string | null;
-  last_name: string | null;
-  avatar_url: string | null;
-  phone: string | null;
-}
+import { Profile } from '@/types/auth';
 
 interface OnboardingStepProps {
   profile: Profile | null;

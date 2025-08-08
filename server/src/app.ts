@@ -10,6 +10,10 @@ import categoryRoutes from './routes/categoryRoutes';
 import userRoutes from './routes/userRoutes';
 import cartRoutes from './routes/cartRoutes';
 import orderRoutes from './routes/orderRoutes';
+import newRoutes from './routes/index';
+import authRoutes from './routes/authRoutes';
+import favoriteRoutes from './routes/favoriteRoutes';
+import productConfigRoutes from './routes/productConfigRoutes';
 
 // Configuration de l'environnement
 dotenv.config();
@@ -31,14 +35,18 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/carts', cartRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/new', newRoutes); // Nouvelles routes pour collections, produits, etc.
+app.use('/api/auth', authRoutes); // Routes d'authentification
+app.use('/api/favorites', favoriteRoutes); // Routes de favoris
+app.use('/api/product-config', productConfigRoutes); // Routes de configuration de produits
 
 // Route par défaut
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
   res.json({ message: 'My Vision Connect API' });
 });
 
 // Gestion des erreurs
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error(err.stack);
   res.status(500).json({
     message: 'Une erreur est survenue',
