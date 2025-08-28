@@ -67,8 +67,7 @@ export const Footer: React.FC = () => {
               <div className="h-1 w-10 bg-blue-400 rounded-full"></div>
             </div>
             <ul className="space-y-3">
-              <li><Link to="/" className="text-blue-100 hover:text-white hover:translate-x-1 flex items-center transition-all"><ArrowRight className="mr-2 h-4 w-4" />Accueil</Link></li>
-              <li><Link to="/shop" className="text-blue-100 hover:text-white hover:translate-x-1 flex items-center transition-all"><ArrowRight className="mr-2 h-4 w-4" />Boutique</Link></li>
+              <li><Link to="/shop" className="text-blue-100 hover:text-white hover:translate-x-1 flex items-center transition-all"><ArrowRight className="mr-2 h-4 w-4" />Shop</Link></li>
               <li><Link to="/about" className="text-blue-100 hover:text-white hover:translate-x-1 flex items-center transition-all"><ArrowRight className="mr-2 h-4 w-4" />À propos</Link></li>
               <li><Link to="/contact" className="text-blue-100 hover:text-white hover:translate-x-1 flex items-center transition-all"><ArrowRight className="mr-2 h-4 w-4" />Contact</Link></li>
               <li><Link to="/blog" className="text-blue-100 hover:text-white hover:translate-x-1 flex items-center transition-all"><ArrowRight className="mr-2 h-4 w-4" />Blog</Link></li>

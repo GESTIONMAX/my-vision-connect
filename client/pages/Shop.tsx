@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ShopHeader } from '../components/shop/ShopHeader';
+import { HeroSection } from '../components/shop/HeroSection';
 import { CategoryTabs } from '../components/shop/CategoryTabs';
 import { ProductCard } from '../components/shop/ProductCard';
 import { ProductFilters } from '../components/shop/ProductFilters';
@@ -194,14 +195,19 @@ const Shop = () => {
   const currentPage = produitsData.page || pagination.page;
   
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* En-tête et navigation */}
-      <div className="container mx-auto px-4 py-8">
-        {/* Fil d'ariane et titre */}
+    <div className="min-h-screen bg-white">
+      {/* Section Hero ajoutée ici */}
+      <HeroSection />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* En-tête de la boutique */}
         <ShopHeader 
-          title="Shop All" 
-          breadcrumbs={[{label: 'HOME', url: '/'}, {label: 'SHOP ALL'}]}
-          promotionalText="Offre spéciale ! Livraison gratuite pour toute commande supérieure à 150€"
+          title="Notre Collection"
+          breadcrumbs={[
+            { label: 'Accueil', url: '/' },
+            { label: 'Boutique' }
+          ]}
+          className="mb-8"
         />
         
         {/* Onglets de catégories */}

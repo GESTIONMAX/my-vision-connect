@@ -1,6 +1,6 @@
 import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // Import des composants et pages
 import Shop from "./pages/Shop";
@@ -29,14 +29,8 @@ const App = () => (
         <Header />
         <main className="flex-1 p-4 pt-6">
           <Routes>
-            {/* Page d'accueil temporaire */}
-            <Route path="/" element={
-              <div className="mb-4">
-                <h2 className="text-xl font-bold">Diagnostic du projet</h2>
-                <p>Environnement de développement en cours de configuration...</p>
-                <p>Cette page est une version temporaire pendant que nous résolvons les problèmes d'importation.</p>
-              </div>
-            } />
+            {/* Page d'accueil */}
+            <Route path="/" element={<Shop />} />
             {/* Routes restaurées progressivement */}
             <Route path="/dashboard" element={<ChameloDashboard />} />
             <Route path="/b2c" element={<B2C />} />
