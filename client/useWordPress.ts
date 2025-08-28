@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { wordpressApi, WordPressApiParams } from '@/services/wordpressApi';
-import { WORDPRESS_CONFIG } from '@/config/wordpress';
+import { wordpressApi, WordPressApiParams } from './services/wordpressApi';
+import { WORDPRESS_CONFIG } from './config/wordpress';
 
 // Hook principal pour récupérer les posts
 export const useWordPressPosts = (params?: WordPressApiParams) => {
