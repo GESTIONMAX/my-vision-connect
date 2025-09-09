@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
 
 // Créer un client Supabase spécifique pour nos tables personnalisées
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;

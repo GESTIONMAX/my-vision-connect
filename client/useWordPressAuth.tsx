@@ -105,9 +105,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { supabase } = await import('@/integrations/supabase/client');
       
-      const { data, error } = await supabase.functions.invoke('wordpress-auth', {
         body: { 
           action: 'login',
           email,
@@ -166,9 +164,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     companySector?: string;
   }) => {
     try {
-      const { supabase } = await import('@/integrations/supabase/client');
       
-      const { data, error } = await supabase.functions.invoke('wordpress-auth', {
         body: { 
           action: 'register',
           ...userData
@@ -209,9 +205,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (!user) return { error: 'Non authentifié' };
 
     try {
-      const { supabase } = await import('@/integrations/supabase/client');
       
-      const { data, error } = await supabase.functions.invoke('wordpress-auth', {
         body: { 
           action: 'update_profile',
           user_id: user.id,

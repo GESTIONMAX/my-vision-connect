@@ -1,7 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
 import { Product } from '@/hooks/useProducts';
-import { Database } from '@/types/supabase';
 
 // Typage pour les tables Supabase
 type BestsellerRow = Database['public']['Tables']['bestsellers']['Row'];
@@ -26,7 +24,6 @@ export const useBestsellers = () => {
     queryKey: ['bestsellers'],
     queryFn: async () => {
       // On type explicitement la table comme étant une vue
-      const { data, error } = await supabase
         .from('view_bestsellers')
         .select('*')
         .order('rank') as { data: BestsellerProductView[] | null, error: any };
@@ -47,7 +44,6 @@ export const useBestsellers = () => {
  */
 export const checkIsBestseller = async (productId: string): Promise<boolean> => {
   // On type explicitement la table
-  const { data, error } = await supabase
     .from('bestsellers')
     .select('id')
     .eq('product_id', productId)
@@ -73,7 +69,6 @@ export const addProductToBestsellers = async (productId: string, rank: number) =
     rank
   };
   
-  return supabase
     .from('bestsellers')
     .insert(newBestseller) as { data: BestsellerRow | null, error: any };
 };
@@ -84,7 +79,6 @@ export const addProductToBestsellers = async (productId: string, rank: number) =
  * @returns Le résultat de l'opération
  */
 export const removeProductFromBestsellers = async (productId: string) => {
-  return supabase
     .from('bestsellers')
     .delete()
     .eq('product_id', productId) as { data: BestsellerRow | null, error: any };

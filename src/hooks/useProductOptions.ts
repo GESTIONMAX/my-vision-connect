@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
 
 export interface ProductOption {
   id: string;
@@ -18,7 +17,6 @@ export const useProductOptions = (productId: string) => {
   return useQuery({
     queryKey: ['product_options', productId],
     queryFn: async () => {
-      const { data, error } = await supabase
         .from('product_options')
         .select('*')
         .eq('product_id', productId)
@@ -40,7 +38,6 @@ export const useProductOptionsByType = (productId: string, optionType: string) =
   return useQuery({
     queryKey: ['product_options', productId, optionType],
     queryFn: async () => {
-      const { data, error } = await supabase
         .from('product_options')
         .select('*')
         .eq('product_id', productId)
@@ -62,7 +59,6 @@ export const useDefaultOptions = (productId: string) => {
   return useQuery({
     queryKey: ['default_options', productId],
     queryFn: async () => {
-      const { data, error } = await supabase
         .from('product_options')
         .select('*')
         .eq('product_id', productId)

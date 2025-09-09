@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { supabase, testSupabaseConnection } from './integrations/supabase/client';
 
 // Récupération de l'URL Supabase depuis les variables d'environnement
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "http://127.0.0.1:54323";

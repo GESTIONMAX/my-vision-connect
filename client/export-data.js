@@ -5,7 +5,6 @@
  * vers des fichiers JSON qui pourront être importés dans votre nouvelle instance.
  */
 import { config } from 'dotenv';
-import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -22,7 +21,6 @@ const OLD_SUPABASE_URL = process.env.OLD_SUPABASE_URL;
 const OLD_SUPABASE_KEY = process.env.OLD_SUPABASE_SERVICE_KEY;
 
 // Créer le client Supabase
-const supabase = createClient(OLD_SUPABASE_URL, OLD_SUPABASE_KEY);
 
 // Répertoire pour sauvegarder les données
 const EXPORT_DIR = path.join(__dirname, 'exported-data');
@@ -40,7 +38,6 @@ async function exportTable(tableName) {
   console.log(`Exportation de la table: ${tableName}`);
   
   try {
-    const { data, error } = await supabase
       .from(tableName)
       .select('*');
     

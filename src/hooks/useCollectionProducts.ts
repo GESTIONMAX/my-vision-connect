@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
 import { Product } from './useProducts';
 
 export const useCollectionProducts = (collectionSlug: string) => {
@@ -7,7 +6,6 @@ export const useCollectionProducts = (collectionSlug: string) => {
     queryKey: ['collection-products', collectionSlug],
     queryFn: async () => {
       // Query products through the product_collections junction table
-      const { data, error } = await supabase
         .from('products')
         .select(`
           *,

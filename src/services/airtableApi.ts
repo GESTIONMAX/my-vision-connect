@@ -1,4 +1,3 @@
-import { supabase } from '@/integrations/supabase/client';
 
 export interface AirtableSyncResult {
   ok: boolean;
@@ -17,7 +16,6 @@ export async function syncCollectionsFromAirtable(params?: {
   const tableId = params?.tableId || 'tblpZCp7XrWdtyzKJ';
   const viewId = params?.viewId || 'viw6w93yfH0NMJTqS';
 
-  const { data, error } = await supabase.functions.invoke('airtable-sync', {
     body: {
       action: 'sync_collections',
       baseId,

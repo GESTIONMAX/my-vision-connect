@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
 
 export interface ProductVariant {
   id: string;
@@ -20,7 +19,6 @@ export const useProductVariants = (productSlug: string) => {
       if (!productSlug) throw new Error('Product slug is required');
       
       // D'abord, récupérer le produit par son slug
-      const { data: products, error: productError } = await supabase
         .from('products')
         .select('id, name')
         .eq('is_active', true);
@@ -42,7 +40,6 @@ export const useProductVariants = (productSlug: string) => {
         throw new Error('Product not found');
       }
 
-      const { data, error } = await supabase
         .from('product_variants')
         .select('*')
         .eq('product_id', product.id)

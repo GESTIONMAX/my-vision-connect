@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
 
 export interface Product {
   id: string;
@@ -53,9 +52,7 @@ export interface ProductFilters {
 // Hook principal pour récupérer les produits depuis Supabase
 export const useProducts = (filters?: ProductFilters) => {
   return useQuery({
-    queryKey: ['supabase-products', filters],
     queryFn: async () => {
-      let query = supabase
         .from('products')
         .select(`
           *,
@@ -71,7 +68,6 @@ export const useProducts = (filters?: ProductFilters) => {
       // Application des filtres
       if (filters?.collection && filters.collection !== 'all') {
         // Pour les filtres de collection, on doit faire une jointure
-        query = supabase
           .from('products')
           .select(`
             *,
@@ -162,9 +158,7 @@ export const useProducts = (filters?: ProductFilters) => {
 // Hook pour un produit spécifique par ID
 export const useProduct = (id: string) => {
   return useQuery({
-    queryKey: ['supabase-product', id],
     queryFn: async () => {
-      const { data, error } = await supabase
         .from('products')
         .select(`
           *,

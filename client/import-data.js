@@ -4,7 +4,6 @@
  * Ce script permet d'importer les données exportées vers votre nouvelle instance Supabase.
  */
 import { config } from 'dotenv';
-import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -32,13 +31,9 @@ console.log('Import depuis le répertoire:', path.join(__dirname, 'exported-data
 // Configuration du client Supabase pour Supabase auto-hébergé via Coolify
 // Selon la configuration Docker Compose, Kong gère les routes API
 // et le chemin /rest/v1/ est utilisé pour l'API REST
-let supabaseUrl = NEW_SUPABASE_URL;
 // S'assurer que l'URL ne contient pas déjà /rest/v1
-if (!supabaseUrl.endsWith('/rest/v1') && !supabaseUrl.endsWith('/rest/v1/')) {
-  supabaseUrl = `${supabaseUrl}/rest/v1`;
 }
 
-console.log('URL de l\'API REST Supabase:', supabaseUrl);
 console.log('Clé API (préview):', NEW_SUPABASE_KEY.substring(0, 20) + '...');
 
 // Options spécifiques pour Kong API Gateway
@@ -62,7 +57,6 @@ const options = {
 
 // Créer le client Supabase avec la configuration spécifique à Kong
 console.log('Initialisation du client Supabase pour instance auto-hébergée...');
-const supabase = createClient(supabaseUrl, NEW_SUPABASE_KEY, options);
 console.log('Client Supabase initialisé');
 
 // Répertoire contenant les données exportées
@@ -92,7 +86,6 @@ async function importTable(tableName) {
     console.log(`Tentative de désactivation de RLS pour ${tableName}...`);
     try {
       // Désactiver temporairement RLS
-      const { error: rpcError } = await supabase.rpc('disable_rls');
       if (rpcError) {
         console.warn(`Impossible de désactiver RLS. L'erreur sera ignorée et l'import continuera:`, rpcError.message);
       } else {
@@ -111,7 +104,6 @@ async function importTable(tableName) {
       console.log(`Import du lot ${Math.floor(i/batchSize) + 1}/${Math.ceil(data.length/batchSize)} pour ${tableName}...`);
       
       try {
-        const { data: insertedData, error } = await supabase
           .from(tableName)
           .upsert(batch, { 
             onConflict: 'id',
@@ -135,7 +127,6 @@ async function importTable(tableName) {
     
     try {
       // Réactiver RLS
-      const { error: rpcError } = await supabase.rpc('enable_rls');
       if (rpcError) {
         console.warn(`Impossible de réactiver RLS:`, rpcError.message);
       } else {
@@ -163,7 +154,6 @@ async function importAllData() {
   // Tester la connexion avant de procéder
   try {
     console.log('Test de connexion à la nouvelle instance Supabase...');
-    const { data: versionData, error: versionError } = await supabase.rpc('version');
     
     if (versionError) {
       if (versionError.message.includes('relation') || versionError.message.includes('function')) {

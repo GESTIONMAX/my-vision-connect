@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
 
 export interface ProductVariant {
   id: string;
@@ -37,7 +36,6 @@ export const useProductVariants = (productSlug: string) => {
     queryFn: async () => {
       // Get variants for Music Shield products
       if (productSlug === 'music-shield' || productSlug === 'music-shield-standard') {
-        const { data, error } = await supabase
           .from('products')
           .select('*')
           .in('sku', ['music-shield', 'music-shield-standard'])

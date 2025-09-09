@@ -1,6 +1,4 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, Session } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Profile, SignUpData } from '@/types/auth';
 
@@ -33,14 +31,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     // Set up auth state listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         setUser(session?.user ?? null);
         
         if (session?.user) {
           // Fetch user profile
           setTimeout(async () => {
-            const { data: profileData } = await supabase
               .from('profiles')
               .select('*')
               .eq('id', session.user.id)
@@ -57,11 +53,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     );
 
     // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       if (session?.user) {
         // Fetch user profile
-        supabase
           .from('profiles')
           .select('*')
           .eq('id', session.user.id)
@@ -78,7 +72,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signInWithGoogle = async () => {
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: `${window.location.origin}/`,
@@ -107,7 +100,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
@@ -141,7 +133,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const redirectUrl = `${window.location.origin}/`;
       
-      const { data: authData, error } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
         options: {
@@ -177,7 +168,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           pricing_group: 'standard',
         };
 
-        await supabase
           .from('profiles')
           .insert(profileData);
 
@@ -201,7 +191,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signOut = async () => {
     try {
-      await supabase.auth.signOut();
       
       // Clear local state
       setUser(null);
@@ -231,7 +220,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return { error: new Error('User not authenticated') };
       }
 
-      const { error } = await supabase
         .from('profiles')
         .update({
           ...updates,

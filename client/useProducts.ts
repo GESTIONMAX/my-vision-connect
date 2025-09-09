@@ -1,6 +1,5 @@
 
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
 
 export interface Product {
   id: string;
@@ -49,9 +48,7 @@ export interface ProductFilters {
 // Hook principal pour récupérer les produits depuis Supabase
 export const useProducts = (filters?: ProductFilters) => {
   return useQuery({
-    queryKey: ['supabase-products', filters],
     queryFn: async () => {
-      let query = supabase
         .from('products')
         .select('*')
         .eq('is_active', true);
@@ -149,9 +146,7 @@ export const useProducts = (filters?: ProductFilters) => {
 // Hook pour un produit spécifique par slug/SKU
 export const useProduct = (slug: string) => {
   return useQuery({
-    queryKey: ['supabase-product', slug],
     queryFn: async () => {
-      const { data, error } = await supabase
         .from('products')
         .select('*')
         .or(`sku.eq.${slug},id.eq.${slug}`)

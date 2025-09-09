@@ -55,7 +55,6 @@ class CoCartAPI {
 
   private async makeRequest<T>(endpoint: string, params?: any, method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET'): Promise<T> {
     try {
-      const { supabase } = await import('@/integrations/supabase/client');
       
       const requestBody = {
         endpoint: `/cocart/v2${endpoint}`,
@@ -63,7 +62,6 @@ class CoCartAPI {
         method
       };
 
-      const { data, error } = await supabase.functions.invoke('cocart-api', {
         body: requestBody
       });
 

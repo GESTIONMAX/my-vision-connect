@@ -22,6 +22,7 @@ import B2BCatalog from "./pages/B2BCatalog";
 import B2BPartnership from "./pages/B2BPartnership";
 import B2BSupport from "./pages/B2BSupport";
 import Shop from "./pages/Shop";
+import Index from "./pages/Index";
 import NotreSelection from "./pages/NotreSelection";
 import ProductDetail from "./pages/ProductDetail";
 import Technology from "./pages/Technology";
@@ -52,7 +53,7 @@ const App = () => (
                 <Header />
                 <main className="flex-1">
                   <Routes>
-                    <Route path="/" element={<Navigate to="/shop" replace />} />
+                    <Route path="/" element={<Index />} />
                     <Route path="/products" element={<Navigate to="/shop" replace />} />
                     <Route path="/b2c" element={<B2C />} />
                     <Route path="/b2b" element={<B2B />} />

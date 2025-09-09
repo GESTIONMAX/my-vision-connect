@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../integrations/supabase/client';
-import { User } from '@supabase/supabase-js';
 
 // Interface pour la réponse de signInWithOtp incluant verificationId
 interface OtpResponseData {
@@ -45,7 +43,6 @@ export function useTwoFactorAuth() {
       setError(null);
       
       try {
-        const { data, error } = await supabase.auth.getSession();
         
         if (error) {
           throw error;
@@ -67,7 +64,6 @@ export function useTwoFactorAuth() {
     getSession();
     
     // Configurer un écouteur pour les changements d'authentification
-    const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (event === 'SIGNED_IN' && session?.user) {
           setUser(session.user);
@@ -90,7 +86,6 @@ export function useTwoFactorAuth() {
   // Fonction pour récupérer le profil utilisateur
   const fetchProfile = async (userId: string) => {
     try {
-      const { data, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', userId)
@@ -121,7 +116,6 @@ export function useTwoFactorAuth() {
       }
       
       // Inscription avec email/password
-      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
         phone,
@@ -152,7 +146,6 @@ export function useTwoFactorAuth() {
           updated_at: new Date().toISOString()
         };
         
-        const { error: profileError } = await supabase
           .from('profiles')
           .insert(profileData);
         
@@ -211,7 +204,6 @@ export function useTwoFactorAuth() {
       }
       
       // Envoyer un OTP au numéro de téléphone
-      const { data, error } = await supabase.auth.signInWithOtp({
         phone
       }) as { data: OtpResponseData, error: null } | { data: null, error: Error };
       
@@ -252,7 +244,6 @@ export function useTwoFactorAuth() {
     
     try {
       // Vérifier le code OTP
-      const { data, error } = await supabase.auth.verifyOtp({
         phone,
         token,
         type: 'sms'
@@ -295,7 +286,6 @@ export function useTwoFactorAuth() {
     setError(null);
     
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
       });
@@ -333,7 +323,6 @@ export function useTwoFactorAuth() {
    */
   const signOut = async () => {
     try {
-      const { error } = await supabase.auth.signOut();
       
       if (error) {
         throw error;
@@ -364,7 +353,6 @@ export function useTwoFactorAuth() {
     }
     
     try {
-      const { error } = await supabase
         .from('profiles')
         .update({
           ...updates,
@@ -381,7 +369,6 @@ export function useTwoFactorAuth() {
       
       // Si le numéro de téléphone a été mis à jour, mettre à jour les métadonnées utilisateur
       if (updates.phone) {
-        await supabase.auth.updateUser({
           phone: updates.phone
         });
       }

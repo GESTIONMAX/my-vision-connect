@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
 import { Product } from './useProducts';
 
 /**
@@ -23,7 +22,6 @@ export const useProduct = (slug: string) => {
     queryFn: async () => {
       if (!slug) throw new Error('Slug is required');
       
-      const { data: products, error } = await supabase
         .from('products')
         .select(`
           *,
@@ -92,7 +90,6 @@ export const useProducts = () => {
   return useQuery({
     queryKey: ['products'],
     queryFn: async () => {
-      const { data, error } = await supabase
         .from('products')
         .select(`
           *,
@@ -154,7 +151,6 @@ export const useProductsByCollection = (collectionSlug: string) => {
   return useQuery({
     queryKey: ['products', 'collection', collectionSlug],
     queryFn: async () => {
-      const { data, error } = await supabase
         .from('products')
         .select(`
           *,

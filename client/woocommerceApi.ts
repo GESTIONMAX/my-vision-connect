@@ -117,7 +117,6 @@ class WooCommerceAPI {
 
   private async makeRequest<T>(endpoint: string, params?: any, method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET'): Promise<T> {
     try {
-      const { supabase } = await import('@/integrations/supabase/client');
       
       const requestBody = {
         endpoint: `/wc/v3${endpoint}`,
@@ -125,7 +124,6 @@ class WooCommerceAPI {
         method
       };
 
-      const { data, error } = await supabase.functions.invoke('woocommerce-api', {
         body: requestBody
       });
 

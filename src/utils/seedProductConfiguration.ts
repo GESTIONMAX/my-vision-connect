@@ -181,17 +181,13 @@ export const insertSampleData = async () => {
   // Cette fonction peut être utilisée avec le client Supabase pour insérer les données
   // Exemple d'utilisation:
   /*
-  import { supabase } from '@/integrations/supabase/client';
   
-  const { error: variantsError } = await supabase
     .from('product_variants')
     .insert(sampleProductVariants);
     
-  const { error: optionsError } = await supabase
     .from('product_options')
     .insert(sampleProductOptions);
     
-  const { error: specsError } = await supabase
     .from('product_specifications')
     .insert(sampleProductSpecifications);
   */

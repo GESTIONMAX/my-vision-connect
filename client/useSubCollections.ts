@@ -1,6 +1,5 @@
 
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
 
 export interface SubCollection {
   id: string;
@@ -20,7 +19,6 @@ export const useSubCollections = (parentSlug?: string) => {
     queryFn: async () => {
       try {
         // First try to query the sub_collections table directly
-        let query = supabase
           .from('sub_collections')
           .select('*')
           .eq('is_active', true)

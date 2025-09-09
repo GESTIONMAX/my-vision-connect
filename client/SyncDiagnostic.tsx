@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
 import { Loader2, AlertCircle, CheckCircle, RefreshCw } from 'lucide-react';
 import { chameleoApi } from '@/services/chameleoApi';
 import { useToast } from '@/components/ui/use-toast';
@@ -13,7 +12,6 @@ interface SyncStats {
   incompleteProducts: number;
 }
 
-const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
   import.meta.env.VITE_SUPABASE_KEY
 );
@@ -29,7 +27,6 @@ export const SyncDiagnostic = () => {
     setLoading(true);
     try {
       // Récupérer les dernières infos de synchronisation
-      const { data: lastSync } = await supabase
         .from('sync_audit')
         .select('*')
         .order('sync_time', { ascending: false })
@@ -39,27 +36,23 @@ export const SyncDiagnostic = () => {
       const shopifyProducts = JSON.parse(localStorage.getItem('chamelo_products') || '[]');
       
       // Compter les produits Supabase
-      const { data: supabaseProducts, error: productsError } = await supabase
         .from('chamelo_products')
         .select('id, title, image_url');
         
       if (productsError) throw productsError;
       
       // Compter les collections
-      const { data: collections, error: collectionsError } = await supabase
         .from('chamelo_collections')
         .select('id');
         
       if (collectionsError) throw collectionsError;
       
       // Compter les produits sans image
-      const incompleteProducts = supabaseProducts?.filter(p => !p.image_url).length || 0;
       
       setStats({
         lastSyncTime: lastSync?.[0]?.sync_time,
         lastStatus: lastSync?.[0]?.status,
         totalShopifyProducts: shopifyProducts.length,
-        totalSupabaseProducts: supabaseProducts?.length || 0,
         totalCollections: collections?.length || 0,
         incompleteProducts
       });

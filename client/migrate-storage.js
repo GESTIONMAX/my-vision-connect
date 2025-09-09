@@ -2,7 +2,6 @@
  * Script de migration des fichiers Storage pour Lovable
  */
 import { config } from 'dotenv';
-import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';

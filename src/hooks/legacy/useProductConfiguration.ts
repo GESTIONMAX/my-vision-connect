@@ -1,5 +1,4 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
 import { useState, useCallback } from 'react';
 
 export interface ProductConfiguration {
@@ -25,7 +24,6 @@ export const useProductConfigurations = (productId: string) => {
   return useQuery({
     queryKey: ['product_configurations', productId],
     queryFn: async () => {
-      const { data, error } = await supabase
         .from('product_configurations')
         .select('*')
         .eq('product_id', productId)
@@ -52,7 +50,6 @@ export const useCalculatePrice = () => {
       variantId?: string;
       optionIds?: string[];
     }) => {
-      const { data, error } = await supabase.rpc('calculate_configuration_price', {
         p_product_id: productId,
         p_variant_id: variantId || null,
         p_option_ids: optionIds || null,

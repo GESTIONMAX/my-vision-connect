@@ -1,7 +1,7 @@
 {
-  "name": "my-vision-connect",
+  "name": "mytechgear",
   "version": "1.0.0",
-  "description": "My Vision Connect - Monorepo pour frontend React et backend Express",
+  "description": "MyTechGear - Monorepo pour frontend React et backend Express",
   "private": true,
   "scripts": {
     "start:client": "cd client && npm run dev",

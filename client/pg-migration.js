@@ -28,10 +28,8 @@ const OLD_DB_CONFIG = {
 const NEW_DB_CONFIG = {
   // Configuration pour la nouvelle base PostgreSQL Supabase auto-hébergée
   // Remplacez ces valeurs par les informations correctes de votre instance auto-hébergée
-  host: process.env.NEW_PG_HOST || 'supabase-db', // Hostname du conteneur PostgreSQL
   port: process.env.NEW_PG_PORT || 5432,
   database: process.env.NEW_PG_DATABASE || 'postgres',
-  user: process.env.NEW_PG_USER || 'postgres', // Probablement 'supabase_admin' ou 'postgres' 
   password: process.env.NEW_PG_PASSWORD || process.env.SERVICE_PASSWORD_POSTGRES, // Mot de passe défini dans Coolify
   ssl: process.env.NEW_PG_SSL === 'true' ? { rejectUnauthorized: false } : false
 };

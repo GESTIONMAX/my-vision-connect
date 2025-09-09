@@ -1,5 +1,4 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { useToast } from './use-toast';
 
@@ -18,7 +17,6 @@ export const useFavorites = () => {
     queryFn: async () => {
       if (!user) return [];
       
-      const { data, error } = await supabase
         .from('user_favorites')
         .select('*')
         .eq('user_id', user.id.toString());
@@ -49,7 +47,6 @@ export const useAddToFavorites = () => {
         throw new Error('Vous devez être connecté pour ajouter aux favoris');
       }
 
-      const { data, error } = await supabase
         .from('user_favorites')
         .insert({
           user_id: user.id.toString(),
@@ -92,7 +89,6 @@ export const useRemoveFromFavorites = () => {
         throw new Error('Vous devez être connecté');
       }
 
-      const { error } = await supabase
         .from('user_favorites')
         .delete()
         .eq('user_id', user.id.toString())

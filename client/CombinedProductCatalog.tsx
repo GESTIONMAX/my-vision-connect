@@ -9,10 +9,8 @@ import { Product } from '@/hooks/useProducts';
 
 const CombinedProductCatalog = () => {
   const { products: chameleoProducts, collections, loading: chameleoLoading } = useChameleoData();
-  const { data: supabaseProducts = [], isLoading: supabaseLoading } = useProducts(); // Nouveau hook
   const [activeTab, setActiveTab] = useState('all');
 
-  const loading = chameleoLoading || supabaseLoading;
 
   const formatChameleoProduct = (product: ChameleoProduct): Product => ({
     id: `chamelo-${product.id}`,
@@ -46,7 +44,6 @@ const CombinedProductCatalog = () => {
 
   const chameleoOnlyProducts = chameleoProducts.map(formatChameleoProduct);
   const allProducts = [
-    ...supabaseProducts, // Utilisation des produits Supabase
     ...chameleoOnlyProducts
   ];
 
@@ -75,7 +72,6 @@ const CombinedProductCatalog = () => {
               Chamelo ({chameleoOnlyProducts.length})
             </TabsTrigger>
             <TabsTrigger value="local">
-              Nos Produits ({supabaseProducts.length})
             </TabsTrigger>
           </TabsList>
 
@@ -97,7 +93,6 @@ const CombinedProductCatalog = () => {
 
           <TabsContent value="local" className="mt-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {supabaseProducts.map(product => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>

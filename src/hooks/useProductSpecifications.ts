@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
 
 export interface ProductSpecification {
   product_id: string;
@@ -14,7 +13,6 @@ export const useProductSpecifications = (productId: string) => {
   return useQuery({
     queryKey: ['product_specifications', productId],
     queryFn: async () => {
-      const { data, error } = await supabase
         .from('product_specifications')
         .select('*')
         .eq('product_id', productId)

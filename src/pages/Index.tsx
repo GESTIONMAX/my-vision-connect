@@ -1,9 +1,9 @@
-
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { User, Building2, ShoppingBag, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SupabaseConnectionTest } from '@/components/SupabaseConnectionTest';
+import { ShopHero } from '@/components/shop/ShopHero';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -57,6 +57,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
+      <ShopHero />
+      
       <div className="container mx-auto px-4 py-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
