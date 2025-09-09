@@ -1,19 +1,29 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
   "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitAny": false,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
-    },
-    "noImplicitAny": false,
-    "noUnusedParameters": false,
-    "skipLibCheck": true,
-    "allowJs": true,
-    "noUnusedLocals": false,
-    "strictNullChecks": false
-  }
+      "@/*": ["./src/*", "./client/src/*"],
+      "@client/*": ["./client/src/*"],
+      "@server/*": ["./server/src/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "client/src/**/*.ts", "client/src/**/*.tsx", "server/src/**/*.ts"],
+  "references": [
+    { "path": "./client/tsconfig.json" },
+    { "path": "./server/tsconfig.json" }
+  ]
 }

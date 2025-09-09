@@ -1,4 +1,3 @@
-
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
@@ -6,9 +5,10 @@ import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from 'luc
 export const Footer = () => {
   const footerLinks = {
     Produits: [
-      { name: 'Lunettes Connectées', href: '/products/smart-glasses' },
-      { name: 'Teinte Électronique', href: '/products/electronic-tint' },
-      { name: 'Accessoires', href: '/products/accessories' },
+      { name: 'Lunettes Connectées', href: '/shop/smart-glasses' },
+      { name: 'Notre sélection', href: '/notre-selection' },
+      { name: 'Teinte Électronique', href: '/shop/electronic-tint' },
+      
       { name: 'Garantie', href: '/warranty' },
     ],
     Professionnels: [
@@ -48,7 +48,7 @@ export const Footer = () => {
               <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold">ETD</span>
               </div>
-              <span className="font-bold text-xl">EUROGLOBAL TRADING DISTRIBUTION</span>
+              <span className="font-bold text-xl">My Vision Connect</span>
             </Link>
             
             <p className="text-gray-400 mb-6 leading-relaxed">
@@ -96,7 +96,7 @@ export const Footer = () => {
         <div className="mt-12 pt-8 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6 text-sm text-gray-400 mb-4 md:mb-0">
-              <span>&copy; 2024 EUROGLOBAL TRADING DISTRIBUTION. Tous droits réservés.</span>
+              <span>&copy; 2024 My Vision Connect. Tous droits réservés.</span>
               <Link to="/privacy" className="hover:text-white transition-colors">
                 Politique de confidentialité
               </Link>

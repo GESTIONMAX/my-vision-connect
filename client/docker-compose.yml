@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+        - VITE_SUPABASE_KEY=${VITE_SUPABASE_KEY}
+        - WORDPRESS_CLIENT_KEY=${WORDPRESS_CLIENT_KEY}
+        - WORDPRESS_CLIENT_SECRET=${WORDPRESS_CLIENT_SECRET}
+        - WOOCOMMERCE_CONSUMER_KEY=${WOOCOMMERCE_CONSUMER_KEY}
+    restart: unless-stopped
+    # Configuration pour un frontend statique (React/Vite)
+    # Pas besoin d'exposer un port car Coolify s'en charge
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${COOLIFY_SERVICE_NAME}.rule=Host(`${DOMAIN:-$COOLIFY_DOMAIN}`)"
+      - "traefik.http.routers.${COOLIFY_SERVICE_NAME}.entrypoints=websecure"
+      - "traefik.http.routers.${COOLIFY_SERVICE_NAME}.tls=true"
+      - "traefik.http.services.${COOLIFY_SERVICE_NAME}.loadbalancer.server.port=80"
+      # Nécessaire pour les SPA React avec routing côté client
+      - "traefik.http.middlewares.${COOLIFY_SERVICE_NAME}-spa.errors.status=404"
+      - "traefik.http.middlewares.${COOLIFY_SERVICE_NAME}-spa.errors.service=${COOLIFY_SERVICE_NAME}"
+      - "traefik.http.middlewares.${COOLIFY_SERVICE_NAME}-spa.errors.query=/{path:.*}"
+      - "traefik.http.routers.${COOLIFY_SERVICE_NAME}.middlewares=${COOLIFY_SERVICE_NAME}-spa"
+    networks:
+      - web
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    environment:
+      # Variables d'environnement pour le conteneur (runtime)
+      - NODE_ENV=production
+      - TZ=Europe/Paris
+
+networks:
+  web:
+    external: ${COOLIFY_NETWORK_EXTERNAL:-false}
+    name: ${COOLIFY_NETWORK_NAME:-coolify_user_network}

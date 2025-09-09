@@ -1,0 +1,34 @@
+# Fichier nixpacks.toml pour forcer la détection Node.js
+
+# Forcer l'utilisation de Node.js
+providers = ["node"]
+
+# Spécifier la version de Node.js
+[phases.setup]
+nixPkgs = ["nodejs-18_x"]
+
+# Définir les étapes de construction
+[phases.install]
+cmds = ["npm ci"]
+
+[phases.build]
+cmds = ["npm run build"]
+
+# Configurer la façon dont l'application est servie
+[start]
+# Pour une application statique React/Vite
+cmd = "npx serve -s dist"
+# Utiliser le port standard pour les applications web
+web_port = 80
+
+# Configuration pour SPA
+[nixpacks]
+plan_path = "/app/nixpacks.plan"
+
+# Variable d'environnement pour indiquer que c'est une SPA
+[variables]
+IS_SPA = "true"
+
+# Configurer le répertoire de publication
+[phases.setup.nixpkgs_config]
+output_dir = "dist"
