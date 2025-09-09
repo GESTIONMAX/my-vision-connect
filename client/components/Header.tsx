@@ -34,19 +34,19 @@ export const Header: React.FC = () => {
   
   // Style pour les liens de navigation
   const navLinkClass = (path: string) => cn(
-    "relative font-medium transition-colors duration-200 px-3 py-2 rounded-md",
-    "hover:text-slate-800 hover:bg-slate-100/80",
+    "relative font-medium transition-all duration-300 px-4 py-2.5 rounded-md mx-1",
+    "hover:text-blue-600 hover:bg-blue-50/50",
     isActive(path)
-      ? "text-slate-800 before:absolute before:bottom-0 before:left-0 before:w-full before:h-0.5 before:bg-slate-800"
-      : "text-slate-600"
+      ? "text-blue-600 font-semibold"
+      : "text-slate-600 hover:text-blue-600"
   );
   
   // Style pour le header qui change au scroll
   const headerClass = cn(
-    "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+    "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b",
     scrolled
-      ? "bg-white/90 backdrop-blur-sm shadow-md py-3"
-      : "bg-white py-5"
+      ? "bg-white/95 backdrop-blur-sm shadow-sm py-3"
+      : "bg-white/95 py-4"
   );
 
   return (
@@ -55,47 +55,88 @@ export const Header: React.FC = () => {
         <div className="container mx-auto px-4 flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <span className="text-2xl font-bold bg-gradient-to-r from-slate-700 to-slate-900 bg-clip-text text-transparent">
-              VISION<span className="text-slate-500">connect</span>
+            <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+              VISION<span className="text-blue-400">connect</span>
             </span>
           </Link>
           
           {/* Navigation desktop */}
           <nav className="hidden md:flex items-center space-x-1">
-            <Link to="/shop" className={navLinkClass('/shop')}>
-              Shop
+            <Link 
+              to="/shop" 
+              className={cn(
+                navLinkClass('/shop'),
+                "group relative overflow-hidden"
+              )}
+            >
+              <span className="relative z-10">Boutique</span>
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
             </Link>
-            <Link to="/faq" className={navLinkClass('/faq')}>
-              FAQ
+            <Link 
+              to="/faq" 
+              className={cn(
+                navLinkClass('/faq'),
+                "group relative overflow-hidden"
+              )}
+            >
+              <span className="relative z-10">FAQ</span>
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
             </Link>
-            <Link to="/contact" className={navLinkClass('/contact')}>
-              Contact
+            <Link 
+              to="/contact" 
+              className={cn(
+                navLinkClass('/contact'),
+                "group relative overflow-hidden"
+              )}
+            >
+              <span className="relative z-10">Contact</span>
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
             </Link>
-            <Link to="/b2b" className={navLinkClass('/b2b')}>
-              Espace B2B
+            <Link 
+              to="/b2b" 
+              className={cn(
+                navLinkClass('/b2b'),
+                "group relative overflow-hidden"
+              )}
+            >
+              <span className="relative z-10">Espace B2B</span>
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
             </Link>
           </nav>
           
           {/* Actions desktop */}
-          <div className="hidden md:flex items-center space-x-3">
+          <div className="hidden md:flex items-center space-x-2">
             {/* Recherche */}
-            <Button variant="ghost" size="icon" className="text-slate-600 hover:text-slate-800 hover:bg-slate-100">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="text-slate-600 hover:text-blue-600 hover:bg-blue-50/50 rounded-full p-2 transition-colors duration-200"
+            >
               <Search size={20} />
             </Button>
             
             {/* Mode sombre/clair */}
-            <Button variant="ghost" size="icon" className="text-slate-600 hover:text-slate-800 hover:bg-slate-100" onClick={toggleDarkMode}>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="text-slate-600 hover:text-blue-600 hover:bg-blue-50/50 rounded-full p-2 transition-colors duration-200" 
+              onClick={toggleDarkMode}
+            >
               {darkMode ? <Sun size={20} /> : <Moon size={20} />}
             </Button>
             
             {/* Panier */}
-            <Button variant="ghost" size="icon" className="text-slate-600 hover:text-slate-800 hover:bg-slate-100 relative">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="text-slate-600 hover:text-blue-600 hover:bg-blue-50/50 rounded-full p-2 transition-colors duration-200 relative"
+            >
               <ShoppingCart size={20} />
-              <span className="absolute -top-1 -right-1 bg-slate-800 text-white w-5 h-5 flex items-center justify-center rounded-full text-xs">3</span>
+              <span className="absolute -top-0.5 -right-0.5 bg-blue-600 text-white w-5 h-5 flex items-center justify-center rounded-full text-xs font-medium">3</span>
             </Button>
             
             {/* Compte */}
-            <Button variant="ghost" className="flex items-center space-x-1 text-slate-600 hover:text-slate-800 hover:bg-slate-100">
+            <Button variant="ghost" className="flex items-center space-x-1 text-slate-600 hover:text-blue-600 hover:bg-blue-50/50">
               <User size={18} />
               <span className="hidden lg:inline-block">Compte</span>
               <ChevronDown size={14} />
@@ -104,7 +145,7 @@ export const Header: React.FC = () => {
           
           {/* Bouton menu mobile */}
           <button
-            className="md:hidden text-slate-600 hover:text-slate-800 focus:outline-none"
+            className="md:hidden text-slate-600 hover:text-blue-600 focus:outline-none"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
           >
@@ -129,7 +170,7 @@ export const Header: React.FC = () => {
               className="text-xl font-medium py-2 border-b border-slate-100"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Shop
+              Boutique
             </Link>
             <Link 
               to="/blog" 
