@@ -1,7 +1,7 @@
 {
-  "name": "my-vision-connect-server",
+  "name": "mytechgear-server",
   "version": "1.0.0",
-  "description": "Backend API for My Vision Connect",
+  "description": "Backend API for MyTechGear",
   "main": "src/app.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/app.ts",

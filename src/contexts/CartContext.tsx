@@ -1,6 +1,5 @@
 
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import { useAuth } from '@/hooks/useAuth';
 
 export interface CartItem {
   id: string;

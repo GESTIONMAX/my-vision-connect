@@ -1,5 +1,5 @@
 
-import { useAuth } from '@/hooks/useAuth';
+import { useAuthNew } from '@/hooks/useAuthNew';
 import { useCart } from '@/hooks/useCart';
 import { CartHeader } from './CartHeader';
 import { CartItems } from './CartItems';
@@ -8,7 +8,7 @@ import { CartActions } from './CartActions';
 import { EmptyCart } from './EmptyCart';
 
 export const CartPage = () => {
-  const { profile } = useAuth();
+  const { profile } = useAuthNew();
   const { 
     items, 
     updateQuantity, 

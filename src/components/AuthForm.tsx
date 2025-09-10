@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuthNew } from '@/hooks/useAuthNew';
 import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
 
 export const AuthForm = () => {
@@ -20,7 +20,7 @@ export const AuthForm = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const { signIn, signUp } = useAuth();
+  const { login: signIn, signUp } = useAuthNew();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {

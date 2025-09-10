@@ -1,7 +1,7 @@
 import { Heart } from 'lucide-react';
 import { Button } from '../../client/button';
-import { useAuth } from '../hooks/useAuth';
-import { useIsFavorite, useToggleFavorite } from '../hooks/useFavoritesCombined';
+import { useAuthNew } from '../hooks/useAuthNew';
+import { useIsFavoriteNew, useToggleFavoriteNew } from '../hooks/useFavoritesNew';
 import { cn } from '../../client/utils';
 import { useToast } from '../../client/use-toast';
 
@@ -12,10 +12,10 @@ interface FavoriteButtonProps {
 }
 
 export const FavoriteButton = ({ productId, className, size = 'md' }: FavoriteButtonProps) => {
-  const { user } = useAuth();
+  const { user } = useAuthNew();
   const { toast } = useToast();
-  const isFavorite = useIsFavorite(productId);
-  const { toggleFavorite, isLoading } = useToggleFavorite();
+  const { data: isFavorite = false } = useIsFavoriteNew(productId);
+  const { toggle: toggleFavorite, isLoading } = useToggleFavoriteNew();
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();

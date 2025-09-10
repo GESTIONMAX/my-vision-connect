@@ -16,14 +16,12 @@
     "noImplicitAny": false,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*", "./client/src/*"],
-      "@client/*": ["./client/src/*"],
+      "@/*": ["./src/*"],
       "@server/*": ["./server/src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "client/src/**/*.ts", "client/src/**/*.tsx", "server/src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "server/src/**/*.ts"],
   "references": [
-    { "path": "./client/tsconfig.json" },
     { "path": "./server/tsconfig.json" }
   ]
 }

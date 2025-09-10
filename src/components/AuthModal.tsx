@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuthNew } from '@/hooks/useAuthNew';
 import { Loader2, Eye, EyeOff } from 'lucide-react';
 
 interface AuthModalProps {
@@ -25,7 +25,7 @@ export function AuthModal({ children }: AuthModalProps) {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-  const { signIn, signInWithGoogle, signUp } = useAuth();
+  const { login: signIn, signUp } = useAuthNew();
   const navigate = useNavigate();
 
   const [signInForm, setSignInForm] = useState({
@@ -199,9 +199,7 @@ export function AuthModal({ children }: AuthModalProps) {
                   variant="outline"
                   className="w-full"
                   onClick={async () => {
-                    setLoading(true);
-                    await signInWithGoogle();
-                    setLoading(false);
+                    setError('Connexion Google temporairement indisponible');
                   }}
                   disabled={loading}
                 >
@@ -361,9 +359,7 @@ export function AuthModal({ children }: AuthModalProps) {
                   variant="outline"
                   className="w-full"
                   onClick={async () => {
-                    setLoading(true);
-                    await signInWithGoogle();
-                    setLoading(false);
+                    setError('Connexion Google temporairement indisponible');
                   }}
                   disabled={loading}
                 >
