@@ -2,13 +2,13 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ProductCard } from '@/components/ProductCard';
-import { useProducts } from '@/hooks/useProduct';
+import { useProductsNew } from '@/hooks/useProductsNew';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Award, Star, Heart } from 'lucide-react';
 
 const NotreSelection = () => {
-  const { data: products = [], isLoading: productsLoading } = useProducts();
+  const { data: products = [], isLoading: productsLoading } = useProductsNew();
   const [activeFilter, setActiveFilter] = useState('all');
 
   // Simuler une sélection de produits avec des critères spécifiques

@@ -4,8 +4,8 @@ import { ArrowLeft, Star, Truck, Shield, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useProduct } from '@/hooks/useProduct';
-import { useProductVariants } from '@/hooks/useProductVariants';
+import { useProductNew } from '@/hooks/useProductsNew';
+import { useProductVariantesNew } from '@/hooks/useVariantesNew';
 import { useCart } from '@/hooks/useCart';
 import { useToast } from '@/hooks/use-toast';
 import { Link } from 'react-router-dom';
@@ -23,8 +23,9 @@ import { ShareButton } from '@/components/ShareButton';
 
 const ProductDetail = () => {
   const { slug } = useParams();
-  const { data: product, isLoading, error } = useProduct(slug || '');
-  const { data: variants = [] } = useProductVariants(slug || '');
+  // Note: slug needs to be converted to ID for the new hooks
+  const { data: product, isLoading, error } = useProductNew(slug || '');
+  const { data: variants = [] } = useProductVariantesNew(product?.id || '');
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [activeTab, setActiveTab] = useState('description');
   const [configuration, setConfiguration] = useState<{

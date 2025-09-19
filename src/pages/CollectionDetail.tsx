@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ProductCard } from '@/components/ProductCard';
-import { useCollectionProducts } from '@/hooks/useCollectionProducts';
+import { useCollectionProductsNew } from '@/hooks/useProductsNew';
 import { useCollections } from '@/hooks/useCollections';
 import { useState } from 'react';
 
@@ -17,7 +17,7 @@ const CollectionDetailPage = () => {
   const [sortBy, setSortBy] = useState('name');
   
   const { data: collections } = useCollections();
-  const { data: products, isLoading, error } = useCollectionProducts(collectionSlug || '');
+  const { data: products, isLoading, error } = useCollectionProductsNew(collectionSlug || '');
   
   const currentCollection = collections?.find(c => c.slug === collectionSlug);
   

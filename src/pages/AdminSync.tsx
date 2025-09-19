@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { syncCollectionsFromAirtable } from '@/services/airtableApi';
+// TODO: Replace with proper API sync functionality
+// import { syncCollectionsFromAirtable } from '@/services/airtableApi';
 
 export default function AdminSync() {
   const [loading, setLoading] = useState(false);
@@ -10,10 +11,12 @@ export default function AdminSync() {
   const handleSync = async () => {
     setLoading(true);
     try {
-      const res = await syncCollectionsFromAirtable();
+      // TODO: Replace with proper API sync functionality
+      // const res = await syncCollectionsFromAirtable();
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
       toast({
-        title: 'Synchronisation terminée',
-        description: `Collections: ${res.total} (ajoutées: ${res.inserted}, mises à jour: ${res.updated})`,
+        title: 'Synchronisation temporairement désactivée',
+        description: 'La fonction de synchronisation sera implémentée prochainement',
       });
     } catch (e: any) {
       toast({

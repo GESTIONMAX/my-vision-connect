@@ -16,27 +16,29 @@ import { OrdersPage } from "@/pages/account/OrdersPage";
 import { CartPage } from "@/pages/account/CartPage";
 import { FavoritesPage } from "@/pages/account/FavoritesPage";
 import { SettingsPage } from "@/pages/account/SettingsPage";
-import B2C from "./pages/B2C";
-import B2B from "./pages/B2B";
-import B2BCatalog from "./pages/B2BCatalog";
-import B2BPartnership from "./pages/B2BPartnership";
-import B2BSupport from "./pages/B2BSupport";
 import Shop from "./pages/Shop";
 import Index from "./pages/Index";
 import NotreSelection from "./pages/NotreSelection";
 import ProductDetail from "./pages/ProductDetail";
-import Technology from "./pages/Technology";
-import FAQ from "./pages/FAQ";
-import Careers from "./pages/Careers";
-import Auth from "./pages/Auth";
-import Welcome from "./pages/Welcome";
-import NotFound from "./pages/NotFound";
-import { Checkout } from "./pages/Checkout";
 import CollectionDetail from "./pages/CollectionDetail";
-import Blog from "./pages/Blog";
-import BlogPost from "./pages/BlogPost";
 import Contact from "./pages/Contact";
 import AdminSync from "./pages/AdminSync";
+import { 
+  NotFound, 
+  B2C, 
+  B2B, 
+  B2BCatalog, 
+  B2BPartnership, 
+  B2BSupport, 
+  Technology, 
+  FAQ, 
+  Careers, 
+  Blog, 
+  BlogPost, 
+  Auth, 
+  Welcome, 
+  Checkout 
+} from "./components/PlaceholderPage";
 
 const queryClient = new QueryClient();
 

@@ -1,13 +1,14 @@
 import { motion } from 'framer-motion';
-import { useProducts } from '@/hooks/useProduct';
+import { useProductsNew } from '@/hooks/useProductsNew';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Eye, ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { generateProductSlug } from '@/hooks/useProduct';
 
 export const LifestyleCollection = () => {
-  const { data: products = [] } = useProducts();
+  const { data: products = [] } = useProductsNew();
+  
+  const generateProductSlug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
   
   // Filtrer les produits lifestyle et connectés
   const lifestyleProducts = products.filter(product => 
